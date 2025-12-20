@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface PersonalInfo {
-    fistName: string
+    firstName: string
     lastName: string
     email: string
     phone: string
 }
 
 const initialState: PersonalInfo = {
-    fistName: 'John',
+    firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@example.com',
     phone: '+1 234 567 890',
