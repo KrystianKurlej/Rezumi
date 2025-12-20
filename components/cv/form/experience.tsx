@@ -1,3 +1,7 @@
+'use client'
+
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { NewExperience, updateNewExperience } from '@/lib/slices/experienceSlice'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -20,6 +24,15 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
 export default function ExperienceForm() {
+    const dispatch = useAppDispatch()
+    const newExperience = useAppSelector(state => state.newExperience)
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { id, value } = e.target
+        const key = id as keyof NewExperience
+        dispatch(updateNewExperience({ [key]: value }))
+    }
+
     return(
         <>
         <FieldLegend>
@@ -41,47 +54,57 @@ export default function ExperienceForm() {
                 <FieldSet>
                     <FieldGroup>
                         <Field>
-                            <FieldLabel htmlFor="title">
+                            <FieldLabel htmlFor="newExperienceTitle">
                                 Title
                             </FieldLabel>
                             <Input
-                                id="title"
+                                id="newExperienceTitle"
+                                value={newExperience.title}
+                                onChange={handleChange}
                             />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="company">
+                            <FieldLabel htmlFor="newExperienceCompany">
                                 Company
                             </FieldLabel>
                             <Input
-                                id="company"
+                                id="newExperienceCompany"
+                                value={newExperience.company}
+                                onChange={handleChange}
                             />
                         </Field>
                         <div className="grid grid-cols-2 gap-4">
                             <Field>
-                                <FieldLabel htmlFor="startDate">
+                                <FieldLabel htmlFor="newExperienceStartDate">
                                     Start Date
                                 </FieldLabel>
                                 <Input
-                                    id="startDate"
+                                    id="newExperienceStartDate"
+                                    value={newExperience.startDate}
+                                    onChange={handleChange}
                                     type="date"
                                 />
                             </Field>
                             <Field>
-                                <FieldLabel htmlFor="endDate">
+                                <FieldLabel htmlFor="newExperienceEndDate">
                                     End Date
                                 </FieldLabel>
                                 <Input
-                                    id="endDate"
+                                    id="newExperienceEndDate"
+                                    value={newExperience.endDate}
+                                    onChange={handleChange}
                                     type="date"
                                 />
                             </Field>
                         </div>
                         <Field>
-                            <FieldLabel htmlFor="description">
+                            <FieldLabel htmlFor="newExperienceDescription">
                                 Description
                             </FieldLabel>
                             <Textarea
-                                id="description"
+                                id="newExperienceDescription"
+                                value={newExperience.description}
+                                onChange={handleChange}
                             />
                         </Field>
                     </FieldGroup>
@@ -90,7 +113,9 @@ export default function ExperienceForm() {
                     <DialogClose asChild>
                         <Button variant="outline">Cancel</Button>
                     </DialogClose>
-                    <Button>Save changes</Button>
+                    <Button>
+                        Add Experience
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
