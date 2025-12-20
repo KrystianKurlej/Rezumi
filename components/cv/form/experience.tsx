@@ -167,8 +167,8 @@ export default function ExperienceForm() {
                                             <ItemActions>
                                                 <Dialog>
                                                     <DialogTrigger asChild>
-                                                        <Button variant="outline" size="sm">
-                                                            Edit
+                                                        <Button variant="outline" size="icon-sm">
+                                                            <i className="bi bi-pencil-square"></i>
                                                         </Button>
                                                     </DialogTrigger>
                                                     <DialogContent>
@@ -258,8 +258,8 @@ export default function ExperienceForm() {
                                                 </Dialog>
                                                 <Dialog>
                                                     <DialogTrigger asChild>
-                                                        <Button variant="outline" size="sm">
-                                                            Delete
+                                                        <Button variant="outline" size="icon-sm">
+                                                            <i className="bi bi-trash"></i>
                                                         </Button>
                                                     </DialogTrigger>
                                                     <DialogContent>
@@ -292,15 +292,16 @@ export default function ExperienceForm() {
                             {experiences.length > 0 ? (
                                 <DialogTrigger asChild>
                                     <Button variant="outline" className="w-full mb-4">
+                                        <i className="bi bi-plus-lg"></i>
                                         Add more Experience
                                     </Button>
                                 </DialogTrigger>
                             ) : (
-                                <Empty className="bg-gray-50">
+                                <Empty className="border">
                                     <EmptyHeader>
-                                        {/* <EmptyMedia variant="icon">
-                                            <Icon />
-                                        </EmptyMedia> */}
+                                        <EmptyMedia variant="icon">
+                                            <i className="bi bi-briefcase"></i>
+                                        </EmptyMedia>
                                         <EmptyTitle>
                                             No experience added yet
                                         </EmptyTitle>
@@ -310,6 +311,7 @@ export default function ExperienceForm() {
                                     </EmptyHeader>
                                     <EmptyContent>
                                         <Button onClick={() => setDialogOpen(true)}>
+                                            <i className="bi bi-plus-lg"></i>
                                             Add Experience
                                         </Button>
                                     </EmptyContent>
