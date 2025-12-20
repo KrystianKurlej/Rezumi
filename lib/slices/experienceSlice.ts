@@ -7,6 +7,7 @@ export interface NewExperience {
     newExperienceStartDate: string
     newExperienceEndDate: string
     newExperienceDescription: string
+    newExperienceIsOngoing: boolean
 }
 
 export interface Experiences {
@@ -20,6 +21,7 @@ const initialNewExperienceState: NewExperience = {
     newExperienceStartDate: '',
     newExperienceEndDate: '',
     newExperienceDescription: '',
+    newExperienceIsOngoing: false,
 };
 
 const initialExperiencesState: Experiences = {

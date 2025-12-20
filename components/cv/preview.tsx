@@ -22,7 +22,7 @@ export default function Preview() {
                             <li key={experience.id} className={"mb-2" + (experiences.length - 1 !== experiences.indexOf(experience) ? " border-b border-gray-200 pb-2" : "")}>
                                 <div className="flex gap-4">
                                     <div className="grow"><span className="font-semibold">{experience.title}</span> - {experience.company}</div>
-                                    <div className="shrink-0">{experience.startDate} - {experience.endDate}</div>
+                                    <div className="shrink-0">{experience.startDate} - {experience.isOngoing ? 'Present' : experience.endDate}</div>
                                 </div>
                                 <div className="text-sm">{experience.description}</div>
                             </li>

@@ -34,6 +34,8 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
@@ -72,7 +74,8 @@ export default function ExperienceForm() {
           company: newExperience.newExperienceCompany,
           startDate: newExperience.newExperienceStartDate,
           endDate: newExperience.newExperienceEndDate,
-          description: newExperience.newExperienceDescription
+          description: newExperience.newExperienceDescription,
+          isOngoing: newExperience.newExperienceIsOngoing
         }
         const id = await addExperienceToDB(experienceData)
         dispatch(addExperience({
@@ -101,7 +104,7 @@ export default function ExperienceForm() {
     const handleEditChange = (id: number, field: keyof DBExperience, value: string) => {
         setEditingExperience((prev: DBExperience | null) => ({
             ...prev,
-            [field]: value
+            [field]: field === 'isOngoing' ? value === 'true' : value
         }) as DBExperience)
     }
 
@@ -114,7 +117,8 @@ export default function ExperienceForm() {
                 company: editingExperience.company ?? originalExperience.company,
                 startDate: editingExperience.startDate ?? originalExperience.startDate,
                 endDate: editingExperience.endDate ?? originalExperience.endDate,
-                description: editingExperience.description ?? originalExperience.description
+                description: editingExperience.description ?? originalExperience.description,
+                isOngoing: editingExperience.isOngoing ?? originalExperience.isOngoing
             }
             
             await updateExperience(originalExperience.id!, updatedData)
@@ -145,7 +149,7 @@ export default function ExperienceForm() {
                                                 <ItemTitle>{experience.title} - {experience.company}</ItemTitle>
                                                 <div>
                                                     <ItemDescription>
-                                                        {experience.startDate} - {experience.endDate}
+                                                        {experience.startDate} - {experience.isOngoing ? 'Present' : experience.endDate}
                                                     </ItemDescription>
                                                     <ItemDescription>
                                                         {experience.description}
@@ -204,10 +208,23 @@ export default function ExperienceForm() {
                                                                         id={`experienceEndDate${experience.id}`}
                                                                         value={editingExperience?.endDate || experience.endDate}
                                                                         type="date"
+                                                                        disabled={editingExperience?.isOngoing ?? experience.isOngoing}
                                                                         onChange={(e) => handleEditChange(experience.id!, 'endDate', e.target.value)}
                                                                     />
                                                                 </Field>
                                                             </div>
+                                                            <Field>
+                                                                <div className="flex items-center space-x-2">
+                                                                    <Switch
+                                                                        id={`ongoingExperience${experience.id}`}
+                                                                        checked={editingExperience?.isOngoing ?? experience.isOngoing}
+                                                                        onCheckedChange={(checked) => {handleEditChange(experience.id!, 'isOngoing', checked.toString())}}
+                                                                    />
+                                                                    <Label htmlFor={`ongoingExperience${experience.id}`}>
+                                                                        Ongoing Position
+                                                                    </Label>
+                                                                </div>
+                                                            </Field>
                                                             <Field>
                                                                 <FieldLabel htmlFor={`experienceDescription${experience.id}`}>
                                                                     Description
@@ -319,8 +336,21 @@ export default function ExperienceForm() {
                                                     value={newExperience.newExperienceEndDate}
                                                     onChange={handleChange}
                                                     type="date"
+                                                    disabled={newExperience.newExperienceIsOngoing}
                                                 />
                                             </Field>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <Switch
+                                                id="ongoingExperience"
+                                                checked={newExperience.newExperienceIsOngoing}
+                                                onCheckedChange={(checked) => {
+                                                    dispatch(updateNewExperience({ newExperienceIsOngoing: checked }))
+                                                }}
+                                            />
+                                            <Label htmlFor="ongoingExperience">
+                                                Ongoing Position
+                                            </Label>
                                         </div>
                                         <Field>
                                             <FieldLabel htmlFor="newExperienceDescription">

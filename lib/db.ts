@@ -12,11 +12,12 @@ export interface DBExperience {
     startDate: string
     endDate: string
     description: string
+    isOngoing: boolean
     createdAt: number
 }
 
 const DB_NAME = 'cv-maker'
-const DB_VERSION = 1
+const DB_VERSION = 2
 const STORE_NAME = 'cvm'
 
 let db: IDBDatabase | null = null
