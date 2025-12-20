@@ -2,6 +2,7 @@
 
 import PersonalForm from "@/components/cv/form/personal"
 import ExperienceForm from "@/components/cv/form/experience";
+import EducationForm from "@/components/cv/form/education";
 import Preview from "@/components/cv/preview";
 import {
   FieldGroup,
@@ -29,6 +30,8 @@ export default function Home() {
           <PersonalForm />
           <FieldSeparator />
           <ExperienceForm />
+          <FieldSeparator />
+          <EducationForm />
         </FieldGroup>
       </div>
     </div>

@@ -100,6 +100,7 @@ export function ExperienceAddDialog({
                 id="newExperienceTitle"
                 value={newExperience.newExperienceTitle}
                 onChange={handleChange}
+                placeholder="Software Engineer, Marketing Manager, etc."
               />
             </Field>
             <Field>
@@ -110,6 +111,7 @@ export function ExperienceAddDialog({
                 id="newExperienceCompany"
                 value={newExperience.newExperienceCompany}
                 onChange={handleChange}
+                placeholder="Company name"
               />
             </Field>
             <div className="grid grid-cols-2 gap-4">
@@ -157,6 +159,7 @@ export function ExperienceAddDialog({
                 id="newExperienceDescription"
                 value={newExperience.newExperienceDescription}
                 onChange={handleChange}
+                placeholder="Key responsibilities, achievements, projects, etc."
               />
             </Field>
           </FieldGroup>

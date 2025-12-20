@@ -95,6 +95,7 @@ export function ExperienceEditDialog({
               id={`experienceTitle${experience.id}`}
               value={editingExperience?.title || experience.title}
               onChange={(e) => handleEditChange('title', e.target.value)}
+              placeholder="Software Engineer, Marketing Manager, etc."
             />
           </Field>
           <Field>
@@ -105,6 +106,7 @@ export function ExperienceEditDialog({
               id={`experienceCompany${experience.id}`}
               value={editingExperience?.company || experience.company}
               onChange={(e) => handleEditChange('company', e.target.value)}
+              placeholder="Company name"
             />
           </Field>
           <div className="grid grid-cols-2 gap-4">
@@ -152,6 +154,7 @@ export function ExperienceEditDialog({
               id={`experienceDescription${experience.id}`}
               value={editingExperience?.description || experience.description}
               onChange={(e) => handleEditChange('description', e.target.value)}
+              placeholder="Key responsibilities, achievements, projects, etc."
             />
           </Field>
         </FieldGroup>
