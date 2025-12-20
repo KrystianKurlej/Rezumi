@@ -52,28 +52,24 @@ export default function FooterForm() {
     }
 
     return (
-        <FieldSet>
-            <Accordion type="single" collapsible defaultValue="footer-section">
-                <AccordionItem value="footer-section">
-                    <AccordionTrigger>
-                        Footer
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        <FieldGroup>
-                            <Field>
-                                <FieldLabel htmlFor="footerText">Footer Text</FieldLabel>
-                                <Textarea
-                                  id="footerText"
-                                  placeholder="Enter any legal disclaimers or additional information for the footer"
-                                  value={footer.footerText}
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                />
-                            </Field>
-                        </FieldGroup>
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
-        </FieldSet>
+        <AccordionItem value="footer-section">
+            <AccordionTrigger>
+                Footer
+            </AccordionTrigger>
+            <AccordionContent>
+                <FieldGroup>
+                    <Field>
+                        <FieldLabel htmlFor="footerText">Footer Text</FieldLabel>
+                        <Textarea
+                          id="footerText"
+                          placeholder="Enter any legal disclaimers or additional information for the footer"
+                          value={footer.footerText}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                    </Field>
+                </FieldGroup>
+            </AccordionContent>
+        </AccordionItem>
     )
 }

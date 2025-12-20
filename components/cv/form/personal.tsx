@@ -52,66 +52,62 @@ export default function PersonalForm() {
     }
 
     return (
-        <FieldSet>
-            <Accordion type="single" collapsible defaultValue="personal-section">
-                <AccordionItem value="personal-section">
-                    <AccordionTrigger>
-                        Personal Information
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        <FieldGroup>
-                            <div className="grid grid-cols-2 gap-4">
-                                <Field>
-                                    <FieldLabel htmlFor="fistName">
-                                        First Name
-                                    </FieldLabel>
-                                    <Input
-                                        id="firstName"
-                                        value={personal.firstName}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                </Field>
-                                <Field>
-                                    <FieldLabel htmlFor="lastName">
-                                        Last Name
-                                    </FieldLabel>
-                                    <Input
-                                        id="lastName"
-                                        value={personal.lastName}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                </Field>
-                            </div>
-                            <Field>
-                            <FieldLabel htmlFor="email">
-                                Email Address
+        <AccordionItem value="personal-section">
+            <AccordionTrigger>
+                Personal Information
+            </AccordionTrigger>
+            <AccordionContent>
+                <FieldGroup>
+                    <div className="grid grid-cols-2 gap-4">
+                        <Field>
+                            <FieldLabel htmlFor="fistName">
+                                First Name
                             </FieldLabel>
                             <Input
-                                id="email"
-                                type="email"
-                                value={personal.email}
+                                id="firstName"
+                                value={personal.firstName}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                             />
-                            </Field>
-                            <Field>
-                            <FieldLabel htmlFor="phone">
-                                Phone Number
+                        </Field>
+                        <Field>
+                            <FieldLabel htmlFor="lastName">
+                                Last Name
                             </FieldLabel>
                             <Input
-                                id="phone"
-                                type="tel"
-                                value={personal.phone}
+                                id="lastName"
+                                value={personal.lastName}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                             />
-                            </Field>
-                        </FieldGroup>
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
-        </FieldSet>
+                        </Field>
+                    </div>
+                    <Field>
+                    <FieldLabel htmlFor="email">
+                        Email Address
+                    </FieldLabel>
+                    <Input
+                        id="email"
+                        type="email"
+                        value={personal.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                    />
+                    </Field>
+                    <Field>
+                    <FieldLabel htmlFor="phone">
+                        Phone Number
+                    </FieldLabel>
+                    <Input
+                        id="phone"
+                        type="tel"
+                        value={personal.phone}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                    />
+                    </Field>
+                </FieldGroup>
+            </AccordionContent>
+        </AccordionItem>
     )
 }

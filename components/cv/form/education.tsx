@@ -46,51 +46,47 @@ export default function EducationForm() {
     }
 
     return(
-        <FieldSet>
-            <Accordion type="single" collapsible defaultValue="education-section">
-                <AccordionItem value="education-section">
-                    <AccordionTrigger>
-                        Education
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        {educations.length > 0 ? (
-                            <>
-                                <ul>
-                                    {educations.map((education) => (
-                                        <li key={education.id} className="mb-2">
-                                            <EducationItem
-                                                education={education}
-                                                onUpdate={loadEducations}
-                                                onDelete={handleDelete}
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
-                                <EducationAddDialog
-                                    open={dialogOpen}
-                                    onOpenChange={setDialogOpen}
-                                    onAdd={loadEducations}
-                                    trigger={
-                                        <Button variant="outline" className="w-full mb-4">
-                                            <i className="bi bi-plus-lg"></i>
-                                            Add more Education
-                                        </Button>
-                                    }
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <EducationEmptyState onAddClick={() => setDialogOpen(true)} />
-                                <EducationAddDialog
-                                    open={dialogOpen}
-                                    onOpenChange={setDialogOpen}
-                                    onAdd={loadEducations}
-                                />
-                            </>
-                        )}
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
-        </FieldSet>
+        <AccordionItem value="education-section">
+            <AccordionTrigger>
+                Education
+            </AccordionTrigger>
+            <AccordionContent>
+                {educations.length > 0 ? (
+                    <>
+                        <ul>
+                            {educations.map((education) => (
+                                <li key={education.id} className="mb-2">
+                                    <EducationItem
+                                        education={education}
+                                        onUpdate={loadEducations}
+                                        onDelete={handleDelete}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                        <EducationAddDialog
+                            open={dialogOpen}
+                            onOpenChange={setDialogOpen}
+                            onAdd={loadEducations}
+                            trigger={
+                                <Button variant="outline" className="w-full mb-4">
+                                    <i className="bi bi-plus-lg"></i>
+                                    Add more Education
+                                </Button>
+                            }
+                        />
+                    </>
+                ) : (
+                    <>
+                        <EducationEmptyState onAddClick={() => setDialogOpen(true)} />
+                        <EducationAddDialog
+                            open={dialogOpen}
+                            onOpenChange={setDialogOpen}
+                            onAdd={loadEducations}
+                        />
+                    </>
+                )}
+            </AccordionContent>
+        </AccordionItem>
     )
 }

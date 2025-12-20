@@ -5,10 +5,7 @@ import ExperienceForm from "@/components/cv/form/experience";
 import EducationForm from "@/components/cv/form/education";
 import FooterForm from "@/components/cv/form/footer";
 import Preview from "@/components/cv/preview";
-import {
-  FieldGroup,
-  FieldSeparator,
-} from "@/components/ui/field"
+import { Accordion } from "@/components/ui/accordion"
 
 export default function Home() {
   return (
@@ -27,15 +24,12 @@ export default function Home() {
             Complete sections below to build your CV
           </p>
         </div>
-        <FieldGroup>
+        <Accordion type="multiple" defaultValue="personal-section">
           <PersonalForm />
-          <FieldSeparator />
           <ExperienceForm />
-          <FieldSeparator />
           <EducationForm />
-          <FieldSeparator />
           <FooterForm />
-        </FieldGroup>
+        </Accordion>
       </div>
     </div>
   );

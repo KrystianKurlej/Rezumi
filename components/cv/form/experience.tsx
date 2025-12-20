@@ -46,51 +46,47 @@ export default function ExperienceForm() {
     }
 
     return(
-        <FieldSet>
-            <Accordion type="single" collapsible defaultValue="experience-section">
-                <AccordionItem value="experience-section">
-                    <AccordionTrigger>
-                        Experience
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        {experiences.length > 0 ? (
-                            <>
-                                <ul>
-                                    {experiences.map((experience) => (
-                                        <li key={experience.id} className="mb-2">
-                                            <ExperienceItem
-                                                experience={experience}
-                                                onUpdate={loadExperiences}
-                                                onDelete={handleDelete}
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
-                                <ExperienceAddDialog
-                                    open={dialogOpen}
-                                    onOpenChange={setDialogOpen}
-                                    onAdd={loadExperiences}
-                                    trigger={
-                                        <Button variant="outline" className="w-full mb-4">
-                                            <i className="bi bi-plus-lg"></i>
-                                            Add more Experience
-                                        </Button>
-                                    }
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <ExperienceEmptyState onAddClick={() => setDialogOpen(true)} />
-                                <ExperienceAddDialog
-                                    open={dialogOpen}
-                                    onOpenChange={setDialogOpen}
-                                    onAdd={loadExperiences}
-                                />
-                            </>
-                        )}
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
-        </FieldSet>
+        <AccordionItem value="experience-section">
+            <AccordionTrigger>
+                Experience
+            </AccordionTrigger>
+            <AccordionContent>
+                {experiences.length > 0 ? (
+                    <>
+                        <ul>
+                            {experiences.map((experience) => (
+                                <li key={experience.id} className="mb-2">
+                                    <ExperienceItem
+                                        experience={experience}
+                                        onUpdate={loadExperiences}
+                                        onDelete={handleDelete}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                        <ExperienceAddDialog
+                            open={dialogOpen}
+                            onOpenChange={setDialogOpen}
+                            onAdd={loadExperiences}
+                            trigger={
+                                <Button variant="outline" className="w-full mb-4">
+                                    <i className="bi bi-plus-lg"></i>
+                                    Add more Experience
+                                </Button>
+                            }
+                        />
+                    </>
+                ) : (
+                    <>
+                        <ExperienceEmptyState onAddClick={() => setDialogOpen(true)} />
+                        <ExperienceAddDialog
+                            open={dialogOpen}
+                            onOpenChange={setDialogOpen}
+                            onAdd={loadExperiences}
+                        />
+                    </>
+                )}
+            </AccordionContent>
+        </AccordionItem>
     )
 }
