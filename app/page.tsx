@@ -30,7 +30,62 @@ export default function Home() {
       <div className="col-span-2 h-full">
         <div className="h-full p-6 overflow-y-auto">
           <form>
-            Form
+            <FieldGroup>
+              <FieldSet>
+                <FieldLegend>
+                  Personal Information
+                </FieldLegend>
+                <FieldGroup>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Field>
+                      <FieldLabel htmlFor="fistName">
+                        First Name
+                      </FieldLabel>
+                      <Input
+                        id="firstName"
+                        placeholder="John"
+                        required
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="lastName">
+                        Last Name
+                      </FieldLabel>
+                      <Input
+                        id="lastName"
+                        placeholder="Doe"
+                        required
+                      />
+                    </Field>
+                  </div>
+                  <Field>
+                    <FieldLabel htmlFor="email">
+                      Email Address
+                    </FieldLabel>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="john.doe@example.com"
+                      required
+                    />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="phone">
+                      Phone Number
+                    </FieldLabel>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="+1 234 567 890"
+                    />
+                  </Field>
+                </FieldGroup>
+              </FieldSet>
+              <FieldSeparator />
+              <FieldSet>
+                <FieldLegend>Experience</FieldLegend>
+              </FieldSet>
+            </FieldGroup>
           </form>
         </div>
       </div>
