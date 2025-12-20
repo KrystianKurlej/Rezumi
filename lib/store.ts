@@ -1,12 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import personalReducer from './slices/personalSlice'
-import experienceReducer from './slices/experienceSlice'
+import { newExperienceReducer, experiencesReducer } from './slices/experienceSlice'
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             personal: personalReducer,
-            newExperience: experienceReducer,
+            newExperience: newExperienceReducer,
+            experiences: experiencesReducer,
         },
     })
 }

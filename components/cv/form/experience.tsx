@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { NewExperience, updateNewExperience } from '@/lib/slices/experienceSlice'
+import { NewExperience, updateNewExperience, addExperience, resetNewExperience, setLoading } from '@/lib/slices/experienceSlice'
+import { addExperience as addExperienceToDB } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -20,12 +22,22 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field"
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "@/components/ui/item"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
 export default function ExperienceForm() {
     const dispatch = useAppDispatch()
     const newExperience = useAppSelector(state => state.newExperience)
+    const experiences = useAppSelector(state => state.experiences.list)
+    const isAddingExperienceLoading = useAppSelector(state => state.experiences.isLoading)
+    const [dialogOpen, setDialogOpen] = useState(false)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { id, value } = e.target
@@ -33,12 +45,66 @@ export default function ExperienceForm() {
         dispatch(updateNewExperience({ [key]: value }))
     }
 
+    const handleSubmit = async () => {
+      try {
+        dispatch(setLoading(true))
+        const experienceData = {
+          title: newExperience.newExperienceTitle,
+          company: newExperience.newExperienceCompany,
+          startDate: newExperience.newExperienceStartDate,
+          endDate: newExperience.newExperienceEndDate,
+          description: newExperience.newExperienceDescription
+        }
+        const id = await addExperienceToDB(experienceData)
+        dispatch(addExperience({
+            id,
+            createdAt: Date.now(),
+            ...experienceData
+        }))
+        setDialogOpen(false)
+        dispatch(resetNewExperience())
+      } catch (error) {
+        console.error('Error saving experience:', error)
+      } finally {
+        dispatch(setLoading(false))
+      }
+    }
+
     return(
         <>
         <FieldLegend>
             Experience
         </FieldLegend>
-        <Dialog>
+        {experiences.length > 0 && (
+            <ul>
+                {experiences.map((experience) => (
+                    <li key={experience.id} className="mb-2">
+                        <Item variant="outline">
+                            <ItemContent>
+                                <ItemTitle>{experience.title} - {experience.company}</ItemTitle>
+                                <div>
+                                    <ItemDescription>
+                                        {experience.startDate} - {experience.endDate}
+                                    </ItemDescription>
+                                    <ItemDescription>
+                                        {experience.description}
+                                    </ItemDescription>
+                                </div>
+                            </ItemContent>
+                            <ItemActions>
+                                <Button variant="outline" size="sm">
+                                    Edit
+                                </Button>
+                                <Button variant="outline" size="sm">
+                                    Delete
+                                </Button>
+                            </ItemActions>
+                        </Item>
+                    </li>
+                ))}
+            </ul>
+        )}
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full mb-4">
                     Add New
@@ -59,7 +125,7 @@ export default function ExperienceForm() {
                             </FieldLabel>
                             <Input
                                 id="newExperienceTitle"
-                                value={newExperience.title}
+                                value={newExperience.newExperienceTitle}
                                 onChange={handleChange}
                             />
                         </Field>
@@ -69,7 +135,7 @@ export default function ExperienceForm() {
                             </FieldLabel>
                             <Input
                                 id="newExperienceCompany"
-                                value={newExperience.company}
+                                value={newExperience.newExperienceCompany}
                                 onChange={handleChange}
                             />
                         </Field>
@@ -80,7 +146,7 @@ export default function ExperienceForm() {
                                 </FieldLabel>
                                 <Input
                                     id="newExperienceStartDate"
-                                    value={newExperience.startDate}
+                                    value={newExperience.newExperienceStartDate}
                                     onChange={handleChange}
                                     type="date"
                                 />
@@ -91,7 +157,7 @@ export default function ExperienceForm() {
                                 </FieldLabel>
                                 <Input
                                     id="newExperienceEndDate"
-                                    value={newExperience.endDate}
+                                    value={newExperience.newExperienceEndDate}
                                     onChange={handleChange}
                                     type="date"
                                 />
@@ -103,7 +169,7 @@ export default function ExperienceForm() {
                             </FieldLabel>
                             <Textarea
                                 id="newExperienceDescription"
-                                value={newExperience.description}
+                                value={newExperience.newExperienceDescription}
                                 onChange={handleChange}
                             />
                         </Field>
@@ -113,7 +179,7 @@ export default function ExperienceForm() {
                     <DialogClose asChild>
                         <Button variant="outline">Cancel</Button>
                     </DialogClose>
-                    <Button>
+                    <Button onClick={handleSubmit} disabled={isAddingExperienceLoading}>
                         Add Experience
                     </Button>
                 </DialogFooter>
