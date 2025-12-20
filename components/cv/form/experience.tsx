@@ -34,6 +34,14 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -281,11 +289,32 @@ export default function ExperienceForm() {
                             </ul>
                         )}
                         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button variant="outline" className="w-full mb-4">
-                                    Add New
-                                </Button>
-                            </DialogTrigger>
+                            {experiences.length > 0 ? (
+                                <DialogTrigger asChild>
+                                    <Button variant="outline" className="w-full mb-4">
+                                        Add more Experience
+                                    </Button>
+                                </DialogTrigger>
+                            ) : (
+                                <Empty className="bg-gray-50">
+                                    <EmptyHeader>
+                                        {/* <EmptyMedia variant="icon">
+                                            <Icon />
+                                        </EmptyMedia> */}
+                                        <EmptyTitle>
+                                            No experience added yet
+                                        </EmptyTitle>
+                                        <EmptyDescription>
+                                            Start by adding your work experience.
+                                        </EmptyDescription>
+                                    </EmptyHeader>
+                                    <EmptyContent>
+                                        <Button onClick={() => setDialogOpen(true)}>
+                                            Add Experience
+                                        </Button>
+                                    </EmptyContent>
+                                </Empty>
+                            )}
                             <DialogContent>
                                 <DialogHeader>
                                     <DialogTitle>Add new experience</DialogTitle>
