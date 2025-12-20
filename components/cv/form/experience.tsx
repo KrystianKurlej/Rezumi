@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { NewExperience, updateNewExperience, addExperience, resetNewExperience, setLoading } from '@/lib/slices/experienceSlice'
-import { addExperience as addExperienceToDB } from '@/lib/db'
+import { NewExperience, updateNewExperience, addExperience, resetNewExperience, setLoading, setExperiences } from '@/lib/slices/experienceSlice'
+import { addExperience as addExperienceToDB, getAllExperiences } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -38,6 +38,19 @@ export default function ExperienceForm() {
     const experiences = useAppSelector(state => state.experiences.list)
     const isAddingExperienceLoading = useAppSelector(state => state.experiences.isLoading)
     const [dialogOpen, setDialogOpen] = useState(false)
+
+    useEffect(() => {
+        const loadExperiences = async () => {
+            try {
+                const savedExperiences = await getAllExperiences()
+                dispatch(setExperiences(savedExperiences))
+            } catch (error) {
+                console.error('Error loading experiences:', error)
+            }
+        }
+
+        loadExperiences()
+    }, [dispatch])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { id, value } = e.target
