@@ -6,14 +6,10 @@ import { setExperiences } from '@/lib/slices/experienceSlice'
 import { getAllExperiences, deleteExperience } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
-  Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import {
-  FieldSet,
-} from "@/components/ui/field"
 import { ExperienceItem } from './experience/ExperienceItem'
 import { ExperienceAddDialog } from './experience/ExperienceAddDialog'
 import { ExperienceEmptyState } from './experience/ExperienceEmptyState'

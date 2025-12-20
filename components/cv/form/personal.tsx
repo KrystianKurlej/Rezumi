@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { PersonalInfo, updatePersonalInfo, setPersonalInfo } from '@/lib/slices/personalSlice'
 import { getPersonalInfo, updatePersonalInfo as updatePersonalInfoDB } from '@/lib/db'
 import {
-  Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
@@ -14,7 +13,6 @@ import {
   Field,
   FieldGroup,
   FieldLabel,
-  FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 

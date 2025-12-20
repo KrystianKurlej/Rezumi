@@ -6,14 +6,10 @@ import { setEducations } from '@/lib/slices/educationSlice'
 import { getAllEducations, deleteEducation } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
-  Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import {
-  FieldSet,
-} from "@/components/ui/field"
 import { EducationItem } from './education/EducationItem'
 import { EducationAddDialog } from './education/EducationAddDialog'
 import { EducationEmptyState } from './education/EducationEmptyState'

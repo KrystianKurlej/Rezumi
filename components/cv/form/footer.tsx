@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { Footer, updateFooter, setFooter } from '@/lib/slices/footerSlice'
 import { getFooter, updateFooter as updateFooterDB } from '@/lib/db'
 import {
-  Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
@@ -14,7 +13,6 @@ import {
   Field,
   FieldGroup,
   FieldLabel,
-  FieldSet,
 } from "@/components/ui/field"
 import { Textarea } from "@/components/ui/textarea"
 
