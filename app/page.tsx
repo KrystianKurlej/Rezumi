@@ -10,27 +10,26 @@ import {
 
 export default function Home() {
   return (
-    <div className="h-screen grid grid-cols-6">
-      <div className="h-full">
-        <div className="h-full p-6 overflow-y-auto">
-          Templates
-        </div>
+    <div className="grid grid-cols-6">
+      <div className="h-screen p-6 overflow-y-auto">
       </div>
-      <div className="col-span-3 h-full">
-        <div className="bg-gray-50 h-full p-6 border-x overflow-y-auto">
-          <Preview />
-        </div>
+      <div className="col-span-3 bg-gray-50 h-screen p-6 border-x overflow-y-auto">
+        <Preview />
       </div>
-      <div className="col-span-2 h-full">
-        <div className="h-full p-6 overflow-y-auto">
-          <form>
-            <FieldGroup>
-              <PersonalForm />
-              <FieldSeparator />
-              <ExperienceForm />
-            </FieldGroup>
-          </form>
+      <div className="col-span-2 h-screen py-6 px-3 overflow-y-auto">
+        <div className="px-3 mb-4">
+          <h2 className="text-lg font-semibold mb-1">
+            Configure Your CV
+          </h2>
+          <p className="text-gray-500 text-sm">
+            Complete sections below to build your CV
+          </p>
         </div>
+        <FieldGroup>
+          <PersonalForm />
+          <FieldSeparator />
+          <ExperienceForm />
+        </FieldGroup>
       </div>
     </div>
   );
