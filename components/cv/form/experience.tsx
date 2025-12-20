@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { NewExperience, updateNewExperience, addExperience, resetNewExperience, setLoading, setExperiences } from '@/lib/slices/experienceSlice'
-import { addExperience as addExperienceToDB, getAllExperiences } from '@/lib/db'
+import { addExperience as addExperienceToDB, getAllExperiences, deleteExperience } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
   Accordion,
@@ -88,6 +88,15 @@ export default function ExperienceForm() {
       }
     }
 
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteExperience(id)
+            dispatch(setExperiences(experiences.filter(exp => exp.id !== id)))
+        } catch (error) {
+            console.error('Error deleting experience:', error)
+        }
+    }
+
     return(
         <FieldSet>
             <Accordion type="single" collapsible defaultValue="experience-section">
@@ -116,9 +125,32 @@ export default function ExperienceForm() {
                                                 <Button variant="outline" size="sm">
                                                     Edit
                                                 </Button>
-                                                <Button variant="outline" size="sm">
-                                                    Delete
-                                                </Button>
+                                                <Dialog>
+                                                    <DialogTrigger asChild>
+                                                        <Button variant="outline" size="sm">
+                                                            Delete
+                                                        </Button>
+                                                    </DialogTrigger>
+                                                    <DialogContent>
+                                                        <DialogHeader>
+                                                            <DialogTitle>Delete <em>{experience.title} {experience.company && `- ${experience.company}`}</em>?</DialogTitle>
+                                                            <DialogDescription>
+                                                                Are you sure you want to delete this experience?
+                                                            </DialogDescription>
+                                                        </DialogHeader>
+                                                        <DialogFooter>
+                                                            <DialogClose asChild>
+                                                                <Button variant="outline">Cancel</Button>
+                                                            </DialogClose>
+                                                            <Button
+                                                                variant="destructive"
+                                                                onClick={() => handleDelete(experience.id!)}
+                                                            >
+                                                                Delete
+                                                            </Button>
+                                                        </DialogFooter>
+                                                    </DialogContent>
+                                                </Dialog>
                                             </ItemActions>
                                         </Item>
                                     </li>
