@@ -6,6 +6,7 @@ export default function Preview() {
     const personal = useAppSelector(state => state.personal)
     const experiences = useAppSelector(state => state.experiences.list)
     const educations = useAppSelector(state => state.educations.list)
+    const footer = useAppSelector(state => state.footer)
 
     return(
         <div className="p-10 bg-white shadow-sm">
@@ -46,6 +47,11 @@ export default function Preview() {
                             </li>
                         ))}
                     </ul>
+                </div>
+            )}
+            {footer.footerText && (
+                <div className="mt-6 text-xs text-gray-600">
+                    {footer.footerText}
                 </div>
             )}
         </div>

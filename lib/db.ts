@@ -30,6 +30,10 @@ export interface DBEducation {
     createdAt: number
 }
 
+export interface DBFooter {
+    footerText: string
+}
+
 const DB_NAME = 'cv-maker'
 const DB_VERSION = 3
 const STORE_NAME = 'cvm'
@@ -269,6 +273,40 @@ export const deleteEducation = async (id: number): Promise<void> => {
 
         request.onerror = () => {
             reject('Failed to delete education')
+        }
+    })
+}
+
+export const updateFooter = async (footer: DBFooter): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.put({ id: 'footer', ...footer, updatedAt: Date.now() })
+
+        request.onsuccess = () => {
+            resolve()
+        }
+
+        request.onerror = () => {
+            reject('Failed to update footer')
+        }
+    })
+}
+
+export const getFooter = async (): Promise<DBFooter | null> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.get('footer')
+
+        request.onsuccess = () => {
+            resolve(request.result as DBFooter || null)
+        }
+
+        request.onerror = () => {
+            reject('Failed to retrieve footer')
         }
     })
 }
