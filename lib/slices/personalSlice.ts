@@ -8,10 +8,10 @@ export interface PersonalInfo {
 }
 
 const initialState: PersonalInfo = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '+1 234 567 890',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
 };
 
 const personalSlice = createSlice({
@@ -21,9 +21,12 @@ const personalSlice = createSlice({
         updatePersonalInfo(state, action: PayloadAction<Partial<PersonalInfo>>) {
             return { ...state, ...action.payload };
         },
+        setPersonalInfo(state, action: PayloadAction<PersonalInfo>) {
+            return action.payload;
+        },
         resetPersonalInfo: () => initialState,
     },
 });
 
-export const { updatePersonalInfo, resetPersonalInfo } = personalSlice.actions;
+export const { updatePersonalInfo, setPersonalInfo, resetPersonalInfo } = personalSlice.actions;
 export default personalSlice.reducer;

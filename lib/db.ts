@@ -1,3 +1,10 @@
+export interface DBPersonalInfo {
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+}
+
 export interface DBExperience {
     id?: number
     title: string
@@ -42,6 +49,40 @@ export const initDB = (): Promise<IDBDatabase> => {
     })
 }
 
+export const updatePersonalInfo = async (personalInfo: DBPersonalInfo): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.put({ id: 'personalInfo', ...personalInfo, updatedAt: Date.now() })
+
+        request.onsuccess = () => {
+            resolve()
+        }
+
+        request.onerror = () => {
+            reject('Failed to update personal information')
+        }
+    })
+}
+
+export const getPersonalInfo = async (): Promise<DBPersonalInfo | null> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.get('personalInfo')
+
+        request.onsuccess = () => {
+            resolve(request.result as DBPersonalInfo || null)
+        }
+
+        request.onerror = () => {
+            reject('Failed to retrieve personal information')
+        }
+    })
+}
+
 export const addExperience = async (experience: Omit<DBExperience, 'id' | 'createdAt'>): Promise<number> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
@@ -68,7 +109,11 @@ export const getAllExperiences = async (): Promise<DBExperience[]> => {
         const request = store.getAll()
 
         request.onsuccess = () => {
-            resolve(request.result as DBExperience[])
+            const allResults = request.result
+            const experiences = allResults.filter((item: DBExperience | (DBPersonalInfo & { id: string })) => 
+                typeof item.id === 'number' && 'createdAt' in item
+            )
+            resolve(experiences as DBExperience[])
         }
 
         request.onerror = () => {
