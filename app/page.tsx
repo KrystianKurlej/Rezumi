@@ -22,8 +22,13 @@ export default function Home() {
       </div>
       <div className="col-span-3 h-full">
         <div className="bg-gray-50 h-full p-6 border-x overflow-y-auto">
-          <div className="p-2 bg-white shadow-sm">
-            CV Preview
+          <div className="p-8 bg-white shadow-sm">
+            <div className="text-sm text-gray-500">CV</div>
+            <div className="text-4xl font-semibold">John Doe</div>
+            <div className="py-1 border-b">
+              <div>john.doe@example.com</div>
+              <div>+1 234 567 890</div>
+            </div>
           </div>
         </div>
       </div>
