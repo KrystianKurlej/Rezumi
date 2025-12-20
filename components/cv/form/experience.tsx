@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { NewExperience, updateNewExperience, addExperience, resetNewExperience, setLoading, setExperiences } from '@/lib/slices/experienceSlice'
-import { addExperience as addExperienceToDB, getAllExperiences, deleteExperience } from '@/lib/db'
+import { addExperience as addExperienceToDB, getAllExperiences, deleteExperience, updateExperience, DBExperience } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
   Accordion,
@@ -43,6 +43,7 @@ export default function ExperienceForm() {
     const experiences = useAppSelector(state => state.experiences.list)
     const isAddingExperienceLoading = useAppSelector(state => state.experiences.isLoading)
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [editingExperience, setEditingExperience] = useState<DBExperience | null>(null)
 
     useEffect(() => {
         const loadExperiences = async () => {
@@ -97,6 +98,36 @@ export default function ExperienceForm() {
         }
     }
 
+    const handleEditChange = (id: number, field: keyof DBExperience, value: string) => {
+        setEditingExperience((prev: DBExperience | null) => ({
+            ...prev,
+            [field]: value
+        }) as DBExperience)
+    }
+
+    const handleEditSubmit = async (originalExperience: DBExperience) => {
+        try {
+            if (!editingExperience) return
+            
+            const updatedData = {
+                title: editingExperience.title ?? originalExperience.title,
+                company: editingExperience.company ?? originalExperience.company,
+                startDate: editingExperience.startDate ?? originalExperience.startDate,
+                endDate: editingExperience.endDate ?? originalExperience.endDate,
+                description: editingExperience.description ?? originalExperience.description
+            }
+            
+            await updateExperience(originalExperience.id!, updatedData)
+            
+            const savedExperiences = await getAllExperiences()
+            dispatch(setExperiences(savedExperiences))
+            
+            setEditingExperience(null)
+        } catch (error) {
+            console.error('Error updating experience:', error)
+        }
+    }
+
     return(
         <FieldSet>
             <Accordion type="single" collapsible defaultValue="experience-section">
@@ -122,9 +153,84 @@ export default function ExperienceForm() {
                                                 </div>
                                             </ItemContent>
                                             <ItemActions>
-                                                <Button variant="outline" size="sm">
-                                                    Edit
-                                                </Button>
+                                                <Dialog>
+                                                    <DialogTrigger asChild>
+                                                        <Button variant="outline" size="sm">
+                                                            Edit
+                                                        </Button>
+                                                    </DialogTrigger>
+                                                    <DialogContent>
+                                                        <DialogHeader>
+                                                            <DialogTitle>Edit <em>{experience.title} {experience.company && `- ${experience.company}`}</em></DialogTitle>
+                                                        </DialogHeader>
+                                                        <FieldGroup>
+                                                            <Field>
+                                                                <FieldLabel htmlFor={`experienceTitle${experience.id}`}>
+                                                                    Title
+                                                                </FieldLabel>
+                                                                <Input
+                                                                    id={`experienceTitle${experience.id}`}
+                                                                    value={editingExperience?.title || experience.title}
+                                                                    onChange={(e) => handleEditChange(experience.id!, 'title', e.target.value)}
+                                                                />
+                                                            </Field>
+                                                            <Field>
+                                                                <FieldLabel htmlFor={`experienceCompany${experience.id}`}>
+                                                                    Company
+                                                                </FieldLabel>
+                                                                <Input
+                                                                    id={`experienceCompany${experience.id}`}
+                                                                    value={editingExperience?.company || experience.company}
+                                                                    onChange={(e) => handleEditChange(experience.id!, 'company', e.target.value)}
+                                                                />
+                                                            </Field>
+                                                            <div className="grid grid-cols-2 gap-4">
+                                                                <Field>
+                                                                    <FieldLabel htmlFor={`experienceStartDate${experience.id}`}>
+                                                                        Start Date
+                                                                    </FieldLabel>
+                                                                    <Input
+                                                                        id={`experienceStartDate${experience.id}`}
+                                                                        value={editingExperience?.startDate || experience.startDate}
+                                                                        type="date"
+                                                                        onChange={(e) => handleEditChange(experience.id!, 'startDate', e.target.value)}
+                                                                    />
+                                                                </Field>
+                                                                <Field>
+                                                                    <FieldLabel htmlFor={`experienceEndDate${experience.id}`}>
+                                                                        End Date
+                                                                    </FieldLabel>
+                                                                    <Input
+                                                                        id={`experienceEndDate${experience.id}`}
+                                                                        value={editingExperience?.endDate || experience.endDate}
+                                                                        type="date"
+                                                                        onChange={(e) => handleEditChange(experience.id!, 'endDate', e.target.value)}
+                                                                    />
+                                                                </Field>
+                                                            </div>
+                                                            <Field>
+                                                                <FieldLabel htmlFor={`experienceDescription${experience.id}`}>
+                                                                    Description
+                                                                </FieldLabel>
+                                                                <Textarea
+                                                                    id={`experienceDescription${experience.id}`}
+                                                                    value={editingExperience?.description || experience.description}
+                                                                    onChange={(e) => handleEditChange(experience.id!, 'description', e.target.value)}
+                                                                />
+                                                            </Field>
+                                                        </FieldGroup>
+                                                        <DialogFooter>
+                                                            <DialogClose asChild>
+                                                                <Button variant="outline">Cancel</Button>
+                                                            </DialogClose>
+                                                            <DialogClose asChild>
+                                                                <Button onClick={() => handleEditSubmit(experience)}>
+                                                                    Save Changes
+                                                                </Button>
+                                                            </DialogClose>
+                                                        </DialogFooter>
+                                                    </DialogContent>
+                                                </Dialog>
                                                 <Dialog>
                                                     <DialogTrigger asChild>
                                                         <Button variant="outline" size="sm">
@@ -165,7 +271,7 @@ export default function ExperienceForm() {
                             </DialogTrigger>
                             <DialogContent>
                                 <DialogHeader>
-                                    <DialogTitle>Experience</DialogTitle>
+                                    <DialogTitle>Add new experience</DialogTitle>
                                     <DialogDescription>
                                         Add your work experience details here.
                                     </DialogDescription>

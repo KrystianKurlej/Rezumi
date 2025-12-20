@@ -93,3 +93,35 @@ export const deleteExperience = async (id: number): Promise<void> => {
         }
     })
 }
+
+export const updateExperience = async (id: number, experience: Omit<DBExperience, 'id' | 'createdAt'>): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const getRequest = store.get(id)
+
+        getRequest.onsuccess = () => {
+            const existingExperience = getRequest.result
+            if (existingExperience) {
+                const updatedExperience = {
+                    ...existingExperience,
+                    ...experience,
+                    id,
+                    updatedAt: Date.now()
+                }
+                
+                const putRequest = store.put(updatedExperience)
+                
+                putRequest.onsuccess = () => resolve()
+                putRequest.onerror = () => reject('Failed to update experience')
+            } else {
+                reject('Experience not found')
+            }
+        }
+
+        getRequest.onerror = () => {
+            reject('Failed to retrieve experience for update')
+        }
+    })
+}
