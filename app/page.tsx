@@ -1,12 +1,11 @@
 'use client'
 
 import PersonalForm from "@/components/cv/form/personal"
+import ExperienceForm from "@/components/cv/form/experience";
 import Preview from "@/components/cv/preview";
 import {
   FieldGroup,
-  FieldLegend,
   FieldSeparator,
-  FieldSet,
 } from "@/components/ui/field"
 
 export default function Home() {
@@ -28,9 +27,7 @@ export default function Home() {
             <FieldGroup>
               <PersonalForm />
               <FieldSeparator />
-              <FieldSet>
-                <FieldLegend>Experience</FieldLegend>
-              </FieldSet>
+              <ExperienceForm />
             </FieldGroup>
           </form>
         </div>
