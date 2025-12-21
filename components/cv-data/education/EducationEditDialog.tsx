@@ -22,6 +22,12 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import MarkdownInfo from '@/components/MarkdownInfo'
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 interface EducationEditDialogProps {
   education: DBEducation
@@ -39,6 +45,8 @@ export function EducationEditDialog({
   trigger 
 }: EducationEditDialogProps) {
   const [editingEducation, setEditingEducation] = useState<DBEducation | null>(null)
+  const [startDateOpen, setStartDateOpen] = useState(false)
+  const [endDateOpen, setEndDateOpen] = useState(false)
 
   const handleEditChange = (field: keyof DBEducation, value: string) => {
     setEditingEducation((prev: DBEducation | null) => ({
@@ -127,24 +135,59 @@ export function EducationEditDialog({
               <FieldLabel htmlFor={`educationStartDate${education.id}`}>
                 Start Date
               </FieldLabel>
-              <Input
-                id={`educationStartDate${education.id}`}
-                value={editingEducation?.startDate || education.startDate}
-                type="date"
-                onChange={(e) => handleEditChange('startDate', e.target.value)}
-              />
+              <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="justify-between w-full">
+                    {editingEducation?.startDate || education.startDate || 'Select start date'}
+                    <i className="bi bi-calendar-event"></i>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={editingEducation?.startDate ? new Date(editingEducation.startDate) : education.startDate ? new Date(education.startDate) : undefined}
+                    onSelect={(date) => {
+                      if (date) {
+                        const year = date.getFullYear()
+                        const month = String(date.getMonth() + 1).padStart(2, '0')
+                        const day = String(date.getDate()).padStart(2, '0')
+                        const formattedDate = `${year}-${month}-${day}`
+                        handleEditChange('startDate', formattedDate)
+                        setStartDateOpen(false)
+                      }
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
             </Field>
             <Field>
               <FieldLabel htmlFor={`educationEndDate${education.id}`}>
                 End Date
               </FieldLabel>
-              <Input
-                id={`educationEndDate${education.id}`}
-                value={editingEducation?.endDate || education.endDate}
-                type="date"
-                disabled={editingEducation?.isOngoing ?? education.isOngoing}
-                onChange={(e) => handleEditChange('endDate', e.target.value)}
-              />
+              <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="justify-between w-full" disabled={editingEducation?.isOngoing ?? education.isOngoing}>
+                    {editingEducation?.endDate || education.endDate || 'Select end date'}
+                    <i className="bi bi-calendar-event"></i>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={editingEducation?.endDate ? new Date(editingEducation.endDate) : education.endDate ? new Date(education.endDate) : undefined}
+                    onSelect={(date) => {
+                      if (date) {
+                        const year = date.getFullYear()
+                        const month = String(date.getMonth() + 1).padStart(2, '0')
+                        const day = String(date.getDate()).padStart(2, '0')
+                        const formattedDate = `${year}-${month}-${day}`
+                        handleEditChange('endDate', formattedDate)
+                        setEndDateOpen(false)
+                      }
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
             </Field>
           </div>
           <Field>

@@ -22,6 +22,12 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import MarkdownInfo from '@/components/MarkdownInfo'
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 interface ExperienceEditDialogProps {
   experience: DBExperience
@@ -39,6 +45,8 @@ export function ExperienceEditDialog({
   trigger 
 }: ExperienceEditDialogProps) {
   const [editingExperience, setEditingExperience] = useState<DBExperience | null>(null)
+  const [startDateOpen, setStartDateOpen] = useState(false)
+  const [endDateOpen, setEndDateOpen] = useState(false)
 
   const handleEditChange = (field: keyof DBExperience, value: string) => {
     setEditingExperience((prev: DBExperience | null) => ({
@@ -115,24 +123,57 @@ export function ExperienceEditDialog({
               <FieldLabel htmlFor={`experienceStartDate${experience.id}`}>
                 Start Date
               </FieldLabel>
-              <Input
-                id={`experienceStartDate${experience.id}`}
-                value={editingExperience?.startDate || experience.startDate}
-                type="date"
-                onChange={(e) => handleEditChange('startDate', e.target.value)}
-              />
+              <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" id={`experienceStartDate${experience.id}`} className="justify-between w-full">
+                    {editingExperience?.startDate || experience.startDate || 'Select date'}
+                    <i className="bi bi-calendar-event"></i>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={editingExperience?.startDate ? new Date(editingExperience.startDate) : experience.startDate ? new Date(experience.startDate) : undefined}
+                    onSelect={(date) => {
+                      if (date) {
+                        const year = date.getFullYear()
+                        const month = String(date.getMonth() + 1).padStart(2, '0')
+                        const day = String(date.getDate()).padStart(2, '0')
+                        handleEditChange('startDate', `${year}-${month}-${day}`)
+                      }
+                      setStartDateOpen(false)
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
             </Field>
             <Field>
               <FieldLabel htmlFor={`experienceEndDate${experience.id}`}>
                 End Date
               </FieldLabel>
-              <Input
-                id={`experienceEndDate${experience.id}`}
-                value={editingExperience?.endDate || experience.endDate}
-                type="date"
-                disabled={editingExperience?.isOngoing ?? experience.isOngoing}
-                onChange={(e) => handleEditChange('endDate', e.target.value)}
-              />
+              <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" id={`experienceEndDate${experience.id}`} className="justify-between w-full" disabled={editingExperience?.isOngoing ?? experience.isOngoing}>
+                    {editingExperience?.endDate || experience.endDate || 'Select date'}
+                    <i className="bi bi-calendar-event"></i>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={editingExperience?.endDate ? new Date(editingExperience.endDate) : experience.endDate ? new Date(experience.endDate) : undefined}
+                    onSelect={(date) => {
+                      if (date) {
+                        const year = date.getFullYear()
+                        const month = String(date.getMonth() + 1).padStart(2, '0')
+                        const day = String(date.getDate()).padStart(2, '0')
+                        handleEditChange('endDate', `${year}-${month}-${day}`)
+                      }
+                      setEndDateOpen(false)
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
             </Field>
           </div>
           <Field>

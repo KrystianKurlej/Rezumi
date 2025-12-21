@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { useState, ReactNode } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { NewEducation, updateNewEducation, addEducation, resetNewEducation, setLoading } from '@/lib/slices/educationSlice'
 import { addEducation as addEducationToDB } from '@/lib/db'
@@ -26,6 +26,12 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import MarkdownInfo from '@/components/MarkdownInfo'
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 interface EducationAddDialogProps {
   open: boolean
@@ -43,6 +49,8 @@ export function EducationAddDialog({
   const dispatch = useAppDispatch()
   const newEducation = useAppSelector(state => state.newEducation)
   const isAddingEducationLoading = useAppSelector(state => state.educations.isLoading)
+  const [startDateOpen, setStartDateOpen] = useState(false)
+  const [endDateOpen, setEndDateOpen] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target
@@ -132,24 +140,59 @@ export function EducationAddDialog({
                 <FieldLabel htmlFor="newEducationStartDate">
                   Start Date
                 </FieldLabel>
-                <Input
-                  id="newEducationStartDate"
-                  value={newEducation.newEducationStartDate}
-                  onChange={handleChange}
-                  type="date"
-                />
+                <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="justify-between w-full">
+                      {newEducation.newEducationStartDate ? newEducation.newEducationStartDate : 'Select start date'}
+                      <i className="bi bi-calendar-event"></i>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newEducation.newEducationStartDate ? new Date(newEducation.newEducationStartDate) : undefined}
+                      onSelect={(date) => {
+                        if (date) {
+                          const year = date.getFullYear()
+                          const month = String(date.getMonth() + 1).padStart(2, '0')
+                          const day = String(date.getDate()).padStart(2, '0')
+                          const formattedDate = `${year}-${month}-${day}`
+                          dispatch(updateNewEducation({ newEducationStartDate: formattedDate }))
+                          setStartDateOpen(false)
+                        }
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
               </Field>
               <Field>
                 <FieldLabel htmlFor="newEducationEndDate">
                   End Date
                 </FieldLabel>
-                <Input
-                  id="newEducationEndDate"
-                  value={newEducation.newEducationEndDate}
-                  onChange={handleChange}
-                  type="date"
-                  disabled={newEducation.newEducationIsOngoing}
-                />
+                <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="justify-between w-full" disabled={newEducation.newEducationIsOngoing}>
+                      {newEducation.newEducationEndDate ? newEducation.newEducationEndDate : 'Select end date'}
+                      <i className="bi bi-calendar-event"></i>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newEducation.newEducationEndDate ? new Date(newEducation.newEducationEndDate) : undefined}
+                      onSelect={(date) => {
+                        if (date) {
+                          const year = date.getFullYear()
+                          const month = String(date.getMonth() + 1).padStart(2, '0')
+                          const day = String(date.getDate()).padStart(2, '0')
+                          const formattedDate = `${year}-${month}-${day}`
+                          dispatch(updateNewEducation({ newEducationEndDate: formattedDate }))
+                          setEndDateOpen(false)
+                        }
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
               </Field>
             </div>
             <div className="flex items-center space-x-2">

@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { useState, ReactNode } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { NewExperience, updateNewExperience, addExperience, resetNewExperience, setLoading } from '@/lib/slices/experienceSlice'
 import { addExperience as addExperienceToDB } from '@/lib/db'
@@ -26,6 +26,12 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import MarkdownInfo from '@/components/MarkdownInfo'
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 interface ExperienceAddDialogProps {
   open: boolean
@@ -43,6 +49,8 @@ export function ExperienceAddDialog({
   const dispatch = useAppDispatch()
   const newExperience = useAppSelector(state => state.newExperience)
   const isAddingExperienceLoading = useAppSelector(state => state.experiences.isLoading)
+  const [startDateOpen, setStartDateOpen] = useState(false)
+  const [endDateOpen, setEndDateOpen] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target
@@ -120,24 +128,59 @@ export function ExperienceAddDialog({
                 <FieldLabel htmlFor="newExperienceStartDate">
                   Start Date
                 </FieldLabel>
-                <Input
-                  id="newExperienceStartDate"
-                  value={newExperience.newExperienceStartDate}
-                  onChange={handleChange}
-                  type="date"
-                />
+                <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="justify-between w-full">
+                      {newExperience.newExperienceStartDate ? newExperience.newExperienceStartDate : 'Select start date'}
+                      <i className="bi bi-calendar-event"></i>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newExperience.newExperienceStartDate ? new Date(newExperience.newExperienceStartDate) : undefined}
+                      onSelect={(date) => {
+                        if (date) {
+                          const year = date.getFullYear()
+                          const month = String(date.getMonth() + 1).padStart(2, '0')
+                          const day = String(date.getDate()).padStart(2, '0')
+                          const formattedDate = `${year}-${month}-${day}`
+                          dispatch(updateNewExperience({ newExperienceStartDate: formattedDate }))
+                        }
+                        setStartDateOpen(false)
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
               </Field>
               <Field>
                 <FieldLabel htmlFor="newExperienceEndDate">
                   End Date
                 </FieldLabel>
-                <Input
-                  id="newExperienceEndDate"
-                  value={newExperience.newExperienceEndDate}
-                  onChange={handleChange}
-                  type="date"
-                  disabled={newExperience.newExperienceIsOngoing}
-                />
+                <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" id="newExperienceEndDate" className="justify-between w-full" disabled={newExperience.newExperienceIsOngoing}>
+                      {newExperience.newExperienceEndDate || 'Select end date'}
+                      <i className="bi bi-calendar-event"></i>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newExperience.newExperienceEndDate ? new Date(newExperience.newExperienceEndDate) : undefined}
+                      onSelect={(date) => {
+                        if (date) {
+                          const year = date.getFullYear()
+                          const month = String(date.getMonth() + 1).padStart(2, '0')
+                          const day = String(date.getDate()).padStart(2, '0')
+                          const formattedDate = `${year}-${month}-${day}`
+                          dispatch(updateNewExperience({ newExperienceEndDate: formattedDate }))
+                        }
+                        setEndDateOpen(false)
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
               </Field>
             </div>
             <div className="flex items-center space-x-2">
