@@ -1,6 +1,7 @@
 'use client'
 
 import { useAppSelector } from "@/lib/hooks"
+import { formatRichText } from "@/lib/utils"
 
 export default function Preview() {
     const personal = useAppSelector(state => state.personal)
@@ -26,7 +27,7 @@ export default function Preview() {
                                     <div className="grow"><span className="font-semibold">{experience.title}</span> - {experience.company}</div>
                                     <div className="shrink-0">{experience.startDate} - {experience.isOngoing ? 'Present' : experience.endDate}</div>
                                 </div>
-                                <div className="text-sm">{experience.description}</div>
+                                <div className="text-sm" dangerouslySetInnerHTML={{ __html: formatRichText(experience.description) }}></div>
                             </li>
                         ))}
                     </ul>
@@ -43,16 +44,14 @@ export default function Preview() {
                                     <div className="shrink-0">{education.startDate} - {education.isOngoing ? 'Present' : education.endDate}</div>
                                 </div>
                                 <div className="text-sm font-medium">{education.institution}</div>
-                                {education.description && <div className="text-sm">{education.description}</div>}
+                                {education.description && <div className="text-sm" dangerouslySetInnerHTML={{ __html: formatRichText(education.description) }}></div>}
                             </li>
                         ))}
                     </ul>
                 </div>
             )}
             {footer.footerText && (
-                <div className="mt-6 text-xs text-gray-600">
-                    {footer.footerText}
-                </div>
+                <div className="mt-6 text-xs text-gray-600" dangerouslySetInnerHTML={{ __html: formatRichText(footer.footerText) }}></div>
             )}
         </div>
     )

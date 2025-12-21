@@ -25,6 +25,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import MarkdownInfo from '@/components/MarkdownInfo'
 
 interface ExperienceAddDialogProps {
   open: boolean
@@ -161,6 +162,7 @@ export function ExperienceAddDialog({
                 onChange={handleChange}
                 placeholder="Key responsibilities, achievements, projects, etc."
               />
+              <MarkdownInfo />
             </Field>
           </FieldGroup>
         </FieldSet>

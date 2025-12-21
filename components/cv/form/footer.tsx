@@ -12,9 +12,9 @@ import {
 import {
   Field,
   FieldGroup,
-  FieldLabel,
 } from "@/components/ui/field"
 import { Textarea } from "@/components/ui/textarea"
+import MarkdownInfo from '@/components/MarkdownInfo'
 
 export default function FooterForm() {
     const dispatch = useAppDispatch()
@@ -57,7 +57,6 @@ export default function FooterForm() {
             <AccordionContent>
                 <FieldGroup>
                     <Field>
-                        <FieldLabel htmlFor="footerText">Footer Text</FieldLabel>
                         <Textarea
                           id="footerText"
                           placeholder="Enter any legal disclaimers or additional information for the footer"
@@ -65,6 +64,7 @@ export default function FooterForm() {
                           onChange={handleChange}
                           onBlur={handleBlur}
                         />
+                        <MarkdownInfo />
                     </Field>
                 </FieldGroup>
             </AccordionContent>

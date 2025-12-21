@@ -25,6 +25,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import MarkdownInfo from '@/components/MarkdownInfo'
 
 interface EducationAddDialogProps {
   open: boolean
@@ -173,6 +174,7 @@ export function EducationAddDialog({
                 onChange={handleChange}
                 placeholder="Notable achievements, thesis, coursework, etc."
               />
+              <MarkdownInfo />
             </Field>
           </FieldGroup>
         </FieldSet>

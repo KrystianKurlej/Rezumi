@@ -21,6 +21,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import MarkdownInfo from '@/components/MarkdownInfo'
 
 interface ExperienceEditDialogProps {
   experience: DBExperience
@@ -156,6 +157,7 @@ export function ExperienceEditDialog({
               onChange={(e) => handleEditChange('description', e.target.value)}
               placeholder="Key responsibilities, achievements, projects, etc."
             />
+            <MarkdownInfo />
           </Field>
         </FieldGroup>
         <DialogFooter>
