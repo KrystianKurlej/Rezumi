@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/item"
 import { EducationEditDialog } from './EducationEditDialog'
 import { EducationDeleteDialog } from './EducationDeleteDialog'
+import { formatDate } from '@/lib/utils'
 
 interface EducationItemProps {
   education: DBEducation
@@ -32,7 +33,7 @@ export function EducationItem({ education, onUpdate, onDelete }: EducationItemPr
             {education.institution}
           </ItemDescription>
           <ItemDescription>
-            {education.startDate} - {education.isOngoing ? 'Present' : education.endDate}
+            {formatDate(education.startDate, 'long')} - {education.isOngoing ? 'Present' : formatDate(education.endDate, 'long')}
           </ItemDescription>
           {education.description && (
             <ItemDescription>

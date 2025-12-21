@@ -16,3 +16,17 @@ export function formatRichText(text: string) {
     .replace(/• (.*?)(<br\/>|$)/g, '<ul><li>$1</li></ul>') // Bullet points
     .replace(/1\. (.*?)(<br\/>|$)/g, '<ol><li>$1</li></ol>') // Numbered lists
 }
+
+export function formatDate(dateString: string, variant: 'long' | 'short') {
+  const year = dateString.slice(0, 4)
+  const month = dateString.slice(5, 7)
+  const day = dateString.slice(8, 10)
+
+  if (variant === 'long') {
+    return `${day}.${month}.${year}`
+  }
+
+  if (variant === 'short') {
+    return `${month}.${year}`
+  }
+}

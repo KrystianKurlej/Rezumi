@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/item"
 import { ExperienceEditDialog } from './ExperienceEditDialog'
 import { ExperienceDeleteDialog } from './ExperienceDeleteDialog'
+import { formatDate } from '@/lib/utils'
 
 interface ExperienceItemProps {
   experience: DBExperience
@@ -29,7 +30,7 @@ export function ExperienceItem({ experience, onUpdate, onDelete }: ExperienceIte
         <ItemTitle>{experience.title} - {experience.company}</ItemTitle>
         <div>
           <ItemDescription>
-            {experience.startDate} - {experience.isOngoing ? 'Present' : experience.endDate}
+            {formatDate(experience.startDate, 'long')} - {experience.isOngoing ? 'Present' : formatDate(experience.endDate, 'long')}
           </ItemDescription>
           <ItemDescription>
             {experience.description}

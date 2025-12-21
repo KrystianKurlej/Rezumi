@@ -1,7 +1,7 @@
 'use client'
 
 import { useAppSelector } from "@/lib/hooks"
-import { formatRichText } from "@/lib/utils"
+import { formatRichText, formatDate } from "@/lib/utils"
 
 export default function Preview() {
     const personal = useAppSelector(state => state.personal)
@@ -26,9 +26,9 @@ export default function Preview() {
                             <li key={experience.id} className={"mb-2" + (experiences.length - 1 !== experiences.indexOf(experience) ? " border-b border-gray-200 pb-2" : "")}>
                                 <div className="flex gap-4">
                                     <div className="grow"><span className="font-semibold">{experience.title}</span> - {experience.company}</div>
-                                    <div className="shrink-0">{experience.startDate} - {experience.isOngoing ? 'Present' : experience.endDate}</div>
+                                    <div className="shrink-0">{formatDate(experience.startDate, 'short')} - {experience.isOngoing ? 'Present' : formatDate(experience.endDate, 'short')}</div>
                                 </div>
-                                <div className="text-sm" dangerouslySetInnerHTML={{ __html: formatRichText(experience.description) }}></div>
+                                <div className="text-sm" dangerouslySetInnerHTML={{ __html: formatRichText(experience.description, 'short') }}></div>
                             </li>
                         ))}
                     </ul>
@@ -42,10 +42,10 @@ export default function Preview() {
                             <li key={education.id} className={"mb-2" + (educations.length - 1 !== educations.indexOf(education) ? " border-b border-gray-200 pb-2" : "")}>
                                 <div className="flex gap-4">
                                     <div className="grow"><span className="font-semibold">{education.degree}</span> in {education.fieldOfStudy}</div>
-                                    <div className="shrink-0">{education.startDate} - {education.isOngoing ? 'Present' : education.endDate}</div>
+                                    <div className="shrink-0">{formatDate(education.startDate, 'short')} - {education.isOngoing ? 'Present' : formatDate(education.endDate, 'short')}</div>
                                 </div>
                                 <div className="text-sm font-medium">{education.institution}</div>
-                                {education.description && <div className="text-sm" dangerouslySetInnerHTML={{ __html: formatRichText(education.description) }}></div>}
+                                {education.description && <div className="text-sm" dangerouslySetInnerHTML={{ __html: formatRichText(education.description, 'short') }}></div>}
                             </li>
                         ))}
                     </ul>
