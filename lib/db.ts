@@ -45,6 +45,7 @@ export interface DBApplication {
     position: string
     url: string
     notes: string
+    salary: number | null
     dateApplied: string
     status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
     createdAt: number

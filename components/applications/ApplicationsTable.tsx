@@ -39,6 +39,7 @@ export type Application = {
     position: string,
     url: string,
     notes: string,
+    salary: number | null,
     dateApplied: string,
     status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
 }
@@ -148,6 +149,7 @@ export default function ApplicationsTable() {
         position: app.position,
         url: app.url,
         notes: app.notes,
+        salary: app.salary,
         dateApplied: app.dateApplied,
         status: app.status
       }))
@@ -217,6 +219,31 @@ export default function ApplicationsTable() {
         cell: ({ row }) => (
             <div>{row.getValue("position")}</div>
         ),
+    },
+    {
+        accessorKey: "salary",
+        header: ({ column }) => (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              className="h-auto p-0 font-semibold hover:bg-transparent"
+            >
+              Salary
+              {column.getIsSorted() === "asc" ? (
+                <i className="ml-2 bi bi-arrow-up text-xs"></i>
+              ) : column.getIsSorted() === "desc" ? (
+                <i className="ml-2 bi bi-arrow-down text-xs"></i>
+              ) : (
+                <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
+              )}
+            </Button>
+        ),
+        cell: ({ row }) => {
+            const salary = row.getValue("salary") as number | null;
+            return (
+                <div>{salary ? salary.toLocaleString() : '-'}</div>
+            );
+        },
     },
     {
         accessorKey: "status",

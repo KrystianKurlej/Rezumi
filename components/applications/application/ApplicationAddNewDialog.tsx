@@ -89,6 +89,7 @@ export function ApplicationAddNewDialog({
         position: newApplication.newApplicationPosition,
         url: newApplication.newApplicationUrl,
         notes: newApplication.newApplicationNotes,
+        salary: newApplication.newApplicationSalary ? parseFloat(newApplication.newApplicationSalary) : null,
         dateApplied: newApplication.newApplicationDateApplied,
         status: newApplication.newApplicationStatus
       })
@@ -153,6 +154,18 @@ export function ApplicationAddNewDialog({
                 value={newApplication.newApplicationUrl}
                 onChange={handleChange}
                 placeholder="https://..."
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="newApplicationSalary">
+                Expected Salary
+              </FieldLabel>
+              <Input
+                id="newApplicationSalary"
+                type="number"
+                value={newApplication.newApplicationSalary}
+                onChange={handleChange}
+                placeholder="50000"
               />
             </Field>
             <Field>

@@ -55,7 +55,7 @@ export function ApplicationEditDialog({
   const [dateOpen, setDateOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const handleEditChange = (field: keyof Application, value: string) => {
+  const handleEditChange = (field: keyof Application, value: string | number | null) => {
     setEditingApplication((prev: Application | null) => ({
       ...prev,
       ...application,
@@ -89,6 +89,7 @@ export function ApplicationEditDialog({
         position: editingApplication.position ?? application.position,
         url: editingApplication.url ?? application.url,
         notes: editingApplication.notes ?? application.notes,
+        salary: editingApplication.salary ?? application.salary,
         dateApplied: editingApplication.dateApplied ?? application.dateApplied,
         status: editingApplication.status ?? application.status
       }
@@ -158,6 +159,18 @@ export function ApplicationEditDialog({
                 value={currentData.url}
                 onChange={(e) => handleEditChange('url', e.target.value)}
                 placeholder="https://..."
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="editSalary">
+                Expected Salary
+              </FieldLabel>
+              <Input
+                id="editSalary"
+                type="number"
+                value={currentData.salary?.toString() || ''}
+                onChange={(e) => handleEditChange('salary', e.target.value ? parseFloat(e.target.value) : null)}
+                placeholder="50000"
               />
             </Field>
             <Field>

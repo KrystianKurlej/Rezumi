@@ -8,6 +8,7 @@ export interface NewApplication {
     newApplicationPosition: string
     newApplicationUrl: string
     newApplicationNotes: string
+    newApplicationSalary: string
     newApplicationDateApplied: string
     newApplicationStatus: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
 }
@@ -24,6 +25,7 @@ const initialNewApplicationState: NewApplication = {
     newApplicationPosition: '',
     newApplicationUrl: '',
     newApplicationNotes: '',
+    newApplicationSalary: '',
     newApplicationDateApplied: '',
     newApplicationStatus: null,
 };
