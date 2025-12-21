@@ -3,6 +3,7 @@ import personalReducer from './slices/personalSlice'
 import { newExperienceReducer, experiencesReducer } from './slices/experienceSlice'
 import { newEducationReducer, educationsReducer } from './slices/educationSlice'
 import footerReducer from './slices/footerSlice'
+import skillsReducer from './slices/skillsSlice'
 
 export const makeStore = () => {
     return configureStore({
@@ -13,6 +14,7 @@ export const makeStore = () => {
             newEducation: newEducationReducer,
             educations: educationsReducer,
             footer: footerReducer,
+            skills: skillsReducer,
         },
     })
 }

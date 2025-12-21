@@ -7,6 +7,7 @@ export default function Preview() {
     const personal = useAppSelector(state => state.personal)
     const experiences = useAppSelector(state => state.experiences.list)
     const educations = useAppSelector(state => state.educations.list)
+    const skills = useAppSelector(state => state.skills)
     const footer = useAppSelector(state => state.footer)
 
     return(
@@ -48,6 +49,12 @@ export default function Preview() {
                             </li>
                         ))}
                     </ul>
+                </div>
+            )}
+            {skills.skillsText && (
+                <div className="mt-4">
+                    <div className="text-xl font-semibold pb-1 mb-2 border-b border-gray-300">Skills</div>
+                    <div className="text-sm" dangerouslySetInnerHTML={{ __html: formatRichText(skills.skillsText) }}></div>
                 </div>
             )}
             {footer.footerText && (

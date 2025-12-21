@@ -3,6 +3,7 @@
 import PersonalForm from "@/components/cv/form/personal"
 import ExperienceForm from "@/components/cv/form/experience";
 import EducationForm from "@/components/cv/form/education";
+import SkillsForm from "@/components/cv/form/skills";
 import FooterForm from "@/components/cv/form/footer";
 import Preview from "@/components/cv/preview";
 import { Accordion } from "@/components/ui/accordion"
@@ -28,6 +29,7 @@ export default function Home() {
           <PersonalForm />
           <ExperienceForm />
           <EducationForm />
+          <SkillsForm />
           <FooterForm />
         </Accordion>
       </div>

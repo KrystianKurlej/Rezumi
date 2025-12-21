@@ -30,6 +30,10 @@ export interface DBEducation {
     createdAt: number
 }
 
+export interface DBSkills {
+    skillsText: string
+}
+
 export interface DBFooter {
     footerText: string
 }
@@ -273,6 +277,40 @@ export const deleteEducation = async (id: number): Promise<void> => {
 
         request.onerror = () => {
             reject('Failed to delete education')
+        }
+    })
+}
+
+export const updateSkills = async (skills: DBSkills): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.put({ id: 'skills', ...skills, updatedAt: Date.now() })
+
+        request.onsuccess = () => {
+            resolve()
+        }
+
+        request.onerror = () => {
+            reject('Failed to update skills')
+        }
+    })
+}
+
+export const getSkills = async (): Promise<DBSkills | null> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.get('skills')
+
+        request.onsuccess = () => {
+            resolve(request.result as DBSkills || null)
+        }
+
+        request.onerror = () => {
+            reject('Failed to retrieve skills')
         }
     })
 }
