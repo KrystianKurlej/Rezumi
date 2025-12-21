@@ -2,9 +2,9 @@ import React from 'react';
 
 export function PageHeader({ children, iconClass }: { children: React.ReactNode, iconClass?: string }) {
     return (
-        <header className="px-4 py-5 border-b">
+        <header className="bg-sidebar px-4 py-5 border-b">
             {iconClass && (
-                <i className={'text-xl mb-2 block text-gray-600 bi ' + iconClass}></i>
+                <i className={'text-xl bi ' + iconClass}></i>
             )}
             {children}
         </header>

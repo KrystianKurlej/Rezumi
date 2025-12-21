@@ -32,7 +32,7 @@ export default function Home() {
             <PreviewScale />
           </div>
           <div className="h-screen overflow-y-auto border-l w-96">
-            <PageHeader iconClass="bi-file-earmark-text">
+            <PageHeader iconClass="bi-file-earmark-person">
               <PageHeaderTitle>
                 CV Data
               </PageHeaderTitle>

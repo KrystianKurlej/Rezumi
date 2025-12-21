@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar"
 
 const items = [
@@ -62,6 +63,11 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <div className="p-4 text-xs text-center text-gray-600">
+          &copy;{new Date().getFullYear()} Krystian Kurlej
+        </div>
+      </SidebarFooter>
     </Sidebar>
   )
 }
