@@ -79,31 +79,31 @@ export default function PersonalForm() {
                                 onBlur={handleBlur}
                             />
                         </Field>
+                        <Field>
+                            <FieldLabel htmlFor="email">
+                                Email Address
+                            </FieldLabel>
+                            <Input
+                                id="email"
+                                type="email"
+                                value={personal.email}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                        </Field>
+                        <Field>
+                            <FieldLabel htmlFor="phone">
+                                Phone Number
+                            </FieldLabel>
+                            <Input
+                                id="phone"
+                                type="tel"
+                                value={personal.phone}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                        </Field>
                     </div>
-                    <Field>
-                        <FieldLabel htmlFor="email">
-                            Email Address
-                        </FieldLabel>
-                        <Input
-                            id="email"
-                            type="email"
-                            value={personal.email}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                        />
-                    </Field>
-                    <Field>
-                        <FieldLabel htmlFor="phone">
-                            Phone Number
-                        </FieldLabel>
-                        <Input
-                            id="phone"
-                            type="tel"
-                            value={personal.phone}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                        />
-                    </Field>
                 </FieldGroup>
             </AccordionContent>
         </AccordionItem>

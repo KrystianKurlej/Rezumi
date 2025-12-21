@@ -8,35 +8,51 @@ import FooterForm from "@/components/cv/form/footer";
 import Preview from "@/components/cv/preview";
 import PreviewScale from "@/components/PreviewScale";
 import { Accordion } from "@/components/ui/accordion"
+import { 
+  PageHeader, 
+  PageHeaderTitle, 
+  PageHeaderDescription
+} from "@/components/PageHeader";
+import { 
+  SidebarProvider, 
+  SidebarInset
+} from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
 export default function Home() {
   return (
-    <div className="grid grid-cols-6">
-      <div className="h-screen p-6 overflow-y-auto">
-      </div>
-      <div className="col-span-3 bg-gray-50 h-screen px-6 border-x overflow-y-hidden relative">
-        <div className="h-full overflow-auto w-full my-6">
-          <Preview />
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <div className="flex">
+          <div className="bg-gray-100 h-screen px-6 overflow-y-hidden relative flex-1">
+            <div className="h-full overflow-auto w-full my-6">
+              <Preview />
+            </div>
+            <PreviewScale />
+          </div>
+          <div className="h-screen overflow-y-auto border-l w-96">
+            <PageHeader iconClass="bi-file-earmark-text">
+              <PageHeaderTitle>
+                CV Data
+              </PageHeaderTitle>
+              <PageHeaderDescription>
+                Set up your core CV information. Add experience, skills, education, and personal details once and reuse them everywhere.
+              </PageHeaderDescription>
+            </PageHeader>
+            <div className="p-2">
+              <Accordion type="multiple" defaultValue="personal-section">
+                <PersonalForm />
+                <ExperienceForm />
+                <EducationForm />
+                <SkillsForm />
+                <FooterForm />
+              </Accordion>
+            </div>
+          </div>
         </div>
-        <PreviewScale />
-      </div>
-      <div className="col-span-2 h-screen py-6 px-3 overflow-y-auto">
-        <div className="px-3 mb-4">
-          <h2 className="text-lg font-semibold mb-1">
-            Configure Your CV
-          </h2>
-          <p className="text-gray-500 text-sm">
-            Complete sections below to build your CV
-          </p>
-        </div>
-        <Accordion type="multiple" defaultValue="personal-section">
-          <PersonalForm />
-          <ExperienceForm />
-          <EducationForm />
-          <SkillsForm />
-          <FooterForm />
-        </Accordion>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
+

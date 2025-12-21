@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Plan struktury aplikacji
 
-## Getting Started
+1. CV Data
 
-First, run the development server:
+Opis:
+Set up your core CV information. Add experience, skills, education, and personal details once — reuse them everywhere.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+👉 To jasno mówi: raz, potem wszędzie.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Templates
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Opis:
+Create different CV versions by choosing what to show, hide, or rewrite for specific roles or companies.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+👉 Bez „single source of truth”, ale sens jest.
 
-## Learn More
+3. Languages
 
-To learn more about Next.js, take a look at the following resources:
+Opis:
+Manage language versions of your CV and switch between them depending on the job offer.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+👉 Zero AI buzzwordów. Konkret.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Structure
 
-## Deploy on Vercel
+(alternatywa dla „Layout” / „Sections”)
+Opis:
+Control the order and visibility of CV sections to match different application needs.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+👉 Dobre do drag & drop w przyszłości.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Versions
+
+Opis:
+Save snapshots of your CV for specific job applications and keep track of what you’ve sent.
+
+👉 Bardzo mocny punkt, ludzie to czują.
+
+6. Export
+
+Opis:
+Export your CV to PDF or other formats, ready to send to recruiters.
+
+👉 Klasyk, ale musi być.

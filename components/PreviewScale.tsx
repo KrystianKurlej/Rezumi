@@ -43,7 +43,6 @@ export default function PreviewScale() {
             </InputGroupAddon>
             <InputGroupInput
               type="text"
-              defaultValue={formatScale(previewSettings.scale)}
               value={formatScale(previewSettings.scale)}
               className="text-center w-14 cursor-default"
               readOnly
