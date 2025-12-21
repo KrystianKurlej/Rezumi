@@ -15,7 +15,6 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   Table,
   TableBody,
@@ -24,60 +23,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-
-const data: Application[] = [
-  {
-    id: "app001",
-    companyName: "Google",
-    position: "Senior Frontend Developer",
-    url: "https://careers.google.com/jobs/results/123456789/",
-    dateApplied: "2024-12-15",
-    status: "submitted"
-  },
-  {
-    id: "app002", 
-    companyName: "Microsoft",
-    position: "React Developer",
-    url: "https://careers.microsoft.com/us/en/job/1234567/",
-    notes: "Remote-first company, good benefits package",
-    dateApplied: "2024-12-10",
-    status: "notApplied"
-  },
-  {
-    id: "app003",
-    companyName: "Meta",
-    position: "Full Stack Engineer",
-    url: "https://www.metacareers.com/jobs/987654321/",
-    dateApplied: "2024-12-08",
-    status: "rejected"
-  },
-  {
-    id: "app004",
-    companyName: "Netflix",
-    position: "Frontend Engineer",
-    url: "https://jobs.netflix.com/jobs/456789/",
-    dateApplied: "2024-12-12",
-    status: "sentFollowUp"
-  },
-  {
-    id: "app005",
-    companyName: "Spotify",
-    position: "UI/UX Developer",
-    notes: "Company seems to have gone quiet after initial contact",
-    dateApplied: "2024-11-28",
-    status: "ghosted"
-  }
-]
+import { ApplicationEditDialog } from "./application/ApplicationEditDialog"
+import { ApplicationDeleteDialog } from "./application/ApplicationDeleteDialog"
+import { ApplicationNotesDialog } from "./application/ApplicationNotesDialog"
 
 export type Application = {
     id: string
@@ -90,7 +38,7 @@ export type Application = {
     status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
 }
 
-function formatStatus(status: Application["status"]) {
+function formatApplicationStatus(status: Application["status"]) {
     switch (status) {
         case 'notApplied':
             return(
@@ -172,7 +120,73 @@ function formatStatus(status: Application["status"]) {
     }
 }
 
-export const columns: ColumnDef<Application>[] = [
+export default function ApplicationsTable() {
+  const [data, setData] = React.useState<Application[]>([
+    {
+      id: "app001",
+      companyName: "Google",
+      position: "Senior Frontend Developer",
+      url: "https://careers.google.com/jobs/results/123456789/",
+      dateApplied: "2024-12-15",
+      status: "submitted"
+    },
+    {
+      id: "app002", 
+      companyName: "Microsoft",
+      position: "React Developer",
+      url: "https://careers.microsoft.com/us/en/job/1234567/",
+      notes: "Remote-first company, good benefits package",
+      dateApplied: "2024-12-10",
+      status: "notApplied"
+    },
+    {
+      id: "app003",
+      companyName: "Meta",
+      position: "Full Stack Engineer",
+      url: "https://www.metacareers.com/jobs/987654321/",
+      dateApplied: "2024-12-08",
+      status: "rejected"
+    },
+    {
+      id: "app004",
+      companyName: "Netflix",
+      position: "Frontend Engineer",
+      url: "https://jobs.netflix.com/jobs/456789/",
+      dateApplied: "2024-12-12",
+      status: "sentFollowUp"
+    },
+    {
+      id: "app005",
+      companyName: "Spotify",
+      position: "UI/UX Developer",
+      notes: "Company seems to have gone quiet after initial contact",
+      dateApplied: "2024-11-28",
+      status: "ghosted"
+    }
+  ])
+  const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(null)
+  
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
+
+  const handleUpdateApplication = (updatedApplication: Application) => {
+    setData(prevData => 
+      prevData.map(app => 
+        app.id === updatedApplication.id ? updatedApplication : app
+      )
+    )
+  }
+
+  const handleDeleteApplication = (applicationId: string) => {
+    setData(prevData => prevData.filter(app => app.id !== applicationId))
+  }
+
+  const columns: ColumnDef<Application>[] = [
     {
         accessorKey: "companyName",
         header: "Company Name",
@@ -191,7 +205,7 @@ export const columns: ColumnDef<Application>[] = [
         accessorKey: "status",
         header: "Status",
         cell: ({ row }) => (
-            formatStatus(row.getValue("status"))
+            formatApplicationStatus(row.getValue("status"))
         ),
     },
     {
@@ -206,25 +220,26 @@ export const columns: ColumnDef<Application>[] = [
         header: null,
         cell: ({ row }) => (
             <div className="flex space-x-2">
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button variant="outline" size="icon-sm">
-                            <i className="bi bi-pencil-square"></i>
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Edit Application for {row.original.position} at {row.original.companyName}</DialogTitle>
-                        </DialogHeader>
-                        {/* Form fields for editing would go here */}
-                        <DialogFooter>
-                            <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
-                            </DialogClose>
-                            <Button>Save Changes</Button>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
+                <ApplicationEditDialog
+                  application={row.original}
+                  open={editDialogOpen === row.original.id}
+                  onOpenChange={(open) => setEditDialogOpen(open ? row.original.id : null)}
+                  onUpdate={handleUpdateApplication}
+                  trigger={
+                    <Button variant="outline" size="icon-sm">
+                      <i className="bi bi-pencil-square"></i>
+                    </Button>
+                  }
+                />
+                <ApplicationDeleteDialog
+                  application={row.original}
+                  onDelete={() => handleDeleteApplication(row.original.id)}
+                  trigger={
+                    <Button variant="outline" size="icon-sm">
+                      <i className="bi bi-trash"></i>
+                    </Button>
+                  }
+                />
                 {row.original.url && (
                     <Button variant="outline" size="sm" asChild>
                         <Link href={row.original.url} target="_blank" rel="noopener noreferrer">
@@ -234,39 +249,20 @@ export const columns: ColumnDef<Application>[] = [
                     </Button>
                 )}
                 {row.original.notes && (
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="outline" size="sm">
-                                Notes
-                                <i className="bi bi-sticky"></i>
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Notes for {row.original.position} at {row.original.companyName}</DialogTitle>
-                                </DialogHeader>
-                                {row.original.notes || "No notes available."}
-                                <DialogFooter>
-                                    <DialogClose asChild>
-                                        <Button variant="outline">Close</Button>
-                                    </DialogClose>
-                                </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
+                    <ApplicationNotesDialog
+                      application={row.original}
+                      trigger={
+                        <Button variant="outline" size="sm">
+                            Notes
+                            <i className="bi bi-sticky"></i>
+                        </Button>
+                      }
+                    />
                 )}
             </div>
         ),
     }
-]
-
-export default function ApplicationsTable() {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  ]
   const table = useReactTable({
     data,
     columns,
