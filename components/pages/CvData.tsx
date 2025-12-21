@@ -1,8 +1,8 @@
-import PersonalForm from "@/components/cv/form/personal"
-import ExperienceForm from "@/components/cv/form/experience";
-import EducationForm from "@/components/cv/form/education";
-import SkillsForm from "@/components/cv/form/skills";
-import FooterForm from "@/components/cv/form/footer";
+import PersonalForm from "@/components/cv-data/personal"
+import ExperienceForm from "@/components/cv-data/experience";
+import EducationForm from "@/components/cv-data/education";
+import SkillsForm from "@/components/cv-data/skills";
+import FooterForm from "@/components/cv-data/footer";
 import { Accordion } from "@/components/ui/accordion"
 import { 
   PageHeader, 

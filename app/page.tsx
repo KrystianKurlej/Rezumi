@@ -1,20 +1,20 @@
 'use client'
 
-import Preview from "@/components/cv/preview";
+import Preview from "@/components/Preview";
 import PreviewScale from "@/components/PreviewScale";
 import { 
   SidebarProvider, 
   SidebarInset
 } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useAppSelector } from '@/lib/hooks'
-import CvData from "@/components/cv/pages/CvData";
-import Export from "@/components/cv/pages/Export";
-import Languages from "@/components/cv/pages/Languages";
-import Templates from "@/components/cv/pages/Templates";
-import Themes from "@/components/cv/pages/Themes";
-import Versions from "@/components/cv/pages/Versions";
+import CvData from "@/components/pages/CvData";
+import Export from "@/components/pages/Export";
+import Languages from "@/components/pages/Languages";
+import Templates from "@/components/pages/Templates";
+import Themes from "@/components/pages/Themes";
+import Versions from "@/components/pages/Versions";
 
 export default function Home() {
   const currentPage = useAppSelector(state => state.pages.currentPage)

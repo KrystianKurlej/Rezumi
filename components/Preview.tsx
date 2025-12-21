@@ -2,7 +2,7 @@
 
 import { useAppSelector } from "@/lib/hooks"
 import { formatRichText, formatDate } from "@/lib/utils"
-import './preview.css'
+import '@/app/preview.css'
 
 export default function Preview() {
     const personal = useAppSelector(state => state.personal)
