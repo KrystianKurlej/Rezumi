@@ -23,24 +23,27 @@ export default function Home() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="h-screen overflow-hidden">
-        <div className="flex h-full">
-          <div className="bg-gray-100 relative flex-1">
-            <ScrollArea className="h-full">
-              <div className="w-full p-6">
-                <Preview />
+        {currentPage === 'applications' ? 
+          <Applications /> :
+          (
+            <div className="flex h-full">
+              <div className="bg-gray-100 relative flex-1">
+                <ScrollArea className="h-full">
+                  <div className="w-full p-6">
+                    <Preview />
+                  </div>
+                </ScrollArea>
+                <PreviewScale />
               </div>
-            </ScrollArea>
-            <PreviewScale />
-          </div>
-          <div className="border-l h-full flex-1">
-            {currentPage === 'personal' && <CvData />}
-            {currentPage === 'templates' && <Templates />}
-            {currentPage === 'languages' && <Languages />}
-            {currentPage === 'themes' && <Themes />}
-            {currentPage === 'applications' && <Applications />}
-            {currentPage === 'export' && <Export />}
-          </div>
-        </div>
+              <div className="border-l h-full flex-1">
+                {currentPage === 'personal' && <CvData />}
+                {currentPage === 'templates' && <Templates />}
+                {currentPage === 'languages' && <Languages />}
+                {currentPage === 'themes' && <Themes />}
+                {currentPage === 'export' && <Export />}
+              </div>
+            </div>
+          )}
       </SidebarInset>
     </SidebarProvider>
   );
