@@ -2,6 +2,7 @@
 
 import { useAppSelector } from "@/lib/hooks"
 import { formatRichText, formatDate } from "@/lib/utils"
+import './preview.css'
 
 export default function Preview() {
     const personal = useAppSelector(state => state.personal)
@@ -11,55 +12,81 @@ export default function Preview() {
     const footer = useAppSelector(state => state.footer)
 
     return(
-        <div className="p-10 bg-white shadow-sm">
-            <div className="text-sm">CV</div>
-            <div className="text-4xl font-semibold">{personal.firstName} {personal.lastName}</div>
-            <div className="py-1">
-                <div>{personal.email}</div>
-                <div>{personal.phone}</div>
+        <div className="cv-preview-container shadow-lg">
+            <div className="cv-page">
+                <div className="cv-header">CV</div>
+                
+                <div className="cv-name">{personal.firstName} {personal.lastName}</div>
+                
+                {(personal.email || personal.phone) && (
+                    <div className="cv-contact">
+                        {personal.email && <div>{personal.email}</div>}
+                        {personal.phone && <div>{personal.phone}</div>}
+                    </div>
+                )}
+
+                {experiences.length > 0 && (
+                    <div className="cv-section">
+                        <div className="cv-section-title">Experience</div>
+                        <div className="cv-section-content">
+                            {experiences.map((experience, index) => (
+                                <div key={experience.id} className="cv-item">
+                                    <div className="cv-item-header">
+                                        <div className="cv-item-title">
+                                            <span className="cv-item-title-main">{experience.title}</span> - {experience.company}
+                                        </div>
+                                        <div className="cv-item-date">
+                                            {formatDate(experience.startDate, 'short')} - {experience.isOngoing ? 'Present' : formatDate(experience.endDate, 'short')}
+                                        </div>
+                                    </div>
+                                    {experience.description && (
+                                        <div className="cv-item-description" dangerouslySetInnerHTML={{ __html: formatRichText(experience.description, 'short') }}></div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {educations.length > 0 && (
+                    <div className="cv-section">
+                        <div className="cv-section-title">Education</div>
+                        <div className="cv-section-content">
+                            {educations.map((education, index) => (
+                                <div key={education.id} className="cv-item">
+                                    <div className="cv-item-header">
+                                        <div className="cv-item-title">
+                                            <span className="cv-item-title-main">{education.degree}</span> in {education.fieldOfStudy}
+                                        </div>
+                                        <div className="cv-item-date">
+                                            {formatDate(education.startDate, 'short')} - {education.isOngoing ? 'Present' : formatDate(education.endDate, 'short')}
+                                        </div>
+                                    </div>
+                                    <div className="cv-institution">{education.institution}</div>
+                                    {education.description && (
+                                        <div className="cv-item-description" dangerouslySetInnerHTML={{ __html: formatRichText(education.description, 'short') }}></div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {skills.skillsText && (
+                    <div className="cv-section">
+                        <div className="cv-section-title">Skills</div>
+                        <div className="cv-section-content">
+                            <div className="cv-skills" dangerouslySetInnerHTML={{ __html: formatRichText(skills.skillsText) }}></div>
+                        </div>
+                    </div>
+                )}
+
+                {footer.footerText && (
+                    <div className="cv-footer">
+                        <div dangerouslySetInnerHTML={{ __html: formatRichText(footer.footerText) }}></div>
+                    </div>
+                )}
             </div>
-            {experiences.length > 0 && (
-                <div className="mt-4">
-                    <div className="text-xl font-semibold pb-1 mb-2 border-b border-gray-300">Experience</div>
-                    <ul>
-                        {experiences.map((experience) => (
-                            <li key={experience.id} className={"mb-2" + (experiences.length - 1 !== experiences.indexOf(experience) ? " border-b border-gray-200 pb-2" : "")}>
-                                <div className="flex gap-4">
-                                    <div className="grow"><span className="font-semibold">{experience.title}</span> - {experience.company}</div>
-                                    <div className="shrink-0">{formatDate(experience.startDate, 'short')} - {experience.isOngoing ? 'Present' : formatDate(experience.endDate, 'short')}</div>
-                                </div>
-                                <div className="text-sm" dangerouslySetInnerHTML={{ __html: formatRichText(experience.description, 'short') }}></div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            {educations.length > 0 && (
-                <div className="mt-4">
-                    <div className="text-xl font-semibold pb-1 mb-2 border-b border-gray-300">Education</div>
-                    <ul>
-                        {educations.map((education) => (
-                            <li key={education.id} className={"mb-2" + (educations.length - 1 !== educations.indexOf(education) ? " border-b border-gray-200 pb-2" : "")}>
-                                <div className="flex gap-4">
-                                    <div className="grow"><span className="font-semibold">{education.degree}</span> in {education.fieldOfStudy}</div>
-                                    <div className="shrink-0">{formatDate(education.startDate, 'short')} - {education.isOngoing ? 'Present' : formatDate(education.endDate, 'short')}</div>
-                                </div>
-                                <div className="text-sm font-medium">{education.institution}</div>
-                                {education.description && <div className="text-sm" dangerouslySetInnerHTML={{ __html: formatRichText(education.description, 'short') }}></div>}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            {skills.skillsText && (
-                <div className="mt-4">
-                    <div className="text-xl font-semibold pb-1 mb-2 border-b border-gray-300">Skills</div>
-                    <div className="text-sm" dangerouslySetInnerHTML={{ __html: formatRichText(skills.skillsText) }}></div>
-                </div>
-            )}
-            {footer.footerText && (
-                <div className="mt-6 text-xs text-gray-600" dangerouslySetInnerHTML={{ __html: formatRichText(footer.footerText) }}></div>
-            )}
         </div>
     )
 }

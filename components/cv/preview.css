@@ -1,0 +1,70 @@
+.cv-preview-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+/* Strona A4 - 210mm x 297mm = 794px x 1123px przy 96 DPI */
+.cv-page {
+    width: 794px;
+    min-height: 1123px;
+    background: white;
+    padding: 40pt;
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.4;
+    color: hsl(0, 0%, 10%);
+    box-sizing: border-box;
+    aspect-ratio: 794 / 1123;
+    height: auto;
+}
+
+.cv-name{
+    margin-top: 0;
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+.cv-section{
+    margin-top: 8pt;
+}
+
+.cv-section-title{
+    padding-bottom: 2pt;
+    border-bottom: 1px solid hsl(0, 0%, 70%);
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.cv-section-content{
+    padding-top: 4pt;
+}
+
+.cv-item{
+    margin-bottom: 4pt;
+    padding-bottom: 4pt;
+    border-bottom: 1px solid hsl(0, 0%, 90%);
+}
+
+.cv-item-header{
+    display: flex;
+    gap: 8pt;
+}
+
+.cv-item-title{
+    flex-grow: 1;
+}
+
+.cv-item-title-main{
+    font-weight: bold;
+}
+
+.cv-footer{
+    font-size: 8pt;
+    color: hsl(0, 0%, 50%);
+    margin-top: 8pt;
+    padding-top: 2pt;
+    border-top: 1px solid hsl(0, 0%, 90%);
+}
