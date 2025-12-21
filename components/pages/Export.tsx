@@ -1,3 +1,5 @@
+'use client'
+
 import { 
   PageHeader, 
   PageHeaderTitle, 
@@ -13,8 +15,68 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { ExportButton } from '@/components/export/ExportButton'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { 
+    updateQuickFilename,
+    updateJobFilename,
+    updateCompanyName,
+    updateJobTitle,
+    updateJobLink,
+    updateNotes,
+    generateJobFilename
+} from '@/lib/slices/exportSlice'
 
 export default function Export() {
+    const dispatch = useAppDispatch()
+    const exportData = useAppSelector(state => state.export)
+    const personal = useAppSelector(state => state.personal)
+    const experiences = useAppSelector(state => state.experiences.list)
+    const educations = useAppSelector(state => state.educations.list)
+    const skills = useAppSelector(state => state.skills)
+    const footer = useAppSelector(state => state.footer)
+
+    const getGeneratedFilename = () => {
+        if (exportData.companyName && exportData.jobTitle) {
+            const cleanCompany = exportData.companyName.replace(/[^a-z0-9]/gi, '-').toLowerCase()
+            const cleanTitle = exportData.jobTitle.replace(/[^a-z0-9]/gi, '-').toLowerCase()
+            return `cv-${cleanCompany}-${cleanTitle}.pdf`
+        }
+        return exportData.jobFilename
+    }
+
+    const handleSaveApplication = () => {
+        console.log('Saving application:', {
+            filename: getGeneratedFilename(),
+            companyName: exportData.companyName,
+            jobTitle: exportData.jobTitle,
+            jobLink: exportData.jobLink,
+            notes: exportData.notes,
+            timestamp: new Date().toISOString()
+        })
+        // Tu będzie logika zapisania do IndexedDB
+    }
+
+    const exportCVData = () => {
+        const cvData = {
+            personal,
+            experiences,
+            educations,
+            skills,
+            footer,
+            exportedAt: new Date().toISOString()
+        }
+        
+        const dataStr = JSON.stringify(cvData, null, 2)
+        const dataBlob = new Blob([dataStr], { type: 'application/json' })
+        const url = URL.createObjectURL(dataBlob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = 'cv-data.json'
+        link.click()
+        URL.revokeObjectURL(url)
+    }
+    
     return(
         <ScrollArea className="h-full">
             <PageHeader iconClass="bi-send-arrow-down">
@@ -43,6 +105,8 @@ export default function Export() {
                                 </FieldLabel>
                                 <Input
                                     type="text"
+                                    value={exportData.jobFilename}
+                                    onChange={(e) => dispatch(updateJobFilename(e.target.value))}
                                     placeholder="my-cv.pdf"
                                 />
                                 <FieldDescription>
@@ -56,6 +120,8 @@ export default function Export() {
                                     </FieldLabel>
                                     <Input
                                         type="text"
+                                        value={exportData.companyName}
+                                        onChange={(e) => dispatch(updateCompanyName(e.target.value))}
                                         placeholder="Acme Corp"
                                     />
                                 </Field>
@@ -65,6 +131,8 @@ export default function Export() {
                                     </FieldLabel>
                                     <Input
                                         type="text"
+                                        value={exportData.jobTitle}
+                                        onChange={(e) => dispatch(updateJobTitle(e.target.value))}
                                         placeholder="Frontend Developer"
                                     />
                                 </Field>
@@ -75,6 +143,8 @@ export default function Export() {
                                 </FieldLabel>
                                 <Input
                                     type="text"
+                                    value={exportData.jobLink}
+                                    onChange={(e) => dispatch(updateJobLink(e.target.value))}
                                     placeholder="https://..."
                                 />
                             </Field>
@@ -84,15 +154,20 @@ export default function Export() {
                                 </FieldLabel>
                                 <Input
                                     type="text"
+                                    value={exportData.notes}
+                                    onChange={(e) => dispatch(updateNotes(e.target.value))}
                                     placeholder="Recruiter name, tech stack, salary range, etc."
                                 />
                             </Field>
                         </FieldGroup>
                         <Field>
-                            <Button>
+                            <ExportButton 
+                                filename={getGeneratedFilename()}
+                                onExportComplete={handleSaveApplication}
+                            >
                                 <i className="bi bi-file-earmark-arrow-down"></i>
                                 Download PDF & Save as Application
-                            </Button>
+                            </ExportButton>
                             <FieldDescription className="text-center text-xs">
                                 This will save a snapshot of your CV exactly as it was sent.
                             </FieldDescription>
@@ -113,6 +188,8 @@ export default function Export() {
                             </FieldLabel>
                             <Input
                                 type="text"
+                                value={exportData.quickFilename}
+                                onChange={(e) => dispatch(updateQuickFilename(e.target.value))}
                                 placeholder="my-cv.pdf"
                             />
                             <FieldDescription>
@@ -120,10 +197,13 @@ export default function Export() {
                             </FieldDescription>
                         </Field>
                         <Field>
-                            <Button variant="secondary">
+                            <ExportButton 
+                                filename={exportData.quickFilename}
+                                variant="secondary"
+                            >
                                 <i className="bi bi-file-earmark-arrow-down"></i>
                                 Download PDF
-                            </Button>
+                            </ExportButton>
                         </Field>
                     </FieldSet>
                     <FieldSet className="mt-2 pt-5 border-t">
@@ -136,13 +216,13 @@ export default function Export() {
                             </FieldDescription>
                         </div>
                         <Field>
-                            <Button variant="secondary">
+                            <Button variant="secondary" onClick={exportCVData}>
                                 <i className="bi bi-download"></i>
                                 Export CV Data (JSON)
                             </Button>
                             <FieldDescription className="text-center text-xs">
                                 This file is not a CV. It contains editable data only.
-                            </FieldDescription >
+                            </FieldDescription>
                         </Field>
                     </FieldSet>
                 </FieldGroup>

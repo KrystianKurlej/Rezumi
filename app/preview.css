@@ -69,3 +69,32 @@
     padding-top: 2pt;
     border-top: 1px solid hsl(0, 0%, 90%);
 }
+
+/* Print styles for PDF export */
+@media print {
+    .cv-preview-container {
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        transform: none !important;
+        transform-origin: unset !important;
+    }
+    
+    .cv-page {
+        width: 210mm !important;
+        min-height: 297mm !important;
+        max-width: none !important;
+        height: auto !important;
+        box-shadow: none !important;
+        aspect-ratio: auto !important;
+        transform: none !important;
+        margin: 0 !important;
+    }
+    
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+    }
+}
