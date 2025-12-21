@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { setApplications, deleteApplication as deleteAppAction, setLoading, updateApplication as updateAppAction } from '@/lib/slices/applicationsSlice'
+import { setApplications, deleteApplication as deleteAppAction, setLoading, updateApplication as updateAppAction, setSorting } from '@/lib/slices/applicationsSlice'
 import {
   flexRender,
   getCoreRowModel,
@@ -15,6 +15,7 @@ import {
   type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
+  type Updater,
 } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import {
@@ -30,6 +31,7 @@ import { ApplicationDeleteDialog } from "./application/ApplicationDeleteDialog"
 import { ApplicationNotesDialog } from "./application/ApplicationNotesDialog"
 import { ApplicationAddNewDialog } from "./application/ApplicationAddNewDialog"
 import { getAllApplications, deleteApplication as deleteApplicationFromDB, type DBApplication } from '@/lib/db'
+import { formatDate } from '@/lib/utils'
 
 export type Application = {
     id: string
@@ -125,11 +127,10 @@ function formatApplicationStatus(status: Application["status"]) {
 
 export default function ApplicationsTable() {
   const dispatch = useAppDispatch()
-  const { list: data, isLoading: loading } = useAppSelector(state => state.applications)
+  const { list: data, isLoading: loading, sorting } = useAppSelector(state => state.applications)
 
   const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(null)
   
-  const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -175,30 +176,90 @@ export default function ApplicationsTable() {
   const columns: ColumnDef<Application>[] = [
     {
         accessorKey: "companyName",
-        header: "Company Name",
+        header: ({ column }) => (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              className="h-auto p-0 font-semibold hover:bg-transparent"
+            >
+              Company Name
+              {column.getIsSorted() === "asc" ? (
+                <i className="ml-2 bi bi-arrow-up text-xs"></i>
+              ) : column.getIsSorted() === "desc" ? (
+                <i className="ml-2 bi bi-arrow-down text-xs"></i>
+              ) : (
+                <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
+              )}
+            </Button>
+        ),
         cell: ({ row }) => (
             <div>{row.getValue("companyName")}</div>
         ),
     },
     {
         accessorKey: "position",
-        header: "Position",
+        header: ({ column }) => (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              className="h-auto p-0 font-semibold hover:bg-transparent"
+            >
+              Position
+              {column.getIsSorted() === "asc" ? (
+                <i className="ml-2 bi bi-arrow-up text-xs"></i>
+              ) : column.getIsSorted() === "desc" ? (
+                <i className="ml-2 bi bi-arrow-down text-xs"></i>
+              ) : (
+                <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
+              )}
+            </Button>
+        ),
         cell: ({ row }) => (
             <div>{row.getValue("position")}</div>
         ),
     },
     {
         accessorKey: "status",
-        header: "Status",
+        header: ({ column }) => (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              className="h-auto p-0 font-semibold hover:bg-transparent"
+            >
+              Status
+              {column.getIsSorted() === "asc" ? (
+                <i className="ml-2 bi bi-arrow-up text-xs"></i>
+              ) : column.getIsSorted() === "desc" ? (
+                <i className="ml-2 bi bi-arrow-down text-xs"></i>
+              ) : (
+                <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
+              )}
+            </Button>
+        ),
         cell: ({ row }) => (
             formatApplicationStatus(row.getValue("status"))
         ),
     },
     {
         accessorKey: "dateApplied",
-        header: "Date Applied",
+        header: ({ column }) => (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              className="h-auto p-0 font-semibold hover:bg-transparent"
+            >
+              Date Applied
+              {column.getIsSorted() === "asc" ? (
+                <i className="ml-2 bi bi-arrow-up text-xs"></i>
+              ) : column.getIsSorted() === "desc" ? (
+                <i className="ml-2 bi bi-arrow-down text-xs"></i>
+              ) : (
+                <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
+              )}
+            </Button>
+        ),
         cell: ({ row }) => (
-            <div>{row.getValue("dateApplied")}</div>
+            <div>{formatDate(row.getValue("dateApplied"), 'long')}</div>
         ),
     },
     {
@@ -249,10 +310,16 @@ export default function ApplicationsTable() {
         ),
     }
   ]
+
+  const handleSortingChange = (updaterOrValue: Updater<SortingState>) => {
+    const newSorting = typeof updaterOrValue === 'function' ? updaterOrValue(sorting) : updaterOrValue
+    dispatch(setSorting(newSorting))
+  }
+
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
+    onSortingChange: handleSortingChange,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -260,6 +327,9 @@ export default function ApplicationsTable() {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    initialState: {
+      sorting: [{ id: 'dateApplied', desc: true }],
+    },
     state: {
       sorting,
       columnFilters,

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { DBApplication } from '../db';
 import type { Application } from '@/components/applications/ApplicationsTable'
+import type { SortingState } from '@tanstack/react-table'
 
 export interface NewApplication {
     newApplicationCompanyName: string
@@ -15,6 +16,7 @@ export interface Applications {
     list: Application[]
     isLoading: boolean
     hasApplications: boolean
+    sorting: SortingState
 }
 
 const initialNewApplicationState: NewApplication = {
@@ -30,6 +32,7 @@ const initialApplicationsState: Applications = {
     list: [],
     isLoading: false,
     hasApplications: false,
+    sorting: [{ id: 'dateApplied', desc: true }], // Default sort by date desc
 };
 
 const newApplicationSlice = createSlice({
@@ -68,6 +71,9 @@ const applicationsSlice = createSlice({
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.isLoading = action.payload
         },
+        setSorting: (state, action: PayloadAction<SortingState>) => {
+            state.sorting = action.payload
+        },
     },
 });
 
@@ -77,7 +83,8 @@ export const {
     addApplication, 
     updateApplication, 
     deleteApplication, 
-    setLoading 
+    setLoading,
+    setSorting
 } = applicationsSlice.actions;
 
 export const newApplicationReducer = newApplicationSlice.reducer;
