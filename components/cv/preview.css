@@ -4,6 +4,7 @@
     align-items: flex-start;
     width: fit-content;
     margin: 0 auto;
+    transform-origin: top center;
 }
 
 /* Strona A4 - 210mm x 297mm = 794px x 1123px przy 96 DPI */

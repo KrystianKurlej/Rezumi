@@ -10,9 +10,10 @@ export default function Preview() {
     const educations = useAppSelector(state => state.educations.list)
     const skills = useAppSelector(state => state.skills)
     const footer = useAppSelector(state => state.footer)
+    const scale = useAppSelector(state => state.preview.scale)
 
     return(
-        <div className="cv-preview-container shadow-lg">
+        <div className="cv-preview-container shadow-lg" style={{ scale: scale }}>
             <div className="cv-page">
                 <div className="cv-header">CV</div>
                 
