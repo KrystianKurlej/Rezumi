@@ -5,10 +5,12 @@ import { newExperienceReducer, experiencesReducer } from './slices/experienceSli
 import { newEducationReducer, educationsReducer } from './slices/educationSlice'
 import footerReducer from './slices/footerSlice'
 import skillsReducer from './slices/skillsSlice'
+import pagesReducer from './slices/pagesSlice'
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
+            pages: pagesReducer,
             preview: previewReducer,
             personal: personalReducer,
             newExperience: newExperienceReducer,

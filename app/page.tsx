@@ -9,8 +9,11 @@ import {
 import { AppSidebar } from "@/components/app-sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import CvData from "@/components/cv/pages/CvData";
+import { useAppSelector } from '@/lib/hooks'
 
 export default function Home() {
+  const currentPage = useAppSelector(state => state.pages.currentPage)
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -25,7 +28,12 @@ export default function Home() {
             <PreviewScale />
           </div>
           <div className="border-l h-full flex-1">
-            <CvData />
+            {currentPage === 'personal' && <CvData />}
+            {currentPage === 'templates' && null}
+            {currentPage === 'languages' && null}
+            {currentPage === 'themes' && null}
+            {currentPage === 'versions' && null}
+            {currentPage === 'export' && null}
           </div>
         </div>
       </SidebarInset>
