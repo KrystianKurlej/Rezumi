@@ -26,6 +26,7 @@ import {
 import { ApplicationEditDialog } from "./application/ApplicationEditDialog"
 import { ApplicationDeleteDialog } from "./application/ApplicationDeleteDialog"
 import { ApplicationNotesDialog } from "./application/ApplicationNotesDialog"
+import { ApplicationAddNewDialog } from "./application/ApplicationAddNewDialog"
 
 export type Application = {
     id: string
@@ -164,6 +165,7 @@ export default function ApplicationsTable() {
       status: "ghosted"
     }
   ])
+
   const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(null)
   
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -334,6 +336,16 @@ export default function ApplicationsTable() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex-1 space-x-2">
+            <ApplicationAddNewDialog
+                trigger={
+                <Button size="sm">
+                    <i className="bi bi-plus-lg"></i>
+                    Add New Application
+                </Button>
+                }
+            />
+        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
