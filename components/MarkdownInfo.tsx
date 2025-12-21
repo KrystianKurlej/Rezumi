@@ -3,7 +3,7 @@ import Link from 'next/link'
 export default function MarkdownInfo() {
     return(
         <small className="text-ring text-xs">
-            Markdown supported. Learn more about&nbsp;
+            <i className="bi bi-markdown"></i> Markdown supported. Learn more about&nbsp;
             <Link
                 href="https://www.markdownguide.org/basic-syntax/"
                 target="_blank"
