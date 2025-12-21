@@ -18,37 +18,42 @@ import {
   SidebarInset
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export default function Home() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
-        <div className="flex">
-          <div className="bg-gray-100 h-screen px-6 overflow-y-hidden relative flex-1">
-            <div className="h-full overflow-auto w-full my-6">
-              <Preview />
-            </div>
+      <SidebarInset className="h-screen overflow-hidden">
+        <div className="flex h-full">
+          <div className="bg-gray-100 relative flex-1">
+            <ScrollArea className="h-full">
+              <div className="w-full p-6">
+                <Preview />
+              </div>
+            </ScrollArea>
             <PreviewScale />
           </div>
-          <div className="h-screen overflow-y-auto border-l w-96">
-            <PageHeader iconClass="bi-file-earmark-person">
-              <PageHeaderTitle>
-                CV Data
-              </PageHeaderTitle>
-              <PageHeaderDescription>
-                Set up your core CV information. Add experience, skills, education, and personal details once and reuse them everywhere.
-              </PageHeaderDescription>
-            </PageHeader>
-            <div className="p-2">
-              <Accordion type="multiple" defaultValue="personal-section">
-                <PersonalForm />
-                <ExperienceForm />
-                <EducationForm />
-                <SkillsForm />
-                <FooterForm />
-              </Accordion>
-            </div>
+          <div className="border-l h-full flex-1">
+            <ScrollArea className="h-full">
+              <PageHeader iconClass="bi-file-earmark-person">
+                <PageHeaderTitle>
+                  CV Data
+                </PageHeaderTitle>
+                <PageHeaderDescription>
+                  Set up your core CV information. Add experience, skills, education, and personal details once and reuse them everywhere.
+                </PageHeaderDescription>
+              </PageHeader>
+              <div className="p-2">
+                <Accordion type="multiple" defaultValue="personal-section">
+                  <PersonalForm />
+                  <ExperienceForm />
+                  <EducationForm />
+                  <SkillsForm />
+                  <FooterForm />
+                </Accordion>
+              </div>
+            </ScrollArea>
           </div>
         </div>
       </SidebarInset>

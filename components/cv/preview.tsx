@@ -13,7 +13,7 @@ export default function Preview() {
     const scale = useAppSelector(state => state.preview.scale)
 
     return(
-        <div className="cv-preview-container shadow-lg" style={{ scale: scale }}>
+        <div className="cv-preview-container shadow-lg my-6" style={{ scale: scale }}>
             <div className="cv-page">
                 <div className="cv-header">CV</div>
                 

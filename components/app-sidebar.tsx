@@ -64,7 +64,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="p-4 text-xs text-center text-gray-600">
+        <div className="p-4 text-xs text-gray-600">
           &copy;{new Date().getFullYear()} Krystian Kurlej
         </div>
       </SidebarFooter>
