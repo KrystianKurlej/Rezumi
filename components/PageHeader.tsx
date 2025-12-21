@@ -4,7 +4,7 @@ export function PageHeader({ children, iconClass }: { children: React.ReactNode,
     return (
         <header className="bg-sidebar px-4 py-5 border-b">
             {iconClass && (
-                <i className={'text-xl bi ' + iconClass}></i>
+                <i className={'text-3xl bi ' + iconClass}></i>
             )}
             {children}
         </header>

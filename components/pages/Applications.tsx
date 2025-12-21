@@ -5,12 +5,12 @@ import {
 } from "@/components/PageHeader";
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-export default function Versions() {
+export default function Applications() {
     return(
         <ScrollArea className="h-full">
-            <PageHeader iconClass="bi-book-half">
+            <PageHeader iconClass="bi-envelope-arrow-up">
                 <PageHeaderTitle>
-                    Versions
+                    Applications
                 </PageHeaderTitle>
                 <PageHeaderDescription>
                     Save snapshots of your CV for specific job applications and keep track of what you’ve sent.

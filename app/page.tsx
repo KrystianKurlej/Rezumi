@@ -14,7 +14,7 @@ import Export from "@/components/pages/Export";
 import Languages from "@/components/pages/Languages";
 import Templates from "@/components/pages/Templates";
 import Themes from "@/components/pages/Themes";
-import Versions from "@/components/pages/Versions";
+import Applications from "@/components/pages/Applications";
 
 export default function Home() {
   const currentPage = useAppSelector(state => state.pages.currentPage)
@@ -37,7 +37,7 @@ export default function Home() {
             {currentPage === 'templates' && <Templates />}
             {currentPage === 'languages' && <Languages />}
             {currentPage === 'themes' && <Themes />}
-            {currentPage === 'versions' && <Versions />}
+            {currentPage === 'applications' && <Applications />}
             {currentPage === 'export' && <Export />}
           </div>
         </div>

@@ -22,7 +22,7 @@ export default function CvData() {
                     Set up your core CV information. Add experience, skills, education, and personal details once and reuse them everywhere.
                 </PageHeaderDescription>
             </PageHeader>
-            <div className="p-2">
+            <div className="p-2 pb-10">
                 <Accordion type="multiple" defaultValue="personal-section">
                     <PersonalForm />
                     <ExperienceForm />

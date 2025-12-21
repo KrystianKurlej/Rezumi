@@ -39,15 +39,15 @@ const items = [
     isActive: false,
   },
   {
-    title: "Versions",
-    slug: "versions",
-    icon: "bi-book-half",
+    title: "Applications",
+    slug: "applications",
+    icon: "bi-envelope-arrow-up",
     isActive: false,
   },
   {
-    title: "Export",
+    title: "Send & Save Application",
     slug: "export",
-    icon: "bi-floppy2-fill",
+    icon: "bi-send-arrow-down",
     isActive: false,
   },
 ]
