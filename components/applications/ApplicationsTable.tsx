@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { setApplications, deleteApplication as deleteAppAction, setLoading } from '@/lib/slices/applicationsSlice'
+import { setApplications, deleteApplication as deleteAppAction, setLoading, updateApplication as updateAppAction } from '@/lib/slices/applicationsSlice'
 import {
   flexRender,
   getCoreRowModel,
@@ -159,8 +159,7 @@ export default function ApplicationsTable() {
   }
 
   const handleUpdateApplication = (updatedApplication: Application) => {
-    // This will be handled by edit dialog - for now just refresh data
-    handleAddApplication()
+    dispatch(updateAppAction(updatedApplication))
   }
 
   const handleDeleteApplication = async (applicationId: string) => {
