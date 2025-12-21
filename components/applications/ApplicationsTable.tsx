@@ -2,6 +2,8 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { setApplications, deleteApplication as deleteAppAction, setLoading } from '@/lib/slices/applicationsSlice'
 import {
   flexRender,
   getCoreRowModel,
@@ -27,6 +29,7 @@ import { ApplicationEditDialog } from "./application/ApplicationEditDialog"
 import { ApplicationDeleteDialog } from "./application/ApplicationDeleteDialog"
 import { ApplicationNotesDialog } from "./application/ApplicationNotesDialog"
 import { ApplicationAddNewDialog } from "./application/ApplicationAddNewDialog"
+import { getAllApplications, deleteApplication as deleteApplicationFromDB, type DBApplication } from '@/lib/db'
 
 export type Application = {
     id: string
@@ -35,7 +38,6 @@ export type Application = {
     url: string,
     notes: string,
     dateApplied: string,
-    notes: string,
     status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
 }
 
@@ -122,49 +124,8 @@ function formatApplicationStatus(status: Application["status"]) {
 }
 
 export default function ApplicationsTable() {
-  const [data, setData] = React.useState<Application[]>([
-    {
-      id: "app001",
-      companyName: "Google",
-      position: "Senior Frontend Developer",
-      url: "https://careers.google.com/jobs/results/123456789/",
-      dateApplied: "2024-12-15",
-      status: "submitted"
-    },
-    {
-      id: "app002", 
-      companyName: "Microsoft",
-      position: "React Developer",
-      url: "https://careers.microsoft.com/us/en/job/1234567/",
-      notes: "Remote-first company, good benefits package",
-      dateApplied: "2024-12-10",
-      status: "notApplied"
-    },
-    {
-      id: "app003",
-      companyName: "Meta",
-      position: "Full Stack Engineer",
-      url: "https://www.metacareers.com/jobs/987654321/",
-      dateApplied: "2024-12-08",
-      status: "rejected"
-    },
-    {
-      id: "app004",
-      companyName: "Netflix",
-      position: "Frontend Engineer",
-      url: "https://jobs.netflix.com/jobs/456789/",
-      dateApplied: "2024-12-12",
-      status: "sentFollowUp"
-    },
-    {
-      id: "app005",
-      companyName: "Spotify",
-      position: "UI/UX Developer",
-      notes: "Company seems to have gone quiet after initial contact",
-      dateApplied: "2024-11-28",
-      status: "ghosted"
-    }
-  ])
+  const dispatch = useAppDispatch()
+  const { list: data, isLoading: loading } = useAppSelector(state => state.applications)
 
   const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(null)
   
@@ -176,16 +137,40 @@ export default function ApplicationsTable() {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const handleUpdateApplication = (updatedApplication: Application) => {
-    setData(prevData => 
-      prevData.map(app => 
-        app.id === updatedApplication.id ? updatedApplication : app
-      )
-    )
+  const handleAddApplication = async () => {
+    try {
+      dispatch(setLoading(true))
+      const applications = await getAllApplications()
+      const formattedData = applications.map((app: DBApplication) => ({
+        id: app.id?.toString() || '',
+        companyName: app.companyName,
+        position: app.position,
+        url: app.url,
+        notes: app.notes,
+        dateApplied: app.dateApplied,
+        status: app.status
+      }))
+      dispatch(setApplications(formattedData))
+    } catch (error) {
+      console.error('Error loading applications:', error)
+    } finally {
+      dispatch(setLoading(false))
+    }
   }
 
-  const handleDeleteApplication = (applicationId: string) => {
-    setData(prevData => prevData.filter(app => app.id !== applicationId))
+  const handleUpdateApplication = (updatedApplication: Application) => {
+    // This will be handled by edit dialog - for now just refresh data
+    handleAddApplication()
+  }
+
+  const handleDeleteApplication = async (applicationId: string) => {
+    try {
+      await deleteApplicationFromDB(parseInt(applicationId))
+      dispatch(deleteAppAction(applicationId))
+    } catch (error) {
+      console.error('Error deleting application:', error)
+      alert('Failed to delete application')
+    }
   }
 
   const columns: ColumnDef<Application>[] = [
@@ -285,8 +270,14 @@ export default function ApplicationsTable() {
   })
   return (
     <div className="w-full">
-      <div className="overflow-hidden rounded-md border">
-        <Table>
+      {loading ? (
+        <div className="flex items-center justify-center h-32">
+          <div>Loading applications...</div>
+        </div>
+      ) : (
+        <>
+          <div className="overflow-hidden rounded-md border">
+            <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -338,6 +329,7 @@ export default function ApplicationsTable() {
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 space-x-2">
             <ApplicationAddNewDialog
+                onAdd={handleAddApplication}
                 trigger={
                 <Button size="sm">
                     <i className="bi bi-plus-lg"></i>
@@ -364,7 +356,11 @@ export default function ApplicationsTable() {
             Next
           </Button>
         </div>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
+
+export { ApplicationsTable }

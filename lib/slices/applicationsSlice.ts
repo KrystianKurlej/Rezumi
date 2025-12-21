@@ -1,0 +1,84 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { DBApplication } from '../db';
+import type { Application } from '@/components/applications/ApplicationsTable'
+
+export interface NewApplication {
+    newApplicationCompanyName: string
+    newApplicationPosition: string
+    newApplicationUrl: string
+    newApplicationNotes: string
+    newApplicationDateApplied: string
+    newApplicationStatus: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
+}
+
+export interface Applications {
+    list: Application[]
+    isLoading: boolean
+    hasApplications: boolean
+}
+
+const initialNewApplicationState: NewApplication = {
+    newApplicationCompanyName: '',
+    newApplicationPosition: '',
+    newApplicationUrl: '',
+    newApplicationNotes: '',
+    newApplicationDateApplied: '',
+    newApplicationStatus: null,
+};
+
+const initialApplicationsState: Applications = {
+    list: [],
+    isLoading: false,
+    hasApplications: false,
+};
+
+const newApplicationSlice = createSlice({
+    name: 'newApplication',
+    initialState: initialNewApplicationState,
+    reducers: {
+        updateNewApplication(state, action: PayloadAction<Partial<NewApplication>>) {
+            return { ...state, ...action.payload };
+        },
+        resetNewApplication: () => initialNewApplicationState,
+    },
+});
+
+const applicationsSlice = createSlice({
+    name: 'applications',
+    initialState: initialApplicationsState,
+    reducers: {
+        setApplications: (state, action: PayloadAction<Application[]>) => {
+            state.list = action.payload
+            state.hasApplications = action.payload.length > 0
+        },
+        addApplication: (state, action: PayloadAction<Application>) => {
+            state.list.push(action.payload)
+            state.hasApplications = true
+        },
+        updateApplication: (state, action: PayloadAction<Application>) => {
+            const index = state.list.findIndex(app => app.id === action.payload.id)
+            if (index !== -1) {
+                state.list[index] = action.payload
+            }
+        },
+        deleteApplication: (state, action: PayloadAction<string>) => {
+            state.list = state.list.filter(app => app.id !== action.payload)
+            state.hasApplications = state.list.length > 0
+        },
+        setLoading: (state, action: PayloadAction<boolean>) => {
+            state.isLoading = action.payload
+        },
+    },
+});
+
+export const { updateNewApplication, resetNewApplication } = newApplicationSlice.actions;
+export const { 
+    setApplications, 
+    addApplication, 
+    updateApplication, 
+    deleteApplication, 
+    setLoading 
+} = applicationsSlice.actions;
+
+export const newApplicationReducer = newApplicationSlice.reducer;
+export const applicationsReducer = applicationsSlice.reducer;

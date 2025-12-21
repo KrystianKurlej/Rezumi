@@ -38,6 +38,18 @@ export interface DBFooter {
     footerText: string
 }
 
+export interface DBApplication {
+    id?: number
+    type: 'application'
+    companyName: string
+    position: string
+    url: string
+    notes: string
+    dateApplied: string
+    status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
+    createdAt: number
+}
+
 const DB_NAME = 'cv-maker'
 const DB_VERSION = 3
 const STORE_NAME = 'cvm'
@@ -345,6 +357,93 @@ export const getFooter = async (): Promise<DBFooter | null> => {
 
         request.onerror = () => {
             reject('Failed to retrieve footer')
+        }
+    })
+}
+
+export const getAllApplications = async (): Promise<DBApplication[]> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.getAll()
+
+        request.onsuccess = () => {
+            const allResults = request.result
+            const applications = allResults.filter((item: DBExperience | DBEducation | DBApplication | (DBPersonalInfo & { id: string })) => item.type === 'application')
+            resolve(applications as DBApplication[])
+        }
+
+        request.onerror = () => {
+            reject('Failed to retrieve applications')
+        }
+    })
+}
+
+export const addApplication = async (application: Omit<DBApplication, 'id' | 'createdAt' | 'type'>): Promise<number> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const timestamp = Date.now()
+        const request = store.add({ ...application, type: 'application', createdAt: timestamp })
+
+        request.onsuccess = () => {
+            resolve(request.result as number)
+        }
+
+        request.onerror = () => {
+            reject('Failed to add application')
+        }
+    })
+}
+
+export const updateApplication = async (id: number, application: Omit<DBApplication, 'id' | 'createdAt' | 'type'>): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const getRequest = store.get(id)
+
+        getRequest.onsuccess = () => {
+            const existingApplication = getRequest.result
+            if (existingApplication) {
+                const updatedApplication = {
+                    ...existingApplication,
+                    ...application,
+                    id,
+                    type: 'application',
+                    updatedAt: Date.now()
+                }
+                
+                const putRequest = store.put(updatedApplication)
+                
+                putRequest.onsuccess = () => resolve()
+                putRequest.onerror = () => reject('Failed to update application')
+            } else {
+                reject('Application not found')
+            }
+        }
+
+        getRequest.onerror = () => {
+            reject('Failed to retrieve application for update')
+        }
+    })
+}
+
+export const deleteApplication = async (id: number): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.delete(id)
+
+        request.onsuccess = () => {
+            resolve()
+        }
+
+        request.onerror = () => {
+            reject('Failed to delete application')
         }
     })
 }

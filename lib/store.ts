@@ -3,6 +3,7 @@ import previewReducer from './slices/previewSlice'
 import personalReducer from './slices/personalSlice'
 import { newExperienceReducer, experiencesReducer } from './slices/experienceSlice'
 import { newEducationReducer, educationsReducer } from './slices/educationSlice'
+import { newApplicationReducer, applicationsReducer } from './slices/applicationsSlice'
 import footerReducer from './slices/footerSlice'
 import skillsReducer from './slices/skillsSlice'
 import pagesReducer from './slices/pagesSlice'
@@ -18,6 +19,8 @@ export const makeStore = () => {
             experiences: experiencesReducer,
             newEducation: newEducationReducer,
             educations: educationsReducer,
+            newApplication: newApplicationReducer,
+            applications: applicationsReducer,
             footer: footerReducer,
             skills: skillsReducer,
             export: exportReducer,
