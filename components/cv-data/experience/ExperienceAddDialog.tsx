@@ -140,6 +140,7 @@ export function ExperienceAddDialog({
                     <Calendar
                       mode="single"
                       selected={newExperience.newExperienceStartDate ? new Date(newExperience.newExperienceStartDate) : undefined}
+                      captionLayout='dropdown'
                       onSelect={(date) => {
                         if (date) {
                           const year = date.getFullYear()
@@ -169,6 +170,7 @@ export function ExperienceAddDialog({
                     <Calendar
                       mode="single"
                       selected={newExperience.newExperienceEndDate ? new Date(newExperience.newExperienceEndDate) : undefined}
+                      captionLayout='dropdown'
                       onSelect={(date) => {
                         if (date) {
                           const year = date.getFullYear()

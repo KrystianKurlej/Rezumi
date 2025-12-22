@@ -134,6 +134,7 @@ export function ExperienceEditDialog({
                   <Calendar
                     mode="single"
                     selected={editingExperience?.startDate ? new Date(editingExperience.startDate) : experience.startDate ? new Date(experience.startDate) : undefined}
+                    captionLayout='dropdown'
                     onSelect={(date) => {
                       if (date) {
                         const year = date.getFullYear()
@@ -162,6 +163,7 @@ export function ExperienceEditDialog({
                   <Calendar
                     mode="single"
                     selected={editingExperience?.endDate ? new Date(editingExperience.endDate) : experience.endDate ? new Date(experience.endDate) : undefined}
+                    captionLayout='dropdown'
                     onSelect={(date) => {
                       if (date) {
                         const year = date.getFullYear()

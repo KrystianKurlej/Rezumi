@@ -146,6 +146,7 @@ export function EducationEditDialog({
                   <Calendar
                     mode="single"
                     selected={editingEducation?.startDate ? new Date(editingEducation.startDate) : education.startDate ? new Date(education.startDate) : undefined}
+                    captionLayout='dropdown'
                     onSelect={(date) => {
                       if (date) {
                         const year = date.getFullYear()
@@ -175,6 +176,7 @@ export function EducationEditDialog({
                   <Calendar
                     mode="single"
                     selected={editingEducation?.endDate ? new Date(editingEducation.endDate) : education.endDate ? new Date(education.endDate) : undefined}
+                    captionLayout='dropdown'
                     onSelect={(date) => {
                       if (date) {
                         const year = date.getFullYear()
