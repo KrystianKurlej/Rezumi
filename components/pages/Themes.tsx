@@ -4,11 +4,12 @@ import {
   PageHeaderDescription
 } from "@/components/PageHeader";
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { menuIcons } from "@/components/AppSidebar";
 
 export default function Themes() {
     return(
         <ScrollArea className="h-full">
-            <PageHeader iconClass="bi-palette2">
+            <PageHeader iconClass={menuIcons.themes}>
                 <PageHeaderTitle>
                     Themes
                 </PageHeaderTitle>

@@ -3,7 +3,6 @@
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { setApplications, setLoading } from '@/lib/slices/applicationsSlice'
-
 import { 
   PageHeader, 
   PageHeaderTitle, 
@@ -21,6 +20,7 @@ import ApplicationsTable from "@/components/applications/ApplicationsTable";
 import { ApplicationAddNewDialog } from "@/components/applications/application/ApplicationAddNewDialog";
 import { Button } from "@/components/ui/button";
 import { getAllApplications, type DBApplication } from '@/lib/db'
+import { menuIcons } from "@/components/AppSidebar";
 
 export default function Applications() {
     const dispatch = useAppDispatch()
@@ -59,7 +59,7 @@ export default function Applications() {
     if (loading) {
         return (
             <ScrollArea className="h-full">
-                <PageHeader iconClass="bi-envelope-arrow-up">
+                <PageHeader iconClass={menuIcons.applications}>
                     <PageHeaderTitle>
                         Applications
                     </PageHeaderTitle>
@@ -76,7 +76,7 @@ export default function Applications() {
 
     return(
         <ScrollArea className="h-full">
-            <PageHeader iconClass="bi-envelope-arrow-up">
+            <PageHeader iconClass={menuIcons.applications}>
                 <PageHeaderTitle>
                     Applications
                 </PageHeaderTitle>

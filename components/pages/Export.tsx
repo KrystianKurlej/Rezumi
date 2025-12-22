@@ -26,6 +26,7 @@ import {
     updateNotes,
     generateJobFilename
 } from '@/lib/slices/exportSlice'
+import { menuIcons } from "@/components/AppSidebar";
 
 export default function Export() {
     const dispatch = useAppDispatch()
@@ -79,7 +80,7 @@ export default function Export() {
     
     return(
         <ScrollArea className="h-full">
-            <PageHeader iconClass="bi-send-arrow-down">
+            <PageHeader iconClass={menuIcons.export}>
                 <PageHeaderTitle>
                     Send & Save Application
                 </PageHeaderTitle>

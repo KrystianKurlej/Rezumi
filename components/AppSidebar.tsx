@@ -13,41 +13,50 @@ import {
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { setCurrentPage } from '@/lib/slices/pagesSlice'
 
-const items = [
+export const menuIcons = {
+  personal: "bi-file-earmark-person",
+  templates: "bi-layout-sidebar-inset",
+  languages: "bi-translate",
+  themes: "bi-palette2",
+  applications: "bi-envelope-arrow-up",
+  export: "bi-send-arrow-down",
+}
+
+const menuItems = [
   {
     title: "CV Data",
     slug: "personal",
-    icon: "bi-file-earmark-person",
+    icon: menuIcons.personal,
     isActive: true,
   },
   {
     title: "Templates",
     slug: "templates",
-    icon: "bi-layout-sidebar-inset",
+    icon: menuIcons.templates,
     isActive: false,
   },
   {
     title: "Languages",
     slug: "languages",
-    icon: "bi-translate",
+    icon: menuIcons.languages,
     isActive: false,
   },
   {
     title: "Themes",
     slug: "themes",
-    icon: "bi-palette2",
+    icon: menuIcons.themes,
     isActive: false,
   },
   {
     title: "Applications",
     slug: "applications",
-    icon: "bi-envelope-arrow-up",
+    icon: menuIcons.applications,
     isActive: false,
   },
   {
     title: "Send & Save Application",
     slug: "export",
-    icon: "bi-send-arrow-down",
+    icon: menuIcons.export,
     isActive: false,
   },
 ]
@@ -56,7 +65,7 @@ export function AppSidebar() {
     const dispatch = useAppDispatch()
     const currentPage = useAppSelector(state => state.pages.currentPage)
 
-    items.forEach(item => {
+    menuItems.forEach(item => {
         item.isActive = (item.slug === currentPage)
     })
 
@@ -66,7 +75,7 @@ export function AppSidebar() {
                 <SidebarGroup>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {items.map((item) => (
+                            {menuItems.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton
                                         isActive={item.isActive}

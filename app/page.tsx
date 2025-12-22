@@ -29,13 +29,13 @@ export default function Home() {
             <div className="flex h-full">
               <div className="bg-gray-100 relative flex-1">
                 <ScrollArea className="h-full">
-                  <div className="w-full p-6">
-                    <Preview />
+                  <div className="p-6">
+                    {/* <Preview /> */}
                   </div>
                 </ScrollArea>
                 <PreviewScale />
               </div>
-              <div className="border-l h-full flex-1">
+              <div className="border-l h-full flex-1 max-w-lg">
                 {currentPage === 'personal' && <CvData />}
                 {currentPage === 'templates' && <Templates />}
                 {currentPage === 'languages' && <Languages />}

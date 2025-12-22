@@ -10,11 +10,12 @@ import {
   PageHeaderDescription
 } from "@/components/PageHeader";
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { menuIcons } from "@/components/AppSidebar";
 
 export default function CvData() {
     return(
         <ScrollArea className="h-full">
-            <PageHeader iconClass="bi-file-earmark-person">
+            <PageHeader iconClass={menuIcons.personal}>
                 <PageHeaderTitle>
                     CV Data
                 </PageHeaderTitle>
