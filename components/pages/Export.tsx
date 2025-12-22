@@ -11,72 +11,39 @@ import {
   FieldDescription,
   FieldSet,
   FieldGroup,
-  FieldLabel,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { ExportButton } from '@/components/export/ExportButton'
-import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { 
-    updateQuickFilename,
-    updateJobFilename,
-    updateCompanyName,
-    updateJobTitle,
-    updateJobLink,
-    updateNotes,
-    generateJobFilename
-} from '@/lib/slices/exportSlice'
+import { useAppSelector } from '@/lib/hooks'
 import { menuIcons } from "@/components/AppSidebar";
+import { pdf } from '@react-pdf/renderer';
+import GenerateCV from '@/components/GenerateCV';
 
 export default function Export() {
-    const dispatch = useAppDispatch()
-    const exportData = useAppSelector(state => state.export)
     const personal = useAppSelector(state => state.personal)
     const experiences = useAppSelector(state => state.experiences.list)
     const educations = useAppSelector(state => state.educations.list)
     const skills = useAppSelector(state => state.skills)
     const footer = useAppSelector(state => state.footer)
-
-    const getGeneratedFilename = () => {
-        if (exportData.companyName && exportData.jobTitle) {
-            const cleanCompany = exportData.companyName.replace(/[^a-z0-9]/gi, '-').toLowerCase()
-            const cleanTitle = exportData.jobTitle.replace(/[^a-z0-9]/gi, '-').toLowerCase()
-            return `cv-${cleanCompany}-${cleanTitle}.pdf`
-        }
-        return exportData.jobFilename
-    }
-
-    const handleSaveApplication = () => {
-        console.log('Saving application:', {
-            filename: getGeneratedFilename(),
-            companyName: exportData.companyName,
-            jobTitle: exportData.jobTitle,
-            jobLink: exportData.jobLink,
-            notes: exportData.notes,
-            timestamp: new Date().toISOString()
-        })
-        // Tu będzie logika zapisania do IndexedDB
-    }
-
-    const exportCVData = () => {
-        const cvData = {
-            personal,
-            experiences,
-            educations,
-            skills,
-            footer,
-            exportedAt: new Date().toISOString()
-        }
+    const filename = 'CV-' + personal.firstName + '_' + personal.lastName + '.pdf'
+    
+    const handleDownloadPDF = async () => {
+        const blob = await pdf(
+            <GenerateCV 
+                personal={personal}
+                experiences={experiences}
+                educations={educations}
+                skills={skills}
+                footer={footer}
+            />
+        ).toBlob();
         
-        const dataStr = JSON.stringify(cvData, null, 2)
-        const dataBlob = new Blob([dataStr], { type: 'application/json' })
-        const url = URL.createObjectURL(dataBlob)
-        const link = document.createElement('a')
-        link.href = url
-        link.download = 'cv-data.json'
-        link.click()
-        URL.revokeObjectURL(url)
-    }
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(url);
+    };
     
     return(
         <ScrollArea className="h-full">
@@ -90,7 +57,7 @@ export default function Export() {
             </PageHeader>
             <div className="p-4 pb-12">
                 <FieldGroup>
-                    <FieldSet>
+                    {/* <FieldSet>
                         <div>
                             <span className="text-lg font-semibold">
                                 Send CV for a specific job
@@ -100,20 +67,6 @@ export default function Export() {
                             </FieldDescription>
                         </div>
                         <FieldGroup>
-                            <Field>
-                                <FieldLabel>
-                                    Filename
-                                </FieldLabel>
-                                <Input
-                                    type="text"
-                                    value={exportData.jobFilename}
-                                    onChange={(e) => dispatch(updateJobFilename(e.target.value))}
-                                    placeholder="my-cv.pdf"
-                                />
-                                <FieldDescription>
-                                    Set the desired filename for your exported CV.
-                                </FieldDescription>
-                            </Field>
                             <div className="grid grid-cols-2 gap-4">
                                 <Field>
                                     <FieldLabel>
@@ -162,49 +115,27 @@ export default function Export() {
                             </Field>
                         </FieldGroup>
                         <Field>
-                            <ExportButton 
-                                filename={getGeneratedFilename()}
-                                onExportComplete={handleSaveApplication}
-                            >
-                                <i className="bi bi-file-earmark-arrow-down"></i>
-                                Download PDF & Save as Application
-                            </ExportButton>
                             <FieldDescription className="text-center text-xs">
                                 This will save a snapshot of your CV exactly as it was sent.
                             </FieldDescription>
                         </Field>
-                    </FieldSet>
+                    </FieldSet> */}
                     <FieldSet className="mt-2 pt-5 border-t">
                         <div>
-                            <span className="text-lg font-semibold">
-                                Download CV only
-                            </span>
-                            <FieldDescription>
-                                Just export your current CV as a PDF, without saving it to your applications.
-                            </FieldDescription>
+                            <Field>
+                                <span className="text-lg font-semibold">
+                                    Download CV only
+                                </span>
+                                <FieldDescription>
+                                    Just export your current CV as a PDF, without saving it to your applications.
+                                </FieldDescription>
+                            </Field>
                         </div>
                         <Field>
-                            <FieldLabel>
-                                Filename
-                            </FieldLabel>
-                            <Input
-                                type="text"
-                                value={exportData.quickFilename}
-                                onChange={(e) => dispatch(updateQuickFilename(e.target.value))}
-                                placeholder="my-cv.pdf"
-                            />
-                            <FieldDescription>
-                                Set the desired filename for your exported CV.
-                            </FieldDescription>
-                        </Field>
-                        <Field>
-                            <ExportButton 
-                                filename={exportData.quickFilename}
-                                variant="secondary"
-                            >
+                            <Button variant="secondary" onClick={handleDownloadPDF}>
                                 <i className="bi bi-file-earmark-arrow-down"></i>
                                 Download PDF
-                            </ExportButton>
+                            </Button>
                         </Field>
                     </FieldSet>
                     <FieldSet className="mt-2 pt-5 border-t">
@@ -217,7 +148,7 @@ export default function Export() {
                             </FieldDescription>
                         </div>
                         <Field>
-                            <Button variant="secondary" onClick={exportCVData}>
+                            <Button variant="secondary">
                                 <i className="bi bi-download"></i>
                                 Export CV Data (JSON)
                             </Button>
