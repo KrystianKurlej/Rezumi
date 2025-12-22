@@ -72,6 +72,7 @@ export function ExperienceAddDialog({
       const id = await addExperienceToDB(experienceData)
       dispatch(addExperience({
         id,
+        type: 'experience',
         createdAt: Date.now(),
         ...experienceData
       }))

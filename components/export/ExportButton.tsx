@@ -25,7 +25,7 @@ export function ExportButton({
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
     documentTitle: filename.replace('.pdf', ''),
-    onBeforeGetContent: () => {
+    onBeforePrint: async () => {
       onExportStart?.()
     },
     onAfterPrint: () => {

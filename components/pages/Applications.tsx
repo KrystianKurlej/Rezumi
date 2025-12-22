@@ -40,6 +40,7 @@ export default function Applications() {
                 position: app.position,
                 url: app.url,
                 notes: app.notes,
+                salary: app.salary,
                 dateApplied: app.dateApplied,
                 status: app.status
             }))

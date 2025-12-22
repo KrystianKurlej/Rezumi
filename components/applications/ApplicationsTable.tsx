@@ -290,7 +290,7 @@ export default function ApplicationsTable() {
     },
     {
         accessorKey: "actions",
-        header: null,
+        header: '',
         cell: ({ row }) => (
             <div className="flex space-x-2">
                 <ApplicationEditDialog

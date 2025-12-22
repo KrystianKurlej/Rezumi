@@ -23,7 +23,7 @@ export default function CvData() {
                 </PageHeaderDescription>
             </PageHeader>
             <div className="p-2 pb-10">
-                <Accordion type="multiple" defaultValue="personal-section">
+                <Accordion type="multiple" defaultValue={["personal-section"]}>
                     <PersonalForm />
                     <ExperienceForm />
                     <EducationForm />

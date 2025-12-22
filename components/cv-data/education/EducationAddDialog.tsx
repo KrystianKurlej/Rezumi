@@ -73,6 +73,7 @@ export function EducationAddDialog({
       const id = await addEducationToDB(educationData)
       dispatch(addEducation({
         id,
+        type: 'education',
         createdAt: Date.now(),
         ...educationData
       }))

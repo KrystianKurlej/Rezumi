@@ -147,7 +147,7 @@ export const getAllExperiences = async (): Promise<DBExperience[]> => {
         request.onsuccess = () => {
             // Filtruj tylko experiences
             const allResults = request.result
-            const experiences = allResults.filter((item: DBExperience | DBEducation | (DBPersonalInfo & { id: string })) => item.type === 'experience')
+            const experiences = allResults.filter((item: any) => item.type === 'experience')
             resolve(experiences as DBExperience[])
         }
 
@@ -216,7 +216,7 @@ export const getAllEducations = async (): Promise<DBEducation[]> => {
 
         request.onsuccess = () => {
             const allResults = request.result
-            const educations = allResults.filter((item: DBExperience | DBEducation | (DBPersonalInfo & { id: string })) => item.type === 'education')
+            const educations = allResults.filter((item: any) => item.type === 'education')
             resolve(educations as DBEducation[])
         }
 
@@ -371,7 +371,7 @@ export const getAllApplications = async (): Promise<DBApplication[]> => {
 
         request.onsuccess = () => {
             const allResults = request.result
-            const applications = allResults.filter((item: DBExperience | DBEducation | DBApplication | (DBPersonalInfo & { id: string })) => item.type === 'application')
+            const applications = allResults.filter((item: any) => item.type === 'application')
             resolve(applications as DBApplication[])
         }
 
