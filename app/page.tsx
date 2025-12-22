@@ -17,7 +17,6 @@ import Applications from "@/components/pages/Applications";
 
 const Preview = dynamic(() => import('@/components/preview/Preview'), {
   ssr: false,
-  loading: () => <div className="w-full h-full" style={{ backgroundColor: '#282828' }}></div>
 });
 
 export default function Home() {
@@ -45,11 +44,11 @@ export default function Home() {
         {currentPage === 'applications' ? 
           <Applications /> :
           (
-            <div className="flex h-full">
+            <div className="flex h-full" style={{ backgroundColor: '#282828' }}>
               <div className="flex-1">
                 <Preview key={previewKey} />
               </div>
-              <div className="border-l h-full flex-1 max-w-lg">
+              <div className="border-l h-full flex-1 max-w-lg bg-white">
                 {currentPage === 'personal' && <CvData />}
                 {currentPage === 'templates' && <Templates />}
                 {currentPage === 'languages' && <Languages />}
