@@ -41,7 +41,7 @@ export default function Preview() {
                                         </div>
                                     </div>
                                     {experience.description && (
-                                        <div className="cv-item-description" dangerouslySetInnerHTML={{ __html: formatRichText(experience.description, 'short') }}></div>
+                                        <div className="cv-item-description" dangerouslySetInnerHTML={{ __html: formatRichText(experience.description) }}></div>
                                     )}
                                 </div>
                             ))}
@@ -65,7 +65,7 @@ export default function Preview() {
                                     </div>
                                     <div className="cv-institution">{education.institution}</div>
                                     {education.description && (
-                                        <div className="cv-item-description" dangerouslySetInnerHTML={{ __html: formatRichText(education.description, 'short') }}></div>
+                                        <div className="cv-item-description" dangerouslySetInnerHTML={{ __html: formatRichText(education.description) }}></div>
                                     )}
                                 </div>
                             ))}
