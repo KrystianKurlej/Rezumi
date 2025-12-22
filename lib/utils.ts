@@ -5,16 +5,72 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatRichText(text: string) {
-  return text
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-    .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic
-    .replace(/__(.*?)__/g, '<u>$1</u>') // Underline
-    .replace(/~~(.*?)~~/g, '<del>$1</del>') // Strikethrough
-    .replace(/`(.*?)`/g, '<code>$1</code>') // Inline code
-    .replace(/\n/g, '<br/>') // New lines
-    .replace(/• (.*?)(<br\/>|$)/g, '<ul><li>$1</li></ul>') // Bullet points
-    .replace(/1\. (.*?)(<br\/>|$)/g, '<ol><li>$1</li></ol>') // Numbered lists
+type TextSegment = {
+  text: string;
+  bold?: boolean;
+  italic?: boolean;
+}
+
+export function formatRichText(text: string): TextSegment[] {
+  if (!text) return [{ text: '' }];
+  
+  const segments: TextSegment[] = [];
+  const lines = text.split('\n');
+  
+  lines.forEach((line, lineIndex) => {
+    let remaining = line;
+    const lineSegments: TextSegment[] = [];
+    
+    // Przetwarzanie jednej linii
+    while (remaining.length > 0) {
+      // Szukaj bold **text**
+      const boldMatch = remaining.match(/^\*\*(.*?)\*\*/);
+      if (boldMatch) {
+        lineSegments.push({ text: boldMatch[1], bold: true });
+        remaining = remaining.slice(boldMatch[0].length);
+        continue;
+      }
+      
+      // Szukaj italic *text*
+      const italicMatch = remaining.match(/^\*(.*?)\*/);
+      if (italicMatch) {
+        lineSegments.push({ text: italicMatch[1], italic: true });
+        remaining = remaining.slice(italicMatch[0].length);
+        continue;
+      }
+      
+      // Szukaj kombinacji bold + italic ***text***
+      const boldItalicMatch = remaining.match(/^\*\*\*(.*?)\*\*\*/);
+      if (boldItalicMatch) {
+        lineSegments.push({ text: boldItalicMatch[1], bold: true, italic: true });
+        remaining = remaining.slice(boldItalicMatch[0].length);
+        continue;
+      }
+      
+      // Szukaj najbliższego specjalnego znaku
+      const nextSpecial = remaining.search(/\*\*/);
+      if (nextSpecial === -1) {
+        // Nie ma więcej specjalnych znaków, dodaj resztę jako zwykły tekst
+        if (remaining.length > 0) {
+          lineSegments.push({ text: remaining });
+        }
+        break;
+      } else if (nextSpecial > 0) {
+        // Dodaj tekst przed specjalnym znakiem
+        lineSegments.push({ text: remaining.slice(0, nextSpecial) });
+        remaining = remaining.slice(nextSpecial);
+      } else {
+        // nextSpecial === 0, ale nie pasuje do żadnego wzorca
+        // Dodaj pierwszy znak jako zwykły tekst
+        lineSegments.push({ text: remaining[0] });
+        remaining = remaining.slice(1);
+      }
+    }
+    
+    segments.push(...lineSegments);
+  });
+  
+  return segments.length > 0 ? segments : [{ text }];
 }
 
 export function formatDate(dateString: string, variant: 'long' | 'short') {

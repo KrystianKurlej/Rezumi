@@ -1,13 +1,11 @@
 'use client'
 
-import Preview from "@/components/Preview";
-import PreviewScale from "@/components/PreviewScale";
+import dynamic from 'next/dynamic';
 import { 
   SidebarProvider, 
   SidebarInset
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { useAppSelector } from '@/lib/hooks'
 import CvData from "@/components/pages/CvData";
 import Export from "@/components/pages/Export";
@@ -15,6 +13,11 @@ import Languages from "@/components/pages/Languages";
 import Templates from "@/components/pages/Templates";
 import Themes from "@/components/pages/Themes";
 import Applications from "@/components/pages/Applications";
+
+const Preview = dynamic(() => import('@/components/preview/Preview'), {
+  ssr: false,
+  loading: () => <div className="w-full h-full flex items-center justify-center">Loading...</div>
+});
 
 export default function Home() {
   const currentPage = useAppSelector(state => state.pages.currentPage)
@@ -27,13 +30,8 @@ export default function Home() {
           <Applications /> :
           (
             <div className="flex h-full">
-              <div className="bg-gray-100 relative flex-1">
-                <ScrollArea className="h-full">
-                  <div className="p-6">
-                    {/* <Preview /> */}
-                  </div>
-                </ScrollArea>
-                <PreviewScale />
+              <div className="flex-1">
+                <Preview />
               </div>
               <div className="border-l h-full flex-1 max-w-lg">
                 {currentPage === 'personal' && <CvData />}

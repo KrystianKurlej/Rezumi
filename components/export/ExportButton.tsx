@@ -3,7 +3,7 @@
 import React, { useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { Button } from '@/components/ui/button'
-import Preview from '@/components/Preview'
+import Preview from '@/components/preview/Preview'
 
 interface ExportButtonProps {
   filename?: string
