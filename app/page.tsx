@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic';
+import { useMemo } from 'react';
 import { 
   SidebarProvider, 
   SidebarInset
@@ -16,11 +17,26 @@ import Applications from "@/components/pages/Applications";
 
 const Preview = dynamic(() => import('@/components/preview/Preview'), {
   ssr: false,
-  loading: () => <div className="w-full h-full flex items-center justify-center">Loading...</div>
+  loading: () => <div className="w-full h-full" style={{ backgroundColor: '#282828' }}></div>
 });
 
 export default function Home() {
   const currentPage = useAppSelector(state => state.pages.currentPage)
+  const personal = useAppSelector(state => state.personal)
+  const experiences = useAppSelector(state => state.experiences.list)
+  const educations = useAppSelector(state => state.educations.list)
+  const skills = useAppSelector(state => state.skills)
+  const footer = useAppSelector(state => state.footer)
+
+  const previewKey = useMemo(() => {
+    return JSON.stringify({
+      personal,
+      experiences: experiences.length,
+      educations: educations.length,
+      skills: skills.skillsText.length,
+      footer: footer.footerText.length
+    })
+  }, [personal, experiences, educations, skills, footer])
 
   return (
     <SidebarProvider>
@@ -31,7 +47,7 @@ export default function Home() {
           (
             <div className="flex h-full">
               <div className="flex-1">
-                <Preview />
+                <Preview key={previewKey} />
               </div>
               <div className="border-l h-full flex-1 max-w-lg">
                 {currentPage === 'personal' && <CvData />}

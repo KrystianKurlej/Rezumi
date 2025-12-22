@@ -12,9 +12,6 @@ const footerSlice = createSlice({
     name: 'footer',
     initialState,
     reducers: {
-        updateFooter(state, action: PayloadAction<Partial<Footer>>) {
-            return { ...state, ...action.payload };
-        },
         setFooter(state, action: PayloadAction<Footer>) {
             return action.payload;
         },
@@ -22,5 +19,5 @@ const footerSlice = createSlice({
     },
 });
 
-export const { updateFooter, setFooter, resetFooter } = footerSlice.actions;
+export const { setFooter, resetFooter } = footerSlice.actions;
 export default footerSlice.reducer;

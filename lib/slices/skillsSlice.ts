@@ -12,9 +12,6 @@ const skillsSlice = createSlice({
     name: 'skills',
     initialState,
     reducers: {
-        updateSkills(state, action: PayloadAction<string>) {
-            state.skillsText = action.payload;
-        },
         setSkills(state, action: PayloadAction<Skills>) {
             return action.payload;
         },
@@ -22,5 +19,5 @@ const skillsSlice = createSlice({
     },
 });
 
-export const { updateSkills, setSkills, resetSkills } = skillsSlice.actions;
+export const { setSkills, resetSkills } = skillsSlice.actions;
 export default skillsSlice.reducer;

@@ -222,7 +222,7 @@ export function EducationEditDialog({
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <Button onClick={handleEditSubmit}>
-            Save Changes
+            Save Changes <i className="bi bi-check"></i>
           </Button>
         </DialogFooter>
       </DialogContent>

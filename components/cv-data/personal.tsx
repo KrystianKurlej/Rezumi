@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { PersonalInfo, updatePersonalInfo, setPersonalInfo } from '@/lib/slices/personalSlice'
+import { PersonalInfo, setPersonalInfo } from '@/lib/slices/personalSlice'
 import { getPersonalInfo, updatePersonalInfo as updatePersonalInfoDB } from '@/lib/db'
 import {
   AccordionContent,
@@ -15,10 +15,13 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { Button } from '@/components/ui/button'
 
 export default function PersonalForm() {
     const dispatch = useAppDispatch()
     const personal = useAppSelector(state => state.personal)
+    const [localPersonal, setLocalPersonal] = useState<PersonalInfo>(personal)
+    const [isSaving, setIsSaving] = useState(false)
 
     useEffect(() => {
         const loadPersonalInfo = async () => {
@@ -26,6 +29,7 @@ export default function PersonalForm() {
                 const savedPersonalInfo = await getPersonalInfo()
                 if (savedPersonalInfo) {
                     dispatch(setPersonalInfo(savedPersonalInfo))
+                    setLocalPersonal(savedPersonalInfo)
                 }
             } catch (error) {
                 console.error('Error loading personal info:', error)
@@ -35,17 +39,25 @@ export default function PersonalForm() {
         loadPersonalInfo()
     }, [dispatch])
 
+    useEffect(() => {
+        setLocalPersonal(personal)
+    }, [personal])
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target
         const key = id as keyof PersonalInfo
-        dispatch(updatePersonalInfo({ [key]: value }))
+        setLocalPersonal(prev => ({ ...prev, [key]: value }))
     }
 
-    const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const handleSave = async () => {
+        setIsSaving(true)
         try {
-            await updatePersonalInfoDB(personal)
+            await updatePersonalInfoDB(localPersonal)
+            dispatch(setPersonalInfo(localPersonal))
         } catch (error) {
             console.error('Error saving personal info:', error)
+        } finally {
+            setIsSaving(false)
         }
     }
 
@@ -63,9 +75,8 @@ export default function PersonalForm() {
                             </FieldLabel>
                             <Input
                                 id="firstName"
-                                value={personal.firstName}
+                                value={localPersonal.firstName}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
                             />
                         </Field>
                         <Field>
@@ -74,9 +85,8 @@ export default function PersonalForm() {
                             </FieldLabel>
                             <Input
                                 id="lastName"
-                                value={personal.lastName}
+                                value={localPersonal.lastName}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
                             />
                         </Field>
                         <Field>
@@ -86,9 +96,8 @@ export default function PersonalForm() {
                             <Input
                                 id="email"
                                 type="email"
-                                value={personal.email}
+                                value={localPersonal.email}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
                             />
                         </Field>
                         <Field>
@@ -98,12 +107,17 @@ export default function PersonalForm() {
                             <Input
                                 id="phone"
                                 type="tel"
-                                value={personal.phone}
+                                value={localPersonal.phone}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
                             />
                         </Field>
                     </div>
+                    <Button
+                        onClick={handleSave}
+                        disabled={isSaving}
+                    >
+                        Save Changes <i className="bi bi-check"></i>
+                    </Button>
                 </FieldGroup>
             </AccordionContent>
         </AccordionItem>

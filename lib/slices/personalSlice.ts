@@ -18,9 +18,6 @@ const personalSlice = createSlice({
     name: 'personal',
     initialState,
     reducers: {
-        updatePersonalInfo(state, action: PayloadAction<Partial<PersonalInfo>>) {
-            return { ...state, ...action.payload };
-        },
         setPersonalInfo(state, action: PayloadAction<PersonalInfo>) {
             return action.payload;
         },
@@ -28,5 +25,5 @@ const personalSlice = createSlice({
     },
 });
 
-export const { updatePersonalInfo, setPersonalInfo, resetPersonalInfo } = personalSlice.actions;
+export const { setPersonalInfo, resetPersonalInfo } = personalSlice.actions;
 export default personalSlice.reducer;

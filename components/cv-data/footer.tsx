@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { Footer, updateFooter, setFooter } from '@/lib/slices/footerSlice'
+import { setFooter } from '@/lib/slices/footerSlice'
 import { getFooter, updateFooter as updateFooterDB } from '@/lib/db'
 import {
   AccordionContent,
@@ -15,10 +15,13 @@ import {
 } from "@/components/ui/field"
 import { Textarea } from "@/components/ui/textarea"
 import MarkdownInfo from '@/components/MarkdownInfo'
+import { Button } from '@/components/ui/button'
 
 export default function FooterForm() {
     const dispatch = useAppDispatch()
     const footer = useAppSelector(state => state.footer)
+    const [localFooter, setLocalFooter] = useState<string>(footer.footerText)
+    const [isSaving, setIsSaving] = useState(false)
 
     useEffect(() => {
         const loadFooter = async () => {
@@ -26,6 +29,7 @@ export default function FooterForm() {
                 const savedFooter = await getFooter()
                 if (savedFooter) {
                     dispatch(setFooter(savedFooter))
+                    setLocalFooter(savedFooter.footerText)
                 }
             } catch (error) {
                 console.error('Error loading footer:', error)
@@ -34,18 +38,25 @@ export default function FooterForm() {
         
         loadFooter()
     }, [dispatch])
+
+    useEffect(() => {
+        setLocalFooter(footer.footerText)
+    }, [footer])
     
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const { id, value } = e.target
-        const key = id as keyof Footer
-        dispatch(updateFooter({ [key]: value }))
+        setLocalFooter(e.target.value)
     }
 
-    const handleBlur = async (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    const handleSave = async () => {
+        setIsSaving(true)
         try {
-            await updateFooterDB(footer)
+            const footerData = { footerText: localFooter }
+            await updateFooterDB(footerData)
+            dispatch(setFooter(footerData))
         } catch (error) {
             console.error('Error saving footer:', error)
+        } finally {
+            setIsSaving(false)
         }
     }
 
@@ -60,12 +71,17 @@ export default function FooterForm() {
                         <Textarea
                           id="footerText"
                           placeholder="Enter any legal disclaimers or additional information for the footer"
-                          value={footer.footerText}
+                          value={localFooter}
                           onChange={handleChange}
-                          onBlur={handleBlur}
                         />
                         <MarkdownInfo />
                     </Field>
+                    <Button
+                        onClick={handleSave}
+                        disabled={isSaving}
+                    >
+                        Save changes <i className="bi bi-check"></i>
+                    </Button>
                 </FieldGroup>
             </AccordionContent>
         </AccordionItem>
