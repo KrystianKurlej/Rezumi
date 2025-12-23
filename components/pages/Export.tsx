@@ -210,7 +210,7 @@ export default function Export() {
                             </Button>
                         </Field>
                     </FieldSet>
-                    <FieldSet className="mt-2 pt-5 border-t">
+                    {/* <FieldSet className="mt-2 pt-5 border-t">
                         <div>
                             <span className="text-lg font-semibold">
                                 Export CV data
@@ -228,7 +228,7 @@ export default function Export() {
                                 This file is not a CV. It contains editable data only.
                             </FieldDescription>
                         </Field>
-                    </FieldSet>
+                    </FieldSet> */}
                 </FieldGroup>
             </div>
         </ScrollArea>

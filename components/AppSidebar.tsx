@@ -28,36 +28,42 @@ const menuItems = [
     slug: "personal",
     icon: menuIcons.personal,
     isActive: true,
+    isDisabled: false,
   },
   {
     title: "Templates",
     slug: "templates",
     icon: menuIcons.templates,
     isActive: false,
+    isDisabled: true,
   },
   {
     title: "Languages",
     slug: "languages",
     icon: menuIcons.languages,
     isActive: false,
+    isDisabled: true,
   },
   {
     title: "Themes",
     slug: "themes",
     icon: menuIcons.themes,
     isActive: false,
+    isDisabled: true,
   },
   {
     title: "Applications",
     slug: "applications",
     icon: menuIcons.applications,
     isActive: false,
+    isDisabled: false,
   },
   {
     title: "Send & Save Application",
     slug: "export",
     icon: menuIcons.export,
     isActive: false,
+    isDisabled: false,
   },
 ]
 
@@ -80,9 +86,10 @@ export function AppSidebar() {
                                     <SidebarMenuButton
                                         isActive={item.isActive}
                                         onClick={() => dispatch(setCurrentPage(item.slug as string))}
+                                        disabled={item.isDisabled}
                                     >
                                         <i className={`bi ${item.icon}`}></i>
-                                        <span>{item.title}</span>
+                                        {!item.isDisabled ? <span>{item.title}</span> : <span className="opacity-50">Comming soon</span>}
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
