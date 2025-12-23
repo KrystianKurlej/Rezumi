@@ -11,7 +11,7 @@ import {
   DialogTrigger,
   DialogClose
 } from "@/components/ui/dialog"
-import { Application } from '../ApplicationsTable'
+import { Application } from '@/lib/slices/applicationsSlice'
 
 interface ApplicationNotesDialogProps {
   application: Application

@@ -34,7 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Application } from '../ApplicationsTable'
+import { Application } from '@/lib/slices/applicationsSlice'
 
 interface ApplicationEditDialogProps {
   application: Application

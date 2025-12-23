@@ -42,7 +42,7 @@ export interface DBApplication {
     dateApplied: string
     status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
     createdAt: number
-    cvData: DBCVData
+    cvData?: DBCVData
 }
 
 const DB_NAME = 'cv-maker'
