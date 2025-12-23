@@ -7,7 +7,6 @@ import { newApplicationReducer, applicationsReducer } from './slices/application
 import footerReducer from './slices/footerSlice'
 import skillsReducer from './slices/skillsSlice'
 import pagesReducer from './slices/pagesSlice'
-import exportReducer from './slices/exportSlice'
 
 export const makeStore = () => {
     return configureStore({
@@ -23,7 +22,6 @@ export const makeStore = () => {
             applications: applicationsReducer,
             footer: footerReducer,
             skills: skillsReducer,
-            export: exportReducer,
         },
     })
 }
