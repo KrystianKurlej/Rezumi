@@ -20,7 +20,38 @@ import { menuIcons } from "@/components/AppSidebar";
 import { pdf } from '@react-pdf/renderer';
 import GenerateCV from '@/components/GenerateCV';
 import { Input } from '@/components/ui/input';
-import { addApplication as addApplicationToDB } from '@/lib/db'
+import { addApplication as addApplicationToDB, type DBExperience, type DBEducation } from '@/lib/db'
+import { type PersonalInfo } from '@/lib/slices/personalSlice'
+import { type Skills } from '@/lib/slices/skillsSlice'
+import { type Footer } from '@/lib/slices/footerSlice'
+
+interface DownloadPDFProps {
+    personal: PersonalInfo;
+    experiences: DBExperience[];
+    educations: DBEducation[];
+    skills: Skills;
+    footer: Footer;
+    filename: string;
+}
+
+export const handleDownloadPDF = async ({ personal, experiences, educations, skills, footer, filename }: DownloadPDFProps) => {
+    const blob = await pdf(
+        <GenerateCV 
+            personal={personal}
+            experiences={experiences}
+            educations={educations}
+            skills={skills}
+            footer={footer}
+        />
+    ).toBlob();
+    
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+};
 
 export default function Export() {
     const [loading, setLoading] = useState(false);
@@ -38,25 +69,6 @@ export default function Export() {
     const skills = useAppSelector(state => state.skills)
     const footer = useAppSelector(state => state.footer)
     const filename = 'CV-' + personal.firstName + '_' + personal.lastName + '.pdf'
-    
-    const handleDownloadPDF = async () => {
-        const blob = await pdf(
-            <GenerateCV 
-                personal={personal}
-                experiences={experiences}
-                educations={educations}
-                skills={skills}
-                footer={footer}
-            />
-        ).toBlob();
-        
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        link.click();
-        URL.revokeObjectURL(url);
-    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target
@@ -68,7 +80,7 @@ export default function Export() {
         setLoading(true)
         
         try {
-            await handleDownloadPDF()
+            await handleDownloadPDF({ personal, experiences, educations, skills, footer, filename })
         } catch (error) {
             console.error('Error downloading PDF:', error)
         } finally {
@@ -80,7 +92,7 @@ export default function Export() {
         setLoading(true)
         
         try {
-            await handleDownloadPDF()
+            await handleDownloadPDF({ personal, experiences, educations, skills, footer, filename })
             await addApplicationToDB({
                 companyName: exportData.companyName,
                 position: exportData.jobTitle,
@@ -88,7 +100,14 @@ export default function Export() {
                 notes: exportData.notes,
                 salary: exportData.salary ? parseFloat(exportData.salary) : null,
                 dateApplied: new Date().toISOString().split('T')[0],
-                status: 'submitted'
+                status: 'submitted',
+                cvData: {
+                    personal,
+                    experiences,
+                    educations,
+                    skills,
+                    footer
+                }
             })
         } catch (error) {
             console.error('Error saving application and downloading PDF:', error)

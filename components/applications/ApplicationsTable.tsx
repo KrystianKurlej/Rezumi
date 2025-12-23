@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { setApplications, deleteApplication as deleteAppAction, setLoading, updateApplication as updateAppAction, setSorting } from '@/lib/slices/applicationsSlice'
+import { setApplications, deleteApplication as deleteAppAction, setLoading, updateApplication as updateAppAction, setSorting, type Application } from '@/lib/slices/applicationsSlice'
 import {
   flexRender,
   getCoreRowModel,
@@ -31,17 +31,7 @@ import { ApplicationNotesDialog } from "./application/ApplicationNotesDialog"
 import { ApplicationAddNewDialog } from "./application/ApplicationAddNewDialog"
 import { getAllApplications, deleteApplication as deleteApplicationFromDB, type DBApplication } from '@/lib/db'
 import { formatDate } from '@/lib/utils'
-
-export type Application = {
-    id: string
-    companyName: string,
-    position: string,
-    url: string,
-    notes: string,
-    salary: number | null,
-    dateApplied: string,
-    status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
-}
+import { handleDownloadPDF } from "../pages/Export"
 
 function formatApplicationStatus(status: Application["status"]) {
     switch (status) {
@@ -150,7 +140,8 @@ export default function ApplicationsTable() {
         notes: app.notes,
         salary: app.salary,
         dateApplied: app.dateApplied,
-        status: app.status
+        status: app.status,
+        cvData: app.cvData,
       }))
       dispatch(setApplications(formattedData))
     } catch (error) {
@@ -171,6 +162,24 @@ export default function ApplicationsTable() {
     } catch (error) {
       console.error('Error deleting application:', error)
       alert('Failed to delete application')
+    }
+  }
+
+  const handleDownloadCV = async (application: Application) => {
+    if (!application.cvData) return;
+
+    try {
+      await handleDownloadPDF({
+        personal: application.cvData.personal,
+        experiences: application.cvData.experiences,
+        educations: application.cvData.educations,
+        skills: application.cvData.skills,
+        footer: application.cvData.footer,
+        filename: `CV-${application.companyName.replace(/\s+/g, '_')}-${application.dateApplied}.pdf`,
+      });
+    } catch (error) {
+      console.error('Error downloading CV PDF:', error);
+      alert('Failed to download CV PDF');
     }
   }
 
@@ -313,6 +322,12 @@ export default function ApplicationsTable() {
                     </Button>
                   }
                 />
+                {row.original.cvData && (
+                    <Button variant="outline" size="sm" onClick={() => handleDownloadCV(row.original)}>
+                        Download CV
+                        <i className="bi bi-file-earmark-arrow-down"></i>
+                    </Button>
+                )}
                 {row.original.url && (
                     <Button variant="outline" size="sm" asChild>
                         <Link href={row.original.url} target="_blank" rel="noopener noreferrer">

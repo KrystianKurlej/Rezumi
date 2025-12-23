@@ -1,7 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { DBApplication } from '../db';
-import type { Application } from '@/components/applications/ApplicationsTable'
+import type { DBCVData } from '../db';
 import type { SortingState } from '@tanstack/react-table'
+
+export interface Application {
+    id: string
+    companyName: string
+    position: string
+    url: string
+    notes: string
+    salary: number | null
+    dateApplied: string
+    status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
+    cvData?: DBCVData
+}
 
 export interface NewApplication {
     newApplicationCompanyName: string

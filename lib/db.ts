@@ -1,10 +1,3 @@
-export interface DBPersonalInfo {
-    firstName: string
-    lastName: string
-    email: string
-    phone: string
-}
-
 export interface DBExperience {
     id?: number
     type: 'experience'
@@ -30,12 +23,12 @@ export interface DBEducation {
     createdAt: number
 }
 
-export interface DBSkills {
-    skillsText: string
-}
-
-export interface DBFooter {
-    footerText: string
+export interface DBCVData {
+    personal: { firstName: string; lastName: string; email: string; phone: string }
+    experiences: DBExperience[]
+    educations: DBEducation[]
+    skills: { skillsText: string }
+    footer: { footerText: string }
 }
 
 export interface DBApplication {
@@ -49,11 +42,14 @@ export interface DBApplication {
     dateApplied: string
     status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
     createdAt: number
+    cvData: DBCVData
 }
 
 const DB_NAME = 'cv-maker'
 const DB_VERSION = 3
 const STORE_NAME = 'cvm'
+
+type StoredItem = DBExperience | DBEducation | DBApplication | { id: string; type?: string }
 
 let db: IDBDatabase | null = null
 
@@ -85,7 +81,7 @@ export const initDB = (): Promise<IDBDatabase> => {
     })
 }
 
-export const updatePersonalInfo = async (personalInfo: DBPersonalInfo): Promise<void> => {
+export const updatePersonalInfo = async (personalInfo: { firstName: string; lastName: string; email: string; phone: string }): Promise<void> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
@@ -102,7 +98,7 @@ export const updatePersonalInfo = async (personalInfo: DBPersonalInfo): Promise<
     })
 }
 
-export const getPersonalInfo = async (): Promise<DBPersonalInfo | null> => {
+export const getPersonalInfo = async (): Promise<{ firstName: string; lastName: string; email: string; phone: string } | null> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readonly')
@@ -110,7 +106,7 @@ export const getPersonalInfo = async (): Promise<DBPersonalInfo | null> => {
         const request = store.get('personalInfo')
 
         request.onsuccess = () => {
-            resolve(request.result as DBPersonalInfo || null)
+            resolve(request.result || null)
         }
 
         request.onerror = () => {
@@ -146,9 +142,9 @@ export const getAllExperiences = async (): Promise<DBExperience[]> => {
 
         request.onsuccess = () => {
             // Filtruj tylko experiences
-            const allResults = request.result
-            const experiences = allResults.filter((item: any) => item.type === 'experience')
-            resolve(experiences as DBExperience[])
+            const allResults = request.result as StoredItem[]
+            const experiences = allResults.filter((item): item is DBExperience => item.type === 'experience')
+            resolve(experiences)
         }
 
         request.onerror = () => {
@@ -215,9 +211,9 @@ export const getAllEducations = async (): Promise<DBEducation[]> => {
         const request = store.getAll()
 
         request.onsuccess = () => {
-            const allResults = request.result
-            const educations = allResults.filter((item: any) => item.type === 'education')
-            resolve(educations as DBEducation[])
+            const allResults = request.result as StoredItem[]
+            const educations = allResults.filter((item): item is DBEducation => item.type === 'education')
+            resolve(educations)
         }
 
         request.onerror = () => {
@@ -294,7 +290,7 @@ export const deleteEducation = async (id: number): Promise<void> => {
     })
 }
 
-export const updateSkills = async (skills: DBSkills): Promise<void> => {
+export const updateSkills = async (skills: { skillsText: string }): Promise<void> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
@@ -311,7 +307,7 @@ export const updateSkills = async (skills: DBSkills): Promise<void> => {
     })
 }
 
-export const getSkills = async (): Promise<DBSkills | null> => {
+export const getSkills = async (): Promise<{ skillsText: string } | null> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readonly')
@@ -319,7 +315,7 @@ export const getSkills = async (): Promise<DBSkills | null> => {
         const request = store.get('skills')
 
         request.onsuccess = () => {
-            resolve(request.result as DBSkills || null)
+            resolve(request.result || null)
         }
 
         request.onerror = () => {
@@ -328,7 +324,7 @@ export const getSkills = async (): Promise<DBSkills | null> => {
     })
 }
 
-export const updateFooter = async (footer: DBFooter): Promise<void> => {
+export const updateFooter = async (footer: { footerText: string }): Promise<void> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
@@ -345,7 +341,7 @@ export const updateFooter = async (footer: DBFooter): Promise<void> => {
     })
 }
 
-export const getFooter = async (): Promise<DBFooter | null> => {
+export const getFooter = async (): Promise<{ footerText: string } | null> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readonly')
@@ -353,7 +349,7 @@ export const getFooter = async (): Promise<DBFooter | null> => {
         const request = store.get('footer')
 
         request.onsuccess = () => {
-            resolve(request.result as DBFooter || null)
+            resolve(request.result || null)
         }
 
         request.onerror = () => {
@@ -370,9 +366,9 @@ export const getAllApplications = async (): Promise<DBApplication[]> => {
         const request = store.getAll()
 
         request.onsuccess = () => {
-            const allResults = request.result
-            const applications = allResults.filter((item: any) => item.type === 'application')
-            resolve(applications as DBApplication[])
+            const allResults = request.result as StoredItem[]
+            const applications = allResults.filter((item): item is DBApplication => item.type === 'application')
+            resolve(applications)
         }
 
         request.onerror = () => {

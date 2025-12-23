@@ -28,6 +28,7 @@ export default function Applications() {
 
     useEffect(() => {
         checkApplications()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const checkApplications = async () => {
@@ -42,7 +43,8 @@ export default function Applications() {
                 notes: app.notes,
                 salary: app.salary,
                 dateApplied: app.dateApplied,
-                status: app.status
+                status: app.status,
+                cvData: app.cvData,
             }))
             dispatch(setApplications(formattedData))
         } catch (error) {
@@ -64,7 +66,7 @@ export default function Applications() {
                         Applications
                     </PageHeaderTitle>
                     <PageHeaderDescription>
-                        Save snapshots of your CV for specific job applications and keep track of what you've sent.
+                        Save snapshots of your CV for specific job applications and keep track of what you&apos;ve sent.
                     </PageHeaderDescription>
                 </PageHeader>
                 <div className="p-4 flex items-center justify-center h-32">
