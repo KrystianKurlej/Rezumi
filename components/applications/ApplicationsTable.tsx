@@ -32,6 +32,8 @@ import { ApplicationAddNewDialog } from "./application/ApplicationAddNewDialog"
 import { getAllApplications, deleteApplication as deleteApplicationFromDB, type DBApplication } from '@/lib/db'
 import { formatDate } from '@/lib/utils'
 import { handleDownloadPDF } from "../pages/Export"
+import { Input } from "../ui/input"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group"
 
 function formatApplicationStatus(status: Application["status"]) {
     switch (status) {
@@ -385,8 +387,23 @@ export default function ApplicationsTable() {
         </div>
       ) : (
         <>
-            <div className="flex items-center justify-end space-x-2 pb-4">
+            <div className="flex items-center space-x-2 pb-4">
                 <div className="flex-1 space-x-2">
+                  <InputGroup className="max-w-sm">
+                    <InputGroupInput
+                      placeholder="Search company..."
+                      value={table.getColumn("companyName")?.getFilterValue() as string ?? ""}
+                      onChange={(event) =>
+                        table.getColumn("companyName")?.setFilterValue(event.target.value)
+                      }
+                      className="max-w-sm"
+                    />
+                    <InputGroupAddon>
+                      <i className="bi bi-search"></i>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </div>
+                <div className="space-x-2">
                     <ApplicationAddNewDialog
                         onAdd={handleAddApplication}
                         trigger={
