@@ -20,7 +20,12 @@ import { Button } from '@/components/ui/button'
 export default function PersonalForm() {
     const dispatch = useAppDispatch()
     const personal = useAppSelector(state => state.personal)
-    const [localPersonal, setLocalPersonal] = useState<PersonalInfo>(personal)
+    const [localPersonal, setLocalPersonal] = useState<PersonalInfo>({
+        firstName: personal.firstName || '',
+        lastName: personal.lastName || '',
+        email: personal.email || '',
+        phone: personal.phone || ''
+    })
     const [isSaving, setIsSaving] = useState(false)
 
     useEffect(() => {
@@ -28,8 +33,14 @@ export default function PersonalForm() {
             try {
                 const savedPersonalInfo = await getPersonalInfo()
                 if (savedPersonalInfo) {
-                    dispatch(setPersonalInfo(savedPersonalInfo))
-                    setLocalPersonal(savedPersonalInfo)
+                    const safePersonalInfo = {
+                        firstName: savedPersonalInfo.firstName || '',
+                        lastName: savedPersonalInfo.lastName || '',
+                        email: savedPersonalInfo.email || '',
+                        phone: savedPersonalInfo.phone || ''
+                    }
+                    dispatch(setPersonalInfo(safePersonalInfo))
+                    setLocalPersonal(safePersonalInfo)
                 }
             } catch (error) {
                 console.error('Error loading personal info:', error)
@@ -40,7 +51,12 @@ export default function PersonalForm() {
     }, [dispatch])
 
     useEffect(() => {
-        setLocalPersonal(personal)
+        setLocalPersonal({
+            firstName: personal.firstName || '',
+            lastName: personal.lastName || '',
+            email: personal.email || '',
+            phone: personal.phone || ''
+        })
     }, [personal])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

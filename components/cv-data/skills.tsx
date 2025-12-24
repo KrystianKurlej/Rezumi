@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button'
 export default function SkillsForm() {
     const dispatch = useAppDispatch()
     const skills = useAppSelector(state => state.skills)
-    const [localSkills, setLocalSkills] = useState<string>(skills.skillsText)
+    const [localSkills, setLocalSkills] = useState<string>(skills?.skillsText || '')
     const [isSaving, setIsSaving] = useState(false)
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export default function SkillsForm() {
     }, [dispatch])
 
     useEffect(() => {
-        setLocalSkills(skills.skillsText)
+        setLocalSkills(skills?.skillsText || '')
     }, [skills])
     
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button'
 export default function FooterForm() {
     const dispatch = useAppDispatch()
     const footer = useAppSelector(state => state.footer)
-    const [localFooter, setLocalFooter] = useState<string>(footer.footerText)
+    const [localFooter, setLocalFooter] = useState<string>(footer?.footerText || '')
     const [isSaving, setIsSaving] = useState(false)
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export default function FooterForm() {
     }, [dispatch])
 
     useEffect(() => {
-        setLocalFooter(footer.footerText)
+        setLocalFooter(footer?.footerText || '')
     }, [footer])
     
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -46,7 +46,7 @@ export interface DBApplication {
 }
 
 const DB_NAME = 'cv-maker'
-const DB_VERSION = 3
+const DB_VERSION = 4
 const STORE_NAME = 'cvm'
 
 type StoredItem = DBExperience | DBEducation | DBApplication | { id: string; type?: string }
@@ -73,10 +73,15 @@ export const initDB = (): Promise<IDBDatabase> => {
 
         request.onupgradeneeded = (event) => {
             const database = (event.target as IDBOpenDBRequest).result
-            if (!database.objectStoreNames.contains(STORE_NAME)) {
-                const store = database.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true })
-                store.createIndex('updatedAt', 'updatedAt', { unique: false })
+            
+            // Usuń stary store jeśli istnieje
+            if (database.objectStoreNames.contains(STORE_NAME)) {
+                database.deleteObjectStore(STORE_NAME)
             }
+            
+            // Utwórz nowy store bez autoIncrement
+            const store = database.createObjectStore(STORE_NAME, { keyPath: 'id' })
+            store.createIndex('updatedAt', 'updatedAt', { unique: false })
         }
     })
 }
@@ -121,10 +126,11 @@ export const addExperience = async (experience: Omit<DBExperience, 'id' | 'creat
         const transaction = database.transaction([STORE_NAME], 'readwrite')
         const store = transaction.objectStore(STORE_NAME)
         const timestamp = Date.now()
-        const request = store.add({ ...experience, type: 'experience', createdAt: timestamp })
+        const id = timestamp // Użyj timestamp jako ID
+        const request = store.add({ ...experience, id, type: 'experience', createdAt: timestamp })
 
         request.onsuccess = () => {
-            resolve(request.result as number)
+            resolve(id)
         }
 
         request.onerror = () => {
@@ -228,10 +234,11 @@ export const addEducation = async (education: Omit<DBEducation, 'id' | 'createdA
         const transaction = database.transaction([STORE_NAME], 'readwrite')
         const store = transaction.objectStore(STORE_NAME)
         const timestamp = Date.now()
-        const request = store.add({ ...education, type: 'education', createdAt: timestamp })
+        const id = timestamp // Użyj timestamp jako ID
+        const request = store.add({ ...education, id, type: 'education', createdAt: timestamp })
 
         request.onsuccess = () => {
-            resolve(request.result as number)
+            resolve(id)
         }
 
         request.onerror = () => {
@@ -383,10 +390,11 @@ export const addApplication = async (application: Omit<DBApplication, 'id' | 'cr
         const transaction = database.transaction([STORE_NAME], 'readwrite')
         const store = transaction.objectStore(STORE_NAME)
         const timestamp = Date.now()
-        const request = store.add({ ...application, type: 'application', createdAt: timestamp })
+        const id = timestamp // Użyj timestamp jako ID
+        const request = store.add({ ...application, id, type: 'application', createdAt: timestamp })
 
         request.onsuccess = () => {
-            resolve(request.result as number)
+            resolve(id)
         }
 
         request.onerror = () => {
