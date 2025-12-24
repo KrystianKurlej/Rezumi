@@ -172,7 +172,7 @@ export default function Export() {
                                     </Field>
                                     <Field>
                                         <FieldLabel>
-                                            Salary
+                                            Listed Salary
                                         </FieldLabel>
                                         <Input
                                             type="number"

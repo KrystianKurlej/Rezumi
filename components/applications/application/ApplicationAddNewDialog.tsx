@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog"
 import {
   Field,
+  FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSet,
@@ -158,7 +159,7 @@ export function ApplicationAddNewDialog({
             </Field>
             <Field>
               <FieldLabel htmlFor="newApplicationSalary">
-                Expected Salary
+                Listed Salary
               </FieldLabel>
               <Input
                 id="newApplicationSalary"

@@ -250,9 +250,21 @@ export default function ApplicationsTable() {
         ),
         cell: ({ row }) => {
             const salary = row.getValue("salary") as number | null;
-            return (
-                <div>{salary ? salary.toLocaleString() : '-'}</div>
-            );
+            
+            if (salary) {
+                const formattedSalary = salary.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                    style: 'currency',
+                    currency: 'PLN',
+                });
+
+                return (
+                    <div>{formattedSalary}</div>
+                );
+            } else {
+                return <div className="text-gray-600">N/A</div>;
+            }
         },
     },
     {
