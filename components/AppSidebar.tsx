@@ -16,7 +16,6 @@ import { setCurrentPage } from '@/lib/slices/pagesSlice'
 export const menuIcons = {
   personal: "bi-file-earmark-person",
   templates: "bi-layout-sidebar-inset",
-  languages: "bi-translate",
   themes: "bi-palette2",
   applications: "bi-envelope-arrow-up",
   export: "bi-send-arrow-down",
@@ -34,13 +33,6 @@ const menuItems = [
     title: "Templates",
     slug: "templates",
     icon: menuIcons.templates,
-    isActive: false,
-    isDisabled: true,
-  },
-  {
-    title: "Languages",
-    slug: "languages",
-    icon: menuIcons.languages,
     isActive: false,
     isDisabled: true,
   },

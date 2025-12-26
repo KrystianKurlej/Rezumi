@@ -10,10 +10,10 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { useAppSelector } from '@/lib/hooks'
 import CvData from "@/components/pages/CvData";
 import Export from "@/components/pages/Export";
-import Languages from "@/components/pages/Languages";
 import Templates from "@/components/pages/Templates";
 import Themes from "@/components/pages/Themes";
 import Applications from "@/components/pages/Applications";
+import ToolBar from '@/components/ToolBar';
 
 const Preview = dynamic(() => import('@/components/preview/Preview'), {
   ssr: false,
@@ -45,13 +45,13 @@ export default function Home() {
           <Applications /> :
           (
             <div className="flex h-full" style={{ backgroundColor: '#282828' }}>
-              <div className="flex-1">
+              <div className="flex-1 flex flex-col">
                 <Preview key={previewKey} />
+                <ToolBar />
               </div>
               <div className="border-l h-full flex-1 max-w-lg bg-white">
                 {currentPage === 'personal' && <CvData />}
                 {currentPage === 'templates' && <Templates />}
-                {currentPage === 'languages' && <Languages />}
                 {currentPage === 'themes' && <Themes />}
                 {currentPage === 'export' && <Export />}
               </div>
