@@ -13,6 +13,7 @@ import Export from "@/components/pages/Export";
 import Templates from "@/components/pages/Templates";
 import Themes from "@/components/pages/Themes";
 import Applications from "@/components/pages/Applications";
+import Settings from "@/components/pages/Settings";
 import ToolBar from '@/components/ToolBar';
 
 const Preview = dynamic(() => import('@/components/preview/Preview'), {
@@ -37,12 +38,13 @@ export default function Home() {
     })
   }, [personal, experiences, educations, skills, footer])
 
+  const pagesWithPreview = ['personal', 'templates', 'themes', 'export'];
+
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="h-screen overflow-hidden">
-        {currentPage === 'applications' ? 
-          <Applications /> :
+        {pagesWithPreview.includes(currentPage) ? 
           (
             <div className="flex h-full" style={{ backgroundColor: '#282828' }}>
               <div className="flex-1 flex flex-col">
@@ -55,6 +57,11 @@ export default function Home() {
                 {currentPage === 'themes' && <Themes />}
                 {currentPage === 'export' && <Export />}
               </div>
+            </div>
+          ) : (
+            <div className="border-l h-full flex-1 bg-white">
+              {currentPage === 'applications' && <Applications />}
+              {currentPage === 'settings' && <Settings />}
             </div>
           )}
       </SidebarInset>

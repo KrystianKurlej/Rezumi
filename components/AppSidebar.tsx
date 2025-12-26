@@ -19,6 +19,7 @@ export const menuIcons = {
   themes: "bi-palette2",
   applications: "bi-envelope-arrow-up",
   export: "bi-send-arrow-down",
+  settings: "bi-gear",
 }
 
 const menuItems = [
@@ -85,6 +86,19 @@ export function AppSidebar() {
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+                <SidebarGroup className="mt-auto">
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuButton
+                                isActive={currentPage === 'settings'}
+                                onClick={() => dispatch(setCurrentPage('settings'))}
+                            >
+                                <i className={`bi ${menuIcons.settings}`}></i>
+                                <span>Settings</span>
+                            </SidebarMenuButton>
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
