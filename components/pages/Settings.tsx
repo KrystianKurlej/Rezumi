@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from "react";
 import { 
   PageHeader, 
   PageHeaderTitle, 
@@ -15,8 +18,80 @@ import {
 } from "@/components/ui/select"
 import { Separator } from "../ui/separator";
 import languages from "@/lib/data/languages.json";
+import { Button } from "../ui/button";
+import { updateSettings, getSettings, type Settings } from "@/lib/db";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
 
 export default function Settings() {
+    const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>(undefined);
+    const [selectedDefaultLanguage, setSelectedDefaultLanguage] = useState<string | undefined>(undefined);
+    const [defaultLanguageChanged, setDefaultLanguageChanged] = useState<boolean>(false);
+    const [settings, setSettings] = useState<Settings>({ defaultLanguage: null, availableLanguages: [] });
+    const [isLanguagesSelected, setIsLanguagesSelected] = useState<boolean>(false);
+
+    useEffect(() => {
+        const loadSettings = async () => {
+            const savedSettings = await getSettings();
+            
+            if (savedSettings) {
+                setSettings(savedSettings);
+
+                if (savedSettings.availableLanguages.length > 0) {
+                    setIsLanguagesSelected(true);
+                }
+
+                if (savedSettings.defaultLanguage) {
+                    setSelectedDefaultLanguage(savedSettings.defaultLanguage);
+                }
+            }
+        };
+
+        loadSettings();
+    }, []);
+
+    const handleAddLanguage = async () => {
+        if (!selectedLanguage) return;
+        
+        const updatedLanguages = settings.availableLanguages.includes(selectedLanguage)
+            ? settings.availableLanguages
+            : [...settings.availableLanguages, selectedLanguage];
+        
+        const newSettings: Settings = {
+            ...settings,
+            availableLanguages: updatedLanguages,
+        };
+        
+        await updateSettings(newSettings);
+        setSettings(newSettings);
+        setSelectedLanguage(undefined);
+    }
+
+    const handleRemoveLanguage = async (langCode: string) => {
+        const updatedLanguages = settings.availableLanguages.filter(code => code !== langCode);
+        
+        const newSettings: Settings = {
+            ...settings,
+            availableLanguages: updatedLanguages,
+        };
+        
+        await updateSettings(newSettings);
+        setSettings(newSettings);
+    }
+
+    const handleSetDefaultLanguage = async () => {
+        if (!selectedDefaultLanguage) return;
+
+        const newSettings: Settings = {
+            ...settings,
+            defaultLanguage: selectedDefaultLanguage,
+        };
+
+        await updateSettings(newSettings);
+        setSettings(newSettings);
+        setSelectedDefaultLanguage(undefined);
+    }
+
     return(
         <ScrollArea className="h-full">
             <PageHeader iconClass={menuIcons.settings}>
@@ -33,12 +108,31 @@ export default function Settings() {
                     <p className="text-sm text-gray-600">
                         Set your preferred default language for your CV. This will be the base language used when creating translated versions.
                     </p>
-                    <div className="mt-4">
-                        <Select>
-                            <SelectTrigger disabled>
-                                <SelectValue placeholder="No languages added yet" />
+                    <div className="mt-3 flex gap-2">
+                        <Select onValueChange={(value) => {setSelectedDefaultLanguage(value); setDefaultLanguageChanged(true);}} value={selectedDefaultLanguage} >
+                            <SelectTrigger disabled={!isLanguagesSelected} className="w-64">
+                                <SelectValue placeholder={isLanguagesSelected ? "Select a default language" : "No languages added yet"} />
                             </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {settings.availableLanguages.map((langCode) => {
+                                        const lang = languages.find(l => l.code === langCode);
+                                        return (
+                                            <SelectItem key={langCode} value={langCode}>
+                                                {lang ? lang.name : langCode}
+                                            </SelectItem>
+                                        );
+                                    })}
+                                </SelectGroup>
+                            </SelectContent>
                         </Select>
+                        <Button 
+                            variant="outline"
+                            disabled={!defaultLanguageChanged}
+                            onClick={() => {handleSetDefaultLanguage();}}
+                        >
+                            Set as default language
+                        </Button>
                     </div>
                 </div>
                 <Separator className="my-6" />
@@ -47,9 +141,9 @@ export default function Settings() {
                     <p className="text-sm text-gray-600">
                         Add or remove the languages available for you to edit.
                     </p>
-                    <div className="mt-4">
-                        <Select>
-                            <SelectTrigger>
+                    <div className="mt-3 flex gap-2">
+                        <Select onValueChange={(value) => setSelectedLanguage(value)} value={selectedLanguage} >
+                            <SelectTrigger className="w-64">
                                 <SelectValue placeholder="Select a language" />
                             </SelectTrigger>
                             <SelectContent>
@@ -62,6 +156,66 @@ export default function Settings() {
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
+                        <Button 
+                            variant="outline"
+                            disabled={!selectedLanguage}
+                            onClick={() => {handleAddLanguage();}}
+                        >
+                            Add selected language
+                        </Button>
+                    </div>
+                    <div className="mt-4">
+                        <span className="text-sm text-gray-600">
+                            {settings.availableLanguages.length > 0
+                                ? `Available languages:`
+                                : 'No languages added yet.'
+                            }
+                        </span>
+                        {settings.availableLanguages.length > 0 && (
+                            <div className="mt-1 flex gap-2">
+                                {settings.availableLanguages.map((langCode) => {
+                                    const lang = languages.find(l => l.code === langCode);
+                                    return (
+                                        <Dialog key={langCode}>
+                                            <DialogTrigger asChild>
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                >
+                                                    {lang ? lang.name : langCode}
+                                                    <i className="bi bi-x"></i>
+                                                </Button>
+                                            </DialogTrigger>
+                                            <DialogContent>
+                                                <DialogHeader>
+                                                    <DialogTitle>
+                                                        Remove <em>{lang ? lang.name : langCode}</em>?
+                                                    </DialogTitle>
+                                                    <DialogDescription>
+                                                        Are you sure you want to remove this language? This will delete all data associated with this language.
+                                                    </DialogDescription>
+                                                </DialogHeader>
+                                                <DialogFooter>
+                                                    <DialogClose asChild>
+                                                        <Button variant="outline">
+                                                            Cancel
+                                                        </Button>
+                                                    </DialogClose>
+                                                    <DialogClose asChild>
+                                                        <Button 
+                                                            variant="destructive"
+                                                            onClick={() => {handleRemoveLanguage(langCode);}}
+                                                        >
+                                                            Remove
+                                                        </Button>
+                                                    </DialogClose>
+                                                </DialogFooter>
+                                            </DialogContent>
+                                        </Dialog>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

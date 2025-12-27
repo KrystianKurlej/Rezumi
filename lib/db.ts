@@ -1,3 +1,16 @@
+const DB_NAME = 'rezumiDB'
+const DB_VERSION = 4
+const STORE_NAME = 'rezumiStore'
+
+export interface DBCVData {
+    // languageId: string
+    personal: { firstName: string; lastName: string; email: string; phone: string }
+    experiences: DBExperience[]
+    educations: DBEducation[]
+    skills: { skillsText: string }
+    footer: { footerText: string }
+}
+
 export interface DBExperience {
     id?: number
     type: 'experience'
@@ -23,14 +36,6 @@ export interface DBEducation {
     createdAt: number
 }
 
-export interface DBCVData {
-    personal: { firstName: string; lastName: string; email: string; phone: string }
-    experiences: DBExperience[]
-    educations: DBEducation[]
-    skills: { skillsText: string }
-    footer: { footerText: string }
-}
-
 export interface DBApplication {
     id?: number
     type: 'application'
@@ -45,9 +50,10 @@ export interface DBApplication {
     cvData?: DBCVData
 }
 
-const DB_NAME = 'cv-maker'
-const DB_VERSION = 4
-const STORE_NAME = 'cvm'
+export interface Settings {
+    defaultLanguage: string | null
+    availableLanguages: string[]
+}
 
 type StoredItem = DBExperience | DBEducation | DBApplication | { id: string; type?: string }
 
@@ -82,6 +88,40 @@ export const initDB = (): Promise<IDBDatabase> => {
             // Utwórz nowy store bez autoIncrement
             const store = database.createObjectStore(STORE_NAME, { keyPath: 'id' })
             store.createIndex('updatedAt', 'updatedAt', { unique: false })
+        }
+    })
+}
+
+export const updateSettings = async (settings: Settings): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.put({ id: 'settings', ...settings, updatedAt: Date.now() })
+
+        request.onsuccess = () => {
+            resolve()
+        }
+
+        request.onerror = () => {
+            reject('Failed to update settings')
+        }
+    })
+}
+
+export const getSettings = async (): Promise<Settings | null> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.get('settings')
+
+        request.onsuccess = () => {
+            resolve(request.result || null)
+        }
+
+        request.onerror = () => {
+            reject('Failed to retrieve settings')
         }
     })
 }
