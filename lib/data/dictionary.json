@@ -1,0 +1,22 @@
+{
+    "cv": {
+        "pl": "CV",
+        "en": "CV"
+    },
+    "experience": {
+        "pl": "Doświadczenie",
+        "en": "Experience"
+    },
+    "education": {
+        "pl": "Edukacja",
+        "en": "Education"
+    },
+    "skills": {
+        "pl": "Umiejętności",
+        "en": "Skills"
+    },
+    "present": {
+        "pl": "Obecnie",
+        "en": "Present"
+    }
+}

@@ -1,6 +1,6 @@
 import { Font } from '@react-pdf/renderer';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
-import { formatDate, formatRichText } from "@/lib/utils"
+import { formatDate, formatRichText, translate } from "@/lib/utils"
 import { PersonalInfo } from '@/lib/slices/personalSlice';
 import { DBExperience, DBEducation } from '@/lib/db';
 import { Skills } from '@/lib/slices/skillsSlice';
@@ -87,7 +87,9 @@ export default function GenerateCV({
             <Page size="A4" style={styles.page}>
                 <View style={styles.headerSection}>
                     <View>
-                        <Text>CV</Text>
+                        <Text>
+                            {translate('pl', 'cv')}
+                        </Text>
                         <Text style={styles.title}>{personal.firstName} {personal.lastName}</Text>
                         {personal.email && <Text style={{ marginTop: 2 }}>{personal.email}</Text>}
                         {personal.phone && <Text style={{ marginTop: 2 }}>{personal.phone}</Text>}
@@ -98,7 +100,9 @@ export default function GenerateCV({
 
                 {experiences.length > 0 && (
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Experience</Text>
+                        <Text style={styles.sectionTitle}>
+                            {translate('pl', 'experience')}
+                        </Text>
                         {experiences.map((experience) => (
                             <View key={experience.id} style={styles.sectionItem}>
                                 <View style={styles.sectionItemHeader}>
@@ -106,7 +110,7 @@ export default function GenerateCV({
                                         <Text style={{ fontWeight: 'bold' }}>{experience.title} </Text>
                                         <Text>- {experience.company}</Text>
                                     </View>
-                                    <Text>{formatDate(experience.startDate, 'short')} - {experience.isOngoing ? 'Present' : formatDate(experience.endDate, 'short')}</Text>
+                                    <Text>{formatDate(experience.startDate, 'short')} - {experience.isOngoing ? translate('pl', 'present') : formatDate(experience.endDate, 'short')}</Text>
                                 </View>
                                 <Text>{experience.description}</Text>
                             </View>
@@ -116,7 +120,9 @@ export default function GenerateCV({
 
                 {educations.length > 0 && (
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Education</Text>
+                        <Text style={styles.sectionTitle}>
+                            {translate('pl', 'education')}
+                        </Text>
                         {educations.map((education) => (
                             <View key={education.id} style={styles.sectionItem}>
                                 <View style={styles.sectionItemHeader}>
@@ -127,7 +133,7 @@ export default function GenerateCV({
                                         </View>
                                         <Text style={{ marginTop: 2 }}>{education.institution}</Text>
                                     </View>
-                                    <Text>{formatDate(education.startDate, 'short')} - {education.isOngoing ? 'Present' : formatDate(education.endDate, 'short')}</Text>
+                                    <Text>{formatDate(education.startDate, 'short')} - {education.isOngoing ? translate('pl', 'present') : formatDate(education.endDate, 'short')}</Text>
                                 </View>
                                 <Text>{education.description}</Text>
                             </View>
@@ -138,7 +144,9 @@ export default function GenerateCV({
                 {skills.skillsText && (
                     <View style={styles.section}>
                         <View style={styles.sectionHeader}>
-                            <Text style={styles.sectionTitle}>Skills</Text>
+                            <Text style={styles.sectionTitle}>
+                                {translate('pl', 'skills')}
+                            </Text>
                         </View>
                         {formatRichText(skills.skillsText).map((segment, index) => (
                             <Text

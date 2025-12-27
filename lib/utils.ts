@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import dictionary from "./data/dictionary.json"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -85,4 +86,12 @@ export function formatDate(dateString: string, variant: 'long' | 'short') {
   if (variant === 'short') {
     return `${month}.${year}`
   }
+}
+
+export function translate(lang: 'en' | 'pl', key: string): string {
+  const entry = dictionary[key as keyof typeof dictionary]
+  
+  if (!entry) return key
+
+  return lang === 'pl' ? entry.pl : entry.en
 }
