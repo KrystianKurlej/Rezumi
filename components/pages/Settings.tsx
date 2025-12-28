@@ -21,6 +21,7 @@ import languages from "@/lib/data/languages.json";
 import { Button } from "../ui/button";
 import { updateSettings, getSettings, type Settings } from "@/lib/db";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { getLanguageName } from "@/lib/utils";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 
 export default function Settings() {
@@ -116,10 +117,9 @@ export default function Settings() {
                             <SelectContent>
                                 <SelectGroup>
                                     {settings.availableLanguages.map((langCode) => {
-                                        const lang = languages.find(l => l.code === langCode);
                                         return (
                                             <SelectItem key={langCode} value={langCode}>
-                                                {lang ? lang.name : langCode}
+                                                {getLanguageName(langCode)}
                                             </SelectItem>
                                         );
                                     })}
@@ -174,7 +174,6 @@ export default function Settings() {
                         {settings.availableLanguages.length > 0 && (
                             <div className="mt-1 flex gap-2">
                                 {settings.availableLanguages.map((langCode) => {
-                                    const lang = languages.find(l => l.code === langCode);
                                     return (
                                         <Dialog key={langCode}>
                                             <DialogTrigger asChild>
@@ -182,14 +181,14 @@ export default function Settings() {
                                                     variant="outline"
                                                     size="sm"
                                                 >
-                                                    {lang ? lang.name : langCode}
+                                                    {getLanguageName(langCode)}
                                                     <i className="bi bi-x"></i>
                                                 </Button>
                                             </DialogTrigger>
                                             <DialogContent>
                                                 <DialogHeader>
                                                     <DialogTitle>
-                                                        Remove <em>{lang ? lang.name : langCode}</em>?
+                                                        Remove <em>{getLanguageName(langCode)}</em>?
                                                     </DialogTitle>
                                                     <DialogDescription>
                                                         Are you sure you want to remove this language? This will delete all data associated with this language.

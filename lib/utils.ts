@@ -1,6 +1,12 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import dictionary from "./data/dictionary.json"
+import languages from "./data/languages.json"
+
+export function getLanguageName(code: string): string {
+  const langEntry = languages.find(lang => lang.code === code)
+  return langEntry ? langEntry.name : code
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
