@@ -93,6 +93,7 @@ export default function PersonalForm() {
                                 id="firstName"
                                 value={localPersonal.firstName}
                                 onChange={handleChange}
+                                placeholder='John'
                             />
                         </Field>
                         <Field>
@@ -103,6 +104,7 @@ export default function PersonalForm() {
                                 id="lastName"
                                 value={localPersonal.lastName}
                                 onChange={handleChange}
+                                placeholder='Doe'
                             />
                         </Field>
                         <Field>
@@ -114,6 +116,7 @@ export default function PersonalForm() {
                                 type="email"
                                 value={localPersonal.email}
                                 onChange={handleChange}
+                                placeholder='john.doe@gmail.com'
                             />
                         </Field>
                         <Field>
@@ -125,6 +128,7 @@ export default function PersonalForm() {
                                 type="tel"
                                 value={localPersonal.phone}
                                 onChange={handleChange}
+                                placeholder='+1 234 567 8900'
                             />
                         </Field>
                     </div>
