@@ -35,6 +35,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Application } from '@/lib/slices/applicationsSlice'
+import { useDefaultCurrency } from '@/lib/hooks'
 
 interface ApplicationEditDialogProps {
   application: Application
@@ -113,6 +114,7 @@ export function ApplicationEditDialog({
   }
 
   const currentData = editingApplication || application
+  const defaultCurrency = useDefaultCurrency()
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -163,7 +165,7 @@ export function ApplicationEditDialog({
             </Field>
             <Field>
               <FieldLabel htmlFor="editSalary">
-                Expected Salary
+                Listed Salary {defaultCurrency && `(${defaultCurrency})`}
               </FieldLabel>
               <Input
                 id="editSalary"

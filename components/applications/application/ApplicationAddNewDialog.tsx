@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, ReactNode } from 'react'
-import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { useAppDispatch, useAppSelector, useDefaultCurrency } from '@/lib/hooks'
 import { NewApplication, updateNewApplication, resetNewApplication } from '@/lib/slices/applicationsSlice'
 import { addApplication as addApplicationToDB } from '@/lib/db'
 import { Button } from "@/components/ui/button"
@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dialog"
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSet,
@@ -108,6 +107,8 @@ export function ApplicationAddNewDialog({
     }
   }
 
+  const defaultCurrency = useDefaultCurrency()
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -159,7 +160,7 @@ export function ApplicationAddNewDialog({
             </Field>
             <Field>
               <FieldLabel htmlFor="newApplicationSalary">
-                Listed Salary
+                Listed Salary {defaultCurrency && `(${defaultCurrency})`}
               </FieldLabel>
               <Input
                 id="newApplicationSalary"

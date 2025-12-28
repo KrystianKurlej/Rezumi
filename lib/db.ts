@@ -53,6 +53,7 @@ export interface DBApplication {
 export interface Settings {
     defaultLanguage: string | null
     availableLanguages: string[]
+    defaultCurrency: string
 }
 
 type StoredItem = DBExperience | DBEducation | DBApplication | { id: string; type?: string }

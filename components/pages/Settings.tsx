@@ -18,11 +18,20 @@ import {
 } from "@/components/ui/select"
 import { Separator } from "../ui/separator";
 import languages from "@/lib/data/languages.json";
+import currencies from "@/lib/data/currencies.json";
 import { Button } from "../ui/button";
-import { updateSettings, getSettings, type Settings } from "@/lib/db";
+import { updateSettings, getSettings } from "@/lib/db";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { getLanguageName } from "@/lib/utils";
 import { DialogTrigger } from "@radix-ui/react-dialog";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { 
+    setSettings, 
+    addLanguage, 
+    removeLanguage, 
+    setDefaultLanguage, 
+    setDefaultCurrency 
+} from "@/lib/slices/settingsSlice";
 
 function SettingsSection({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
     return (
@@ -35,10 +44,13 @@ function SettingsSection({ title, description, children }: { title: string; desc
 }
 
 export default function Settings() {
+    const dispatch = useAppDispatch();
+    const settings = useAppSelector((state) => state.settings);
+    
     const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>(undefined);
+    const [selectedCurrency, setSelectedCurrency] = useState<string | undefined>(undefined);
     const [selectedDefaultLanguage, setSelectedDefaultLanguage] = useState<string | undefined>(undefined);
     const [defaultLanguageChanged, setDefaultLanguageChanged] = useState<boolean>(false);
-    const [settings, setSettings] = useState<Settings>({ defaultLanguage: null, availableLanguages: [] });
     const [isLanguagesSelected, setIsLanguagesSelected] = useState<boolean>(false);
 
     useEffect(() => {
@@ -46,7 +58,7 @@ export default function Settings() {
             const savedSettings = await getSettings();
             
             if (savedSettings) {
-                setSettings(savedSettings);
+                dispatch(setSettings(savedSettings));
 
                 if (savedSettings.availableLanguages.length > 0) {
                     setIsLanguagesSelected(true);
@@ -55,52 +67,79 @@ export default function Settings() {
                 if (savedSettings.defaultLanguage) {
                     setSelectedDefaultLanguage(savedSettings.defaultLanguage);
                 }
+            } else {
+                const defaultSettings = {
+                    defaultLanguage: null,
+                    availableLanguages: [],
+                    defaultCurrency: "USD"
+                };
+                await updateSettings(defaultSettings);
+                dispatch(setSettings(defaultSettings));
             }
         };
 
         loadSettings();
-    }, []);
+    }, [dispatch]);
 
     const handleAddLanguage = async () => {
         if (!selectedLanguage) return;
         
-        const updatedLanguages = settings.availableLanguages.includes(selectedLanguage)
-            ? settings.availableLanguages
-            : [...settings.availableLanguages, selectedLanguage];
+        dispatch(addLanguage(selectedLanguage));
         
-        const newSettings: Settings = {
+        const newSettings = {
             ...settings,
-            availableLanguages: updatedLanguages,
+            availableLanguages: settings.availableLanguages.includes(selectedLanguage)
+                ? settings.availableLanguages
+                : [...settings.availableLanguages, selectedLanguage],
         };
         
         await updateSettings(newSettings);
-        setSettings(newSettings);
         setSelectedLanguage(undefined);
+        setIsLanguagesSelected(true);
     }
 
     const handleRemoveLanguage = async (langCode: string) => {
-        const updatedLanguages = settings.availableLanguages.filter(code => code !== langCode);
+        dispatch(removeLanguage(langCode));
         
-        const newSettings: Settings = {
+        const newSettings = {
             ...settings,
-            availableLanguages: updatedLanguages,
+            availableLanguages: settings.availableLanguages.filter(code => code !== langCode),
         };
         
         await updateSettings(newSettings);
-        setSettings(newSettings);
+        
+        if (newSettings.availableLanguages.length === 0) {
+            setIsLanguagesSelected(false);
+        }
     }
 
     const handleSetDefaultLanguage = async () => {
         if (!selectedDefaultLanguage) return;
 
-        const newSettings: Settings = {
+        dispatch(setDefaultLanguage(selectedDefaultLanguage));
+
+        const newSettings = {
             ...settings,
             defaultLanguage: selectedDefaultLanguage,
         };
 
         await updateSettings(newSettings);
-        setSettings(newSettings);
         setSelectedDefaultLanguage(undefined);
+        setDefaultLanguageChanged(false);
+    }
+
+    const handleSetDefaultCurrency = async () => {
+        if (!selectedCurrency) return;
+
+        dispatch(setDefaultCurrency(selectedCurrency));
+
+        const newSettings = {
+            ...settings,
+            defaultCurrency: selectedCurrency,
+        };
+
+        await updateSettings(newSettings);
+        setSelectedCurrency(undefined);
     }
 
     return(
@@ -223,6 +262,35 @@ export default function Settings() {
                                 })}
                             </div>
                         )}
+                    </div>
+                </SettingsSection>
+                <Separator className="my-6" />
+                <SettingsSection
+                    title="Default Currency"
+                    description="Set your preferred default currency for your CV. This will be used for formatting your salary values."
+                >
+                    <div className="flex gap-2">
+                        <Select onValueChange={(value) => setSelectedCurrency(value)} value={selectedCurrency || settings.defaultCurrency}>
+                            <SelectTrigger className="w-64" >
+                                <SelectValue placeholder={settings.defaultCurrency ? `${currencies.find(c => c.code === settings.defaultCurrency)?.name || settings.defaultCurrency} (${currencies.find(c => c.code === settings.defaultCurrency)?.symbol || ''})` : "Select a default currency"} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {currencies.map((currency) => (
+                                        <SelectItem key={currency.code} value={currency.code}>
+                                            {currency.name} ({currency.symbol})
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <Button 
+                            variant="outline"
+                            onClick={() => {handleSetDefaultCurrency();}}
+                            disabled={!selectedCurrency}
+                        >
+                            Set as default currency
+                        </Button>
                     </div>
                 </SettingsSection>
             </div>

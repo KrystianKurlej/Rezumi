@@ -2,6 +2,23 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import dictionary from "./data/dictionary.json"
 import languages from "./data/languages.json"
+import currencies from "./data/currencies.json"
+
+export function getCurrencySymbol(currencyCode: string): string {
+  const currencyEntry = currencies.find(curr => curr.code === currencyCode)
+  return currencyEntry ? currencyEntry.symbol : currencyCode
+}
+
+export function formatCurrency(amount: number, currencyCode: string): string {
+  const currencyEntry = currencies.find(curr => curr.code === currencyCode)
+  const symbol = currencyEntry ? currencyEntry.symbol : currencyCode
+
+  if (currencyEntry && currencyEntry.side === 'right') {
+    return `${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${symbol}`
+  } else {
+    return `${symbol}${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  }
+}
 
 export function getLanguageName(code: string): string {
   const langEntry = languages.find(lang => lang.code === code)

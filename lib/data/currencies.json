@@ -1,0 +1,164 @@
+[
+    {
+        "name": "US Dollar",
+        "code": "USD",
+        "symbol": "$",
+        "side": "left"
+    },
+    {
+        "name": "Euro",
+        "code": "EUR",
+        "symbol": "€",
+        "side": "right"
+    },
+    {
+        "name": "British Pound",
+        "code": "GBP",
+        "symbol": "£",
+        "side": "left"
+    },
+    {
+        "name": "Canadian Dollar",
+        "code": "CAD",
+        "symbol": "$",
+        "side": "left"
+    },
+    {
+        "name": "Australian Dollar",
+        "code": "AUD",
+        "symbol": "$",
+        "side": "left"
+    },
+    {
+        "name": "Swiss Franc",
+        "code": "CHF",
+        "symbol": "CHF",
+        "side": "right"
+    },
+    {
+        "name": "Chinese Yuan",
+        "code": "CNY",
+        "symbol": "¥",
+        "side": "left"
+    },
+    {
+        "name": "Indian Rupee",
+        "code": "INR",
+        "symbol": "₹",
+        "side": "left"
+    },
+    {
+        "name": "Mexican Peso",
+        "code": "MXN",
+        "symbol": "$",
+        "side": "left"
+    },
+    {
+        "name": "Brazilian Real",
+        "code": "BRL",
+        "symbol": "R$",
+        "side": "left"
+    },
+    {
+        "name": "South African Rand",
+        "code": "ZAR",
+        "symbol": "R",
+        "side": "left"
+    },
+    {
+        "name": "Russian Ruble",
+        "code": "RUB",
+        "symbol": "₽",
+        "side": "right"
+    },
+    {
+        "name": "Japanese Yen",
+        "code": "JPY",
+        "symbol": "¥",
+        "side": "left"
+    },
+    {
+        "name": "New Zealand Dollar",
+        "code": "NZD",
+        "symbol": "$",
+        "side": "left"
+    },
+    {
+        "name": "Swedish Krona",
+        "code": "SEK",
+        "symbol": "kr",
+        "side": "right"
+    },
+    {
+        "name": "Norwegian Krone",
+        "code": "NOK",
+        "symbol": "kr",
+        "side": "right"
+    },
+    {
+        "name": "Danish Krone",
+        "code": "DKK",
+        "symbol": "kr",
+        "side": "right"
+    },
+    {
+        "name": "Turkish Lira",
+        "code": "TRY",
+        "symbol": "₺",
+        "side": "right"
+    },
+    {
+        "name": "Hong Kong Dollar",
+        "code": "HKD",
+        "symbol": "$",
+        "side": "left"
+    },
+    {
+        "name": "Singapore Dollar",
+        "code": "SGD",
+        "symbol": "$",
+        "side": "left"
+    },
+    {
+        "name": "South Korean Won",
+        "code": "KRW",
+        "symbol": "₩",
+        "side": "left"
+    },
+    {
+        "name": "Indonesian Rupiah",
+        "code": "IDR",
+        "symbol": "Rp",
+        "side": "left"
+    },
+    {
+        "name": "Saudi Riyal",
+        "code": "SAR",
+        "symbol": "﷼",
+        "side": "right"
+    },
+    {
+        "name": "Argentine Peso",
+        "code": "ARS",
+        "symbol": "$",
+        "side": "left"
+    },
+    {
+        "name": "Philippine Peso",
+        "code": "PHP",
+        "symbol": "₱",
+        "side": "left"
+    },
+    {
+        "name": "Czech Koruna",
+        "code": "CZK",
+        "symbol": "Kč",
+        "side": "right"
+    },
+    {
+        "name": "Polish Zloty",
+        "code": "PLN",
+        "symbol": "zł",
+        "side": "right"
+    }
+]

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { useAppDispatch, useAppSelector, useFormatCurrency } from '@/lib/hooks'
 import { setApplications, deleteApplication as deleteAppAction, setLoading, updateApplication as updateAppAction, setSorting, type Application } from '@/lib/slices/applicationsSlice'
 import {
   flexRender,
@@ -32,7 +32,6 @@ import { ApplicationAddNewDialog } from "./application/ApplicationAddNewDialog"
 import { getAllApplications, deleteApplication as deleteApplicationFromDB, type DBApplication } from '@/lib/db'
 import { formatDate } from '@/lib/utils'
 import { handleDownloadPDF } from "../pages/Export"
-import { Input } from "../ui/input"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group"
 
 function formatApplicationStatus(status: Application["status"]) {
@@ -185,6 +184,8 @@ export default function ApplicationsTable() {
     }
   }
 
+  const formatCurrency = useFormatCurrency();
+
   const columns: ColumnDef<Application>[] = [
     {
         accessorKey: "companyName",
@@ -252,16 +253,7 @@ export default function ApplicationsTable() {
             const salary = row.getValue("salary") as number | null;
             
             if (salary) {
-                const formattedSalary = salary.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'PLN',
-                });
-
-                return (
-                    <div>{formattedSalary}</div>
-                );
+                return <div>{formatCurrency(salary)}</div>;
             } else {
                 return <div className="text-gray-600">N/A</div>;
             }

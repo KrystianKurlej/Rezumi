@@ -15,7 +15,7 @@ import {
   FieldGroup,
 } from "@/components/ui/field"
 import { Button } from "@/components/ui/button"
-import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { useAppDispatch, useAppSelector, useDefaultCurrency } from '@/lib/hooks'
 import { setCurrentPage } from '@/lib/slices/pagesSlice'
 import { menuIcons } from "@/components/AppSidebar";
 import { pdf } from '@react-pdf/renderer';
@@ -67,6 +67,7 @@ export default function Export() {
         salary: '',
         notes: '',
     });
+    const defaultCurrency = useDefaultCurrency()
 
     const personal = useAppSelector(state => state.personal)
     const experiences = useAppSelector(state => state.experiences.list)
@@ -172,7 +173,7 @@ export default function Export() {
                                     </Field>
                                     <Field>
                                         <FieldLabel>
-                                            Listed Salary
+                                            Listed Salary {defaultCurrency && `(${defaultCurrency})`}
                                         </FieldLabel>
                                         <Input
                                             type="number"
