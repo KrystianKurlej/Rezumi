@@ -24,6 +24,16 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { getLanguageName } from "@/lib/utils";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 
+function SettingsSection({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
+    return (
+        <div>
+            <h2 className="font-semibold">{title}</h2>
+            <p className="text-sm text-gray-600">{description}</p>
+            <div className="mt-3">{children}</div>
+        </div>
+    )
+}
+
 export default function Settings() {
     const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>(undefined);
     const [selectedDefaultLanguage, setSelectedDefaultLanguage] = useState<string | undefined>(undefined);
@@ -104,12 +114,11 @@ export default function Settings() {
                 </PageHeaderDescription>
             </PageHeader>
             <div className="p-4">
-                <div>
-                    <h2 className="font-semibold">Default language</h2>
-                    <p className="text-sm text-gray-600">
-                        Set your preferred default language for your CV. This will be the base language used when creating translated versions.
-                    </p>
-                    <div className="mt-3 flex gap-2">
+                <SettingsSection
+                    title="Default Language"
+                    description="Set your preferred default language for your CV. This will be the base language used when creating translated versions."
+                >
+                    <div className="flex gap-2">
                         <Select onValueChange={(value) => {setSelectedDefaultLanguage(value); setDefaultLanguageChanged(true);}} value={selectedDefaultLanguage} >
                             <SelectTrigger disabled={!isLanguagesSelected} className="w-64">
                                 <SelectValue placeholder={isLanguagesSelected ? "Select a default language" : "No languages added yet"} />
@@ -134,14 +143,13 @@ export default function Settings() {
                             Set as default language
                         </Button>
                     </div>
-                </div>
+                </SettingsSection>
                 <Separator className="my-6" />
-                <div>
-                    <h2 className="font-semibold">Manage Languages</h2>
-                    <p className="text-sm text-gray-600">
-                        Add or remove the languages available for you to edit.
-                    </p>
-                    <div className="mt-3 flex gap-2">
+                <SettingsSection
+                    title="Manage Languages"
+                    description="Add or remove the languages available for you to edit."
+                >
+                    <div className="flex gap-2">
                         <Select onValueChange={(value) => setSelectedLanguage(value)} value={selectedLanguage} >
                             <SelectTrigger className="w-64">
                                 <SelectValue placeholder="Select a language" />
@@ -216,7 +224,7 @@ export default function Settings() {
                             </div>
                         )}
                     </div>
-                </div>
+                </SettingsSection>
             </div>
         </ScrollArea>
     )
