@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
+  SidebarHeader,
 } from "@/components/ui/sidebar"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { setCurrentPage } from '@/lib/slices/pagesSlice'
@@ -70,6 +71,9 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon">
+            <SidebarHeader>
+                <div className="text-xl font-bold italic px-4 pt-2">Rezumi</div>
+            </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupContent>
@@ -105,7 +109,7 @@ export function AppSidebar() {
             </SidebarContent>
             <SidebarFooter>
                 <div className="p-4 text-xs text-gray-600">
-                    &copy;{new Date().getFullYear()} Krystian Kurlej
+                    &copy;{new Date().getFullYear()} Krystian&nbsp;Kurlej, Rezumi 
                 </div>
             </SidebarFooter>
         </Sidebar>
