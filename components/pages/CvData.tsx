@@ -1,6 +1,7 @@
 import PersonalForm from "@/components/cv-data/personal"
 import ExperienceForm from "@/components/cv-data/experience";
 import EducationForm from "@/components/cv-data/education";
+import CoursesForm from "@/components/cv-data/courses";
 import SkillsForm from "@/components/cv-data/skills";
 import FooterForm from "@/components/cv-data/footer";
 import { Accordion } from "@/components/ui/accordion"
@@ -57,6 +58,7 @@ export default function CvData() {
                     <PersonalForm />
                     <ExperienceForm />
                     <EducationForm />
+                    <CoursesForm />
                     <SkillsForm />
                     <FooterForm />
                 </Accordion>

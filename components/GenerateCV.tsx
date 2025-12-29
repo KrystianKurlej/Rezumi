@@ -2,7 +2,7 @@ import { Font } from '@react-pdf/renderer';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { formatDate, formatRichText, translate } from "@/lib/utils"
 import { PersonalInfo } from '@/lib/slices/personalSlice';
-import { DBExperience, DBEducation } from '@/lib/db';
+import { DBExperience, DBEducation, DBCourse } from '@/lib/db';
 import { Skills } from '@/lib/slices/skillsSlice';
 import { Footer } from '@/lib/slices/footerSlice';
 
@@ -10,6 +10,7 @@ interface GenerateCVProps {
     personal: PersonalInfo;
     experiences: DBExperience[];
     educations: DBEducation[];
+    courses: DBCourse[];
     skills: Skills;
     footer: Footer;
 }
@@ -79,6 +80,7 @@ export default function GenerateCV({
     personal,
     experiences,
     educations,
+    courses,
     skills,
     footer
 }: GenerateCVProps) {
@@ -136,6 +138,26 @@ export default function GenerateCV({
                                     <Text>{formatDate(education.startDate, 'short')} - {education.isOngoing ? translate('pl', 'present') : formatDate(education.endDate, 'short')}</Text>
                                 </View>
                                 <Text>{education.description}</Text>
+                            </View>
+                        ))}
+                    </View>
+                )}
+
+                {courses.length > 0 && (
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>
+                            {translate('pl', 'courses_certifications')}
+                        </Text>
+                        {courses.map((course) => (
+                            <View key={course.id} style={styles.sectionItem}>
+                                <View style={styles.sectionItemHeader}>
+                                    <View>
+                                        <Text style={{ fontWeight: 'bold' }}>{course.courseName}</Text>
+                                        <Text style={{ marginTop: 2 }}>{course.platform}</Text>
+                                    </View>
+                                    <Text>{course.isOngoing ? translate('pl', 'in_progress') : `${translate('pl', 'completed')}: ${formatDate(course.completionDate, 'short')}`}</Text>
+                                </View>
+                                {course.description && <Text>{course.description}</Text>}
                             </View>
                         ))}
                     </View>

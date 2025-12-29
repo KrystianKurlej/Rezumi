@@ -38,6 +38,19 @@ export interface DBEducation {
     createdAt: number
 }
 
+export interface DBCourse {
+    id?: number
+    type: 'course'
+    languageId?: string | null
+    courseName: string
+    platform: string
+    completionDate: string
+    certificateUrl: string
+    description: string
+    isOngoing: boolean
+    createdAt: number
+}
+
 export interface DBApplication {
     id?: number
     type: 'application'
@@ -58,7 +71,7 @@ export interface Settings {
     defaultCurrency: string
 }
 
-type StoredItem = DBExperience | DBEducation | DBApplication | { id: string; type?: string }
+type StoredItem = DBExperience | DBEducation | DBCourse | DBApplication | { id: string; type?: string }
 
 let db: IDBDatabase | null = null
 
@@ -348,6 +361,97 @@ export const deleteEducation = async (id: number): Promise<void> => {
 
         request.onerror = () => {
             reject('Failed to delete education')
+        }
+    })
+}
+
+export const getAllCourses = async (languageId?: string | null): Promise<DBCourse[]> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.getAll()
+
+        request.onsuccess = () => {
+            const allResults = request.result as StoredItem[]
+            const courses = allResults.filter((item): item is DBCourse => 
+                item.type === 'course' && 
+                (item as DBCourse).languageId === languageId
+            )
+            resolve(courses)
+        }
+
+        request.onerror = () => {
+            reject('Failed to retrieve courses')
+        }
+    })
+}
+
+export const addCourse = async (course: Omit<DBCourse, 'id' | 'createdAt' | 'type'>): Promise<number> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const timestamp = Date.now()
+        const id = timestamp
+        const request = store.add({ ...course, id, type: 'course', createdAt: timestamp })
+
+        request.onsuccess = () => {
+            resolve(id)
+        }
+
+        request.onerror = () => {
+            reject('Failed to add course')
+        }
+    })
+}
+
+export const updateCourse = async (id: number, course: Omit<DBCourse, 'id' | 'createdAt' | 'type'>): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const getRequest = store.get(id)
+
+        getRequest.onsuccess = () => {
+            const existingCourse = getRequest.result
+            if (existingCourse) {
+                const updatedCourse = {
+                    ...existingCourse,
+                    ...course,
+                    id,
+                    type: 'course',
+                    updatedAt: Date.now()
+                }
+                
+                const putRequest = store.put(updatedCourse)
+                
+                putRequest.onsuccess = () => resolve()
+                putRequest.onerror = () => reject('Failed to update course')
+            } else {
+                reject('Course not found')
+            }
+        }
+
+        getRequest.onerror = () => {
+            reject('Failed to retrieve course for update')
+        }
+    })
+}
+
+export const deleteCourse = async (id: number): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.delete(id)
+
+        request.onsuccess = () => {
+            resolve()
+        }
+
+        request.onerror = () => {
+            reject('Failed to delete course')
         }
     })
 }

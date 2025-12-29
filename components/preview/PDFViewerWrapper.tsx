@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import type { PersonalInfo } from '@/lib/slices/personalSlice'
-import type { DBExperience, DBEducation } from '@/lib/db'
+import type { DBExperience, DBEducation, DBCourse } from '@/lib/db'
 import type { Skills } from '@/lib/slices/skillsSlice'
 import type { Footer } from '@/lib/slices/footerSlice'
 
@@ -10,6 +10,7 @@ interface PDFViewerWrapperProps {
     personal: PersonalInfo
     experiences: DBExperience[]
     educations: DBEducation[]
+    courses: DBCourse[]
     skills: Skills
     footer: Footer
 }
@@ -23,6 +24,7 @@ export default function PDFViewerWrapper({
     personal,
     experiences,
     educations,
+    courses,
     skills,
     footer
 }: PDFViewerWrapperProps) {
@@ -54,6 +56,7 @@ export default function PDFViewerWrapper({
                 personal={personal}
                 experiences={experiences}
                 educations={educations}
+                courses={courses}
                 skills={skills}
                 footer={footer}
             />

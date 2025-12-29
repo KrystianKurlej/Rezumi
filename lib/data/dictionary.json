@@ -11,6 +11,10 @@
         "pl": "Edukacja",
         "en": "Education"
     },
+    "courses_certifications": {
+        "pl": "Kursy i certyfikaty",
+        "en": "Courses & Certifications"
+    },
     "skills": {
         "pl": "Umiejętności",
         "en": "Skills"
@@ -18,5 +22,9 @@
     "present": {
         "pl": "Obecnie",
         "en": "Present"
+    },
+    "in_progress": {
+        "pl": "W trakcie",
+        "en": "In progress"
     }
 }
