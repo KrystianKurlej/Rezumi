@@ -18,8 +18,7 @@ import Footer from './Footer'
 
 export const menuIcons = {
   personal: "bi-file-earmark-person",
-  templates: "bi-layout-sidebar-inset",
-  themes: "bi-palette2",
+  templates: "bi-layers-half",
   applications: "bi-envelope-arrow-up",
   export: "bi-send-arrow-down",
   settings: "bi-gear",
@@ -37,13 +36,6 @@ const menuItems = [
     title: "Templates",
     slug: "templates",
     icon: menuIcons.templates,
-    isActive: false,
-    isDisabled: true,
-  },
-  {
-    title: "Themes",
-    slug: "themes",
-    icon: menuIcons.themes,
     isActive: false,
     isDisabled: true,
   },
@@ -88,7 +80,7 @@ export function AppSidebar() {
                                         disabled={item.isDisabled}
                                     >
                                         <i className={`bi ${item.icon}`}></i>
-                                        {!item.isDisabled ? <span>{item.title}</span> : <span className="opacity-50">Comming soon</span>}
+                                        {item.title}
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}

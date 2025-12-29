@@ -11,7 +11,6 @@ import { useAppSelector } from '@/lib/hooks'
 import CvData from "@/components/pages/CvData";
 import Export from "@/components/pages/Export";
 import Templates from "@/components/pages/Templates";
-import Themes from "@/components/pages/Themes";
 import Applications from "@/components/pages/Applications";
 import Settings from "@/components/pages/Settings";
 import ToolBar from '@/components/ToolBar';
@@ -56,7 +55,6 @@ export default function Home() {
               <div className="border-l h-full flex-1 max-w-lg bg-white">
                 {currentPage === 'personal' && <CvData />}
                 {currentPage === 'templates' && <Templates />}
-                {currentPage === 'themes' && <Themes />}
                 {currentPage === 'export' && <Export />}
               </div>
             </div>

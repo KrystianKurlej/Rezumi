@@ -14,7 +14,7 @@ export default function Templates() {
                     Templates
                 </PageHeaderTitle>
                 <PageHeaderDescription>
-                    Create different CV versions by choosing what to show, hide, or rewrite for specific roles or companies.
+                    Create different CV versions by choosing the layout and deciding what to show, hide, or rewrite for specific roles.
                 </PageHeaderDescription>
             </PageHeader>
             <div className="p-2">
