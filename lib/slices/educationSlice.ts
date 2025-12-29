@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getAllEducations } from '../db';
+import type { AppThunk } from '@/lib/store';
 import type { DBEducation } from '../db';
 
 export interface NewEducation {
@@ -60,6 +62,21 @@ const educationsSlice = createSlice({
 
 export const { updateNewEducation, resetNewEducation } = newEducationSlice.actions;
 export const { setEducations, addEducation, setLoading } = educationsSlice.actions;
+
+export const loadEducationsFromDB = (): AppThunk => async (dispatch, getState) => {
+    try {
+        const state = getState();
+        const selectedLanguage = state.preview.selectedLanguage;
+        const defaultLanguage = state.settings.defaultLanguage;
+        
+        const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null;
+        
+        const educations = await getAllEducations(languageId);
+        dispatch(setEducations(educations));
+    } catch (error) {
+        console.error('Failed to load educations from DB:', error);
+    }
+};
 
 export const newEducationReducer = newEducationSlice.reducer;
 export const educationsReducer = educationsSlice.reducer;

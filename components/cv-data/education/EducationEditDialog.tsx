@@ -60,6 +60,7 @@ export function EducationEditDialog({
       if (!editingEducation) return
       
       const updatedData = {
+        languageId: editingEducation.languageId,
         degree: editingEducation.degree ?? education.degree,
         institution: editingEducation.institution ?? education.institution,
         fieldOfStudy: editingEducation.fieldOfStudy ?? education.fieldOfStudy,

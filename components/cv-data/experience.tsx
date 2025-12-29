@@ -2,8 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { setExperiences } from '@/lib/slices/experienceSlice'
-import { getAllExperiences, deleteExperience } from '@/lib/db'
+import { setExperiences, loadExperiencesFromDB } from '@/lib/slices/experienceSlice'
+import { deleteExperience } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
   AccordionContent,
@@ -17,20 +17,16 @@ import { ExperienceEmptyState } from './experience/ExperienceEmptyState'
 export default function ExperienceForm() {
     const dispatch = useAppDispatch()
     const experiences = useAppSelector(state => state.experiences.list)
+    const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
     const [dialogOpen, setDialogOpen] = useState(false)
 
     const loadExperiences = useCallback(async () => {
-        try {
-            const savedExperiences = await getAllExperiences()
-            dispatch(setExperiences(savedExperiences))
-        } catch (error) {
-            console.error('Error loading experiences:', error)
-        }
+        dispatch(loadExperiencesFromDB())
     }, [dispatch])
 
     useEffect(() => {
         loadExperiences()
-    }, [dispatch, loadExperiences])
+    }, [selectedLanguage, loadExperiences])
 
     const handleDelete = async (id: number) => {
         try {

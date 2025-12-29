@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { setEducations } from '@/lib/slices/educationSlice'
-import { getAllEducations, deleteEducation } from '@/lib/db'
+import { setEducations, loadEducationsFromDB } from '@/lib/slices/educationSlice'
+import { deleteEducation } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
   AccordionContent,
@@ -17,20 +17,16 @@ import { EducationEmptyState } from './education/EducationEmptyState'
 export default function EducationForm() {
     const dispatch = useAppDispatch()
     const educations = useAppSelector(state => state.educations.list)
+    const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
     const [dialogOpen, setDialogOpen] = useState(false)
 
-    const loadEducations = async () => {
-        try {
-            const savedEducations = await getAllEducations()
-            dispatch(setEducations(savedEducations))
-        } catch (error) {
-            console.error('Error loading educations:', error)
-        }
-    }
+    const loadEducations = useCallback(async () => {
+        dispatch(loadEducationsFromDB())
+    }, [dispatch])
 
     useEffect(() => {
         loadEducations()
-    }, [dispatch])
+    }, [selectedLanguage, loadEducations])
 
     const handleDelete = async (id: number) => {
         try {

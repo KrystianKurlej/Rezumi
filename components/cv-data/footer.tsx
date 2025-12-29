@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { setFooter } from '@/lib/slices/footerSlice'
-import { getFooter, updateFooter as updateFooterDB } from '@/lib/db'
+import { setFooter, loadFooterFromDB } from '@/lib/slices/footerSlice'
+import { updateFooter as updateFooterDB } from '@/lib/db'
 import {
   AccordionContent,
   AccordionItem,
@@ -20,24 +20,14 @@ import { Button } from '@/components/ui/button'
 export default function FooterForm() {
     const dispatch = useAppDispatch()
     const footer = useAppSelector(state => state.footer)
+    const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
+    const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
     const [localFooter, setLocalFooter] = useState<string>(footer?.footerText || '')
     const [isSaving, setIsSaving] = useState(false)
 
     useEffect(() => {
-        const loadFooter = async () => {
-            try {
-                const savedFooter = await getFooter()
-                if (savedFooter) {
-                    dispatch(setFooter(savedFooter))
-                    setLocalFooter(savedFooter.footerText)
-                }
-            } catch (error) {
-                console.error('Error loading footer:', error)
-            }
-        }
-        
-        loadFooter()
-    }, [dispatch])
+        dispatch(loadFooterFromDB())
+    }, [selectedLanguage, dispatch])
 
     useEffect(() => {
         setLocalFooter(footer?.footerText || '')
@@ -50,7 +40,8 @@ export default function FooterForm() {
     const handleSave = async () => {
         setIsSaving(true)
         try {
-            const footerData = { footerText: localFooter }
+            const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null
+            const footerData = { languageId, footerText: localFooter }
             await updateFooterDB(footerData)
             dispatch(setFooter(footerData))
         } catch (error) {

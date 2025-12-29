@@ -5,6 +5,10 @@ import { Provider } from "react-redux"
 import { makeStore, AppStore } from "@/lib/store"
 import { loadSettingsFromDB } from "@/lib/slices/settingsSlice"
 import { loadPersonalInfoFromDB } from "@/lib/slices/personalSlice"
+import { loadExperiencesFromDB } from "@/lib/slices/experienceSlice"
+import { loadEducationsFromDB } from "@/lib/slices/educationSlice"
+import { loadSkillsFromDB } from "@/lib/slices/skillsSlice"
+import { loadFooterFromDB } from "@/lib/slices/footerSlice"
 
 export default function StoreProvider({
     children,
@@ -17,8 +21,13 @@ export default function StoreProvider({
     useLayoutEffect(() => {
         if (storeRef.current === null) {
             storeRef.current = makeStore()
+            // Ładuj wszystkie dane z DB przy starcie aplikacji
             storeRef.current.dispatch(loadSettingsFromDB())
             storeRef.current.dispatch(loadPersonalInfoFromDB())
+            storeRef.current.dispatch(loadExperiencesFromDB())
+            storeRef.current.dispatch(loadEducationsFromDB())
+            storeRef.current.dispatch(loadSkillsFromDB())
+            storeRef.current.dispatch(loadFooterFromDB())
         }
         setStore(storeRef.current)
     }, [])

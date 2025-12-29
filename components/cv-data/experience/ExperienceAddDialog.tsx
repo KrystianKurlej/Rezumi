@@ -49,6 +49,8 @@ export function ExperienceAddDialog({
   const dispatch = useAppDispatch()
   const newExperience = useAppSelector(state => state.newExperience)
   const isAddingExperienceLoading = useAppSelector(state => state.experiences.isLoading)
+  const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
+  const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
   const [startDateOpen, setStartDateOpen] = useState(false)
   const [endDateOpen, setEndDateOpen] = useState(false)
 
@@ -61,7 +63,9 @@ export function ExperienceAddDialog({
   const handleSubmit = async () => {
     try {
       dispatch(setLoading(true))
+      const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null
       const experienceData = {
+        languageId,
         title: newExperience.newExperienceTitle,
         company: newExperience.newExperienceCompany,
         startDate: newExperience.newExperienceStartDate,

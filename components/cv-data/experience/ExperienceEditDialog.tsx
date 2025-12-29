@@ -60,6 +60,7 @@ export function ExperienceEditDialog({
       if (!editingExperience) return
       
       const updatedData = {
+        languageId: editingExperience.languageId,
         title: editingExperience.title ?? experience.title,
         company: editingExperience.company ?? experience.company,
         startDate: editingExperience.startDate ?? experience.startDate,

@@ -14,6 +14,7 @@ export interface DBCVData {
 export interface DBExperience {
     id?: number
     type: 'experience'
+    languageId?: string | null
     title: string
     company: string
     startDate: string
@@ -26,6 +27,7 @@ export interface DBExperience {
 export interface DBEducation {
     id?: number
     type: 'education'
+    languageId?: string | null
     degree: string
     institution: string
     fieldOfStudy: string
@@ -186,7 +188,7 @@ export const addExperience = async (experience: Omit<DBExperience, 'id' | 'creat
     })
 }
 
-export const getAllExperiences = async (): Promise<DBExperience[]> => {
+export const getAllExperiences = async (languageId?: string | null): Promise<DBExperience[]> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readonly')
@@ -194,9 +196,12 @@ export const getAllExperiences = async (): Promise<DBExperience[]> => {
         const request = store.getAll()
 
         request.onsuccess = () => {
-            // Filtruj tylko experiences
+            // Filtruj tylko experiences dla danego języka
             const allResults = request.result as StoredItem[]
-            const experiences = allResults.filter((item): item is DBExperience => item.type === 'experience')
+            const experiences = allResults.filter((item): item is DBExperience => 
+                item.type === 'experience' && 
+                (item as DBExperience).languageId === languageId
+            )
             resolve(experiences)
         }
 
@@ -256,7 +261,7 @@ export const updateExperience = async (id: number, experience: Omit<DBExperience
     })
 }
 
-export const getAllEducations = async (): Promise<DBEducation[]> => {
+export const getAllEducations = async (languageId?: string | null): Promise<DBEducation[]> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readonly')
@@ -265,7 +270,10 @@ export const getAllEducations = async (): Promise<DBEducation[]> => {
 
         request.onsuccess = () => {
             const allResults = request.result as StoredItem[]
-            const educations = allResults.filter((item): item is DBEducation => item.type === 'education')
+            const educations = allResults.filter((item): item is DBEducation => 
+                item.type === 'education' && 
+                (item as DBEducation).languageId === languageId
+            )
             resolve(educations)
         }
 
@@ -344,12 +352,14 @@ export const deleteEducation = async (id: number): Promise<void> => {
     })
 }
 
-export const updateSkills = async (skills: { skillsText: string }): Promise<void> => {
+export const updateSkills = async (skills: { languageId?: string | null; skillsText: string }): Promise<void> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
         const store = transaction.objectStore(STORE_NAME)
-        const request = store.put({ id: 'skills', ...skills, updatedAt: Date.now() })
+        
+        const key = skills.languageId ? `skills_${skills.languageId}` : 'skills'
+        const request = store.put({ id: key, ...skills, updatedAt: Date.now() })
 
         request.onsuccess = () => {
             resolve()
@@ -361,12 +371,14 @@ export const updateSkills = async (skills: { skillsText: string }): Promise<void
     })
 }
 
-export const getSkills = async (): Promise<{ skillsText: string } | null> => {
+export const getSkills = async (languageId?: string | null): Promise<{ languageId?: string | null; skillsText: string } | null> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readonly')
         const store = transaction.objectStore(STORE_NAME)
-        const request = store.get('skills')
+        
+        const key = languageId ? `skills_${languageId}` : 'skills'
+        const request = store.get(key)
 
         request.onsuccess = () => {
             resolve(request.result || null)
@@ -378,12 +390,14 @@ export const getSkills = async (): Promise<{ skillsText: string } | null> => {
     })
 }
 
-export const updateFooter = async (footer: { footerText: string }): Promise<void> => {
+export const updateFooter = async (footer: { languageId?: string | null; footerText: string }): Promise<void> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
         const store = transaction.objectStore(STORE_NAME)
-        const request = store.put({ id: 'footer', ...footer, updatedAt: Date.now() })
+        
+        const key = footer.languageId ? `footer_${footer.languageId}` : 'footer'
+        const request = store.put({ id: key, ...footer, updatedAt: Date.now() })
 
         request.onsuccess = () => {
             resolve()
@@ -395,12 +409,14 @@ export const updateFooter = async (footer: { footerText: string }): Promise<void
     })
 }
 
-export const getFooter = async (): Promise<{ footerText: string } | null> => {
+export const getFooter = async (languageId?: string | null): Promise<{ languageId?: string | null; footerText: string } | null> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readonly')
         const store = transaction.objectStore(STORE_NAME)
-        const request = store.get('footer')
+        
+        const key = languageId ? `footer_${languageId}` : 'footer'
+        const request = store.get(key)
 
         request.onsuccess = () => {
             resolve(request.result || null)
