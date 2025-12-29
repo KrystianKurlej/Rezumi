@@ -32,6 +32,13 @@ export default function ToolBar() {
                                 {language === defaultLanguage ? <span>Default <bdi className="uppercase">({language})</bdi></span> : getLanguageName(language)}
                             </Button>
                         ))}
+                        <Button
+                            variant="outline"
+                            size="icon-sm"
+                            onClick={() => dispatch(setCurrentPage('settings'))}
+                        >
+                            <i className="bi bi-plus"></i>
+                        </Button>
                     </ButtonGroup>
                 </div>
             ) : (

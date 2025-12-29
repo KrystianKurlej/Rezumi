@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useLayoutEffect, useState } from "react"
+import { useRef, useLayoutEffect, useState, useEffect } from "react"
 import { Provider } from "react-redux"
 import { makeStore, AppStore } from "@/lib/store"
 import { loadSettingsFromDB } from "@/lib/slices/settingsSlice"
@@ -9,6 +9,8 @@ import { loadExperiencesFromDB } from "@/lib/slices/experienceSlice"
 import { loadEducationsFromDB } from "@/lib/slices/educationSlice"
 import { loadSkillsFromDB } from "@/lib/slices/skillsSlice"
 import { loadFooterFromDB } from "@/lib/slices/footerSlice"
+import { getSettings } from "@/lib/db"
+import Intro from "@/components/pages/Intro"
 
 export default function StoreProvider({
     children,
@@ -17,6 +19,7 @@ export default function StoreProvider({
 }) {
     const storeRef = useRef<AppStore | null>(null)
     const [store, setStore] = useState<AppStore | null>(null)
+    const [showIntro, setShowIntro] = useState<boolean | null>(null)
     
     useLayoutEffect(() => {
         if (storeRef.current === null) {
@@ -32,5 +35,21 @@ export default function StoreProvider({
         setStore(storeRef.current)
     }, [])
 
-    return store ? <Provider store={store}>{children}</Provider> : null
+    useEffect(() => {
+        const checkSettings = async () => {
+            const settings = await getSettings()
+            setShowIntro(!settings)
+        }
+        checkSettings()
+    }, [])
+
+    if (!store || showIntro === null) {
+        return null // Loading state
+    }
+
+    return (
+        <Provider store={store}>
+            {showIntro ? <Intro onComplete={() => setShowIntro(false)} /> : children}
+        </Provider>
+    )
 }

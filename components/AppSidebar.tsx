@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/sidebar"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { setCurrentPage } from '@/lib/slices/pagesSlice'
+import Logo from './Logo'
+import Footer from './Footer'
 
 export const menuIcons = {
   personal: "bi-file-earmark-person",
@@ -72,7 +74,7 @@ export function AppSidebar() {
     return (
         <Sidebar collapsible="icon">
             <SidebarHeader>
-                <div className="text-xl font-bold italic px-4 pt-2">Rezumi</div>
+                <Logo />
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
@@ -108,9 +110,7 @@ export function AppSidebar() {
                 </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
-                <div className="p-4 text-xs text-gray-600">
-                    &copy;{new Date().getFullYear()} Krystian&nbsp;Kurlej, Rezumi 
-                </div>
+                <Footer />
             </SidebarFooter>
         </Sidebar>
     )
