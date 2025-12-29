@@ -1,8 +1,14 @@
 'use client'
 
 import { useAppSelector } from "@/lib/hooks"
-import { PDFViewer } from '@react-pdf/renderer';
-import GenerateCV from "../GenerateCV";
+import dynamic from 'next/dynamic'
+
+const PDFViewerWrapper = dynamic(
+    () => import('./PDFViewerWrapper'),
+    {
+        ssr: false,
+    }
+)
 
 export default function Preview() {
     const personal = useAppSelector(state => state.personal)
@@ -12,14 +18,12 @@ export default function Preview() {
     const footer = useAppSelector(state => state.footer)
 
     return(
-        <PDFViewer className='w-full h-full' showToolbar={false}>
-            <GenerateCV
-                personal={personal}
-                experiences={experiences}
-                educations={educations}
-                skills={skills}
-                footer={footer}
-            />
-        </PDFViewer>
+        <PDFViewerWrapper
+            personal={personal}
+            experiences={experiences}
+            educations={educations}
+            skills={skills}
+            footer={footer}
+        />
     )
 }
