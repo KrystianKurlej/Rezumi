@@ -43,7 +43,7 @@ export default function PDFViewerWrapper({
     }, [])
 
     if (!Client) {
-        return <div className="w-full h-full flex items-center justify-center">Loading PDF viewer...</div>
+        return null
     }
 
     const { PDFViewer, GenerateCV } = Client
