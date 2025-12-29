@@ -35,10 +35,7 @@ import {
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupButton,
   InputGroupInput,
-  InputGroupText,
-  InputGroupTextarea,
 } from "@/components/ui/input-group"
 
 function SettingsSection({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
@@ -60,6 +57,8 @@ export default function Settings() {
     const [selectedDefaultLanguage, setSelectedDefaultLanguage] = useState<string | undefined>(undefined);
     const [defaultLanguageChanged, setDefaultLanguageChanged] = useState<boolean>(false);
     const [isLanguagesSelected, setIsLanguagesSelected] = useState<boolean>(false);
+    const [isImportErrorOpen, setIsImportErrorOpen] = useState<boolean>(false);
+    const [isImportSuccessOpen, setIsImportSuccessOpen] = useState<boolean>(false);
 
     useEffect(() => {
         const loadSettings = async () => {
@@ -333,28 +332,79 @@ export default function Settings() {
                     title="Import data"
                     description="Import your CV data from a previously exported JSON file."
                 >
-                    <InputGroup className="w-64">
-                        <InputGroupInput
-                            type="file"
-                            accept="application/json"
-                            onChange={async (e) => {
-                                const file = e.target.files?.[0];
-                                if (!file) return;
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="outline" className="w-64">
+                                Import data
+                                <i className="bi bi-file-earmark-arrow-up"></i>
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Import CV Data</DialogTitle>
+                                <DialogDescription>
+                                    <strong>This will overwrite your current data</strong>, so please make sure to back up any important information before proceeding.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <InputGroup className="my-4">
+                                <InputGroupInput
+                                    type="file"
+                                    accept="application/json"
+                                    onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
 
-                                const text = await file.text();
-                                try {
-                                    await importDB(text);
-                                    alert("Data imported successfully! Reloading...");
-                                    window.location.reload();
-                                } catch (error) {
-                                    alert("Failed to import data: Invalid JSON file.");
-                                }
-                            }}
-                        />
-                        <InputGroupAddon>
-                            <i className="bi bi-file-earmark-arrow-up"></i>
-                        </InputGroupAddon>
-                    </InputGroup>
+                                        const text = await file.text();
+                                        try {
+                                            await importDB(text);
+                                            setIsImportSuccessOpen(true);
+                                        } catch (error) {
+                                            console.error("Error importing data:", error);
+                                            setIsImportErrorOpen(true);
+                                        }
+                                    }}
+                                />
+                                <InputGroupAddon>
+                                    <i className="bi bi-file-earmark-arrow-up"></i>
+                                </InputGroupAddon>
+                            </InputGroup>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">Cancel</Button>
+                                </DialogClose>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                    <Dialog open={isImportErrorOpen} onOpenChange={setIsImportErrorOpen}>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Something went wrong</DialogTitle>
+                                <DialogDescription>
+                                    Import of your data failed. Please make sure you are using a valid JSON export file from this application and try again.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">Close</Button>
+                                </DialogClose>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                    <Dialog open={isImportSuccessOpen} onOpenChange={setIsImportSuccessOpen}>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Import Successful!</DialogTitle>
+                                <DialogDescription>
+                                    Your data has been imported successfully. Please reload the page to see the changes.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                                <Button onClick={() => window.location.reload()}>
+                                    Reload Page
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </SettingsSection>
             </div>
         </ScrollArea>
