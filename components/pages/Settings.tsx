@@ -20,7 +20,7 @@ import { Separator } from "../ui/separator";
 import languages from "@/lib/data/languages.json";
 import currencies from "@/lib/data/currencies.json";
 import { Button } from "../ui/button";
-import { updateSettings, getSettings, exportDB } from "@/lib/db";
+import { updateSettings, getSettings, exportDB, importDB } from "@/lib/db";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { getLanguageName } from "@/lib/utils";
 import { DialogTrigger } from "@radix-ui/react-dialog";
@@ -343,8 +343,9 @@ export default function Settings() {
 
                                 const text = await file.text();
                                 try {
-                                    const data = JSON.parse(text);
-                                    alert("Data imported successfully!");
+                                    await importDB(text);
+                                    alert("Data imported successfully! Reloading...");
+                                    window.location.reload();
                                 } catch (error) {
                                     alert("Failed to import data: Invalid JSON file.");
                                 }
