@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getSettings } from '@/lib/db';
 import type { AppThunk } from '@/lib/store';
+import { setSelectedLanguage, setDefaultLanguage as setPreviewDefaultLanguage } from './previewSlice';
 
 export interface SettingsState {
     defaultLanguage: string | null;
@@ -55,6 +56,11 @@ export const loadSettingsFromDB = (): AppThunk => async (dispatch) => {
         const savedSettings = await getSettings();
         if (savedSettings) {
             dispatch(setSettings(savedSettings));
+            
+            if (savedSettings.defaultLanguage) {
+                dispatch(setPreviewDefaultLanguage(savedSettings.defaultLanguage));
+                dispatch(setSelectedLanguage(savedSettings.defaultLanguage));
+            }
         }
     } catch (error) {
         console.error('Failed to load settings from DB:', error);

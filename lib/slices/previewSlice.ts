@@ -8,8 +8,8 @@ export interface PreviewSettings {
 
 const initialState: PreviewSettings = {
     scale: 1,
-    selectedLanguage: undefined,
     defaultLanguage: undefined,
+    selectedLanguage: undefined,
 };
 
 const previewSlice = createSlice({
