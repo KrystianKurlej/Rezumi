@@ -29,8 +29,7 @@ export default function ToolBar() {
                                 variant={selectedLanguage === language ? "default" : "outline"}
                                 size="sm"
                             >
-                                {language === defaultLanguage && <i className="bi bi-star"></i>}
-                                {getLanguageName(language)}
+                                {language === defaultLanguage ? <span>Default <bdi className="uppercase">({language})</bdi></span> : getLanguageName(language)}
                             </Button>
                         ))}
                     </ButtonGroup>
