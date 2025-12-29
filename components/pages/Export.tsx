@@ -74,6 +74,8 @@ export default function Export() {
     const educations = useAppSelector(state => state.educations.list)
     const skills = useAppSelector(state => state.skills)
     const footer = useAppSelector(state => state.footer)
+    const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
+    const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
     const filename = 'CV-' + personal.firstName + '_' + personal.lastName + '.pdf'
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,6 +101,9 @@ export default function Export() {
         
         try {
             await handleDownloadPDF({ personal, experiences, educations, skills, footer, filename })
+            
+            const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null
+            
             await addApplicationToDB({
                 companyName: exportData.companyName,
                 position: exportData.jobTitle,
@@ -108,6 +113,7 @@ export default function Export() {
                 dateApplied: new Date().toISOString().split('T')[0],
                 status: 'submitted',
                 cvData: {
+                    languageId,
                     personal,
                     experiences,
                     educations,

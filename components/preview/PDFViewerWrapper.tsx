@@ -15,14 +15,8 @@ interface PDFViewerWrapperProps {
 }
 
 interface PDFClient {
-    PDFViewer: React.ComponentType<{ className: string; showToolbar: boolean; children: React.ReactNode }>
-    GenerateCV: React.ComponentType<{
-        personal: PersonalInfo
-        experiences: DBExperience[]
-        educations: DBEducation[]
-        skills: Skills
-        footer: Footer
-    }>
+    PDFViewer: React.ComponentType<any>
+    GenerateCV: React.ComponentType<any>
 }
 
 export default function PDFViewerWrapper({
