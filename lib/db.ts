@@ -651,6 +651,242 @@ export const removeExperienceFromAllDismissed = async (experienceId: number): Pr
     })
 }
 
+export const getDismissedEducationHints = async (languageId: string): Promise<number[]> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const store = transaction.objectStore(STORE_NAME)
+        
+        const key = `dismissedEducationHints_${languageId}`
+        const request = store.get(key)
+
+        request.onsuccess = () => {
+            const result = request.result
+            resolve(result?.dismissedIds || [])
+        }
+
+        request.onerror = () => {
+            reject('Failed to retrieve dismissed education hints')
+        }
+    })
+}
+
+export const dismissEducationHint = async (languageId: string, educationId: number): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const key = `dismissedEducationHints_${languageId}`
+        
+        const getRequest = store.get(key)
+
+        getRequest.onsuccess = () => {
+            const existingData = getRequest.result
+            const dismissedIds = existingData?.dismissedIds || []
+            
+            if (!dismissedIds.includes(educationId)) {
+                dismissedIds.push(educationId)
+            }
+            
+            const putRequest = store.put({
+                id: key,
+                dismissedIds,
+                updatedAt: Date.now()
+            })
+
+            putRequest.onsuccess = () => resolve()
+            putRequest.onerror = () => reject('Failed to dismiss education hint')
+        }
+
+        getRequest.onerror = () => {
+            reject('Failed to retrieve dismissed education hints for update')
+        }
+    })
+}
+
+export const removeEducationFromAllDismissed = async (educationId: number): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const getAllRequest = store.getAll()
+
+        getAllRequest.onsuccess = () => {
+            const allItems = getAllRequest.result
+            const dismissedHintItems = allItems.filter(item => 
+                typeof item.id === 'string' && 
+                item.id.startsWith('dismissedEducationHints_')
+            )
+
+            if (dismissedHintItems.length === 0) {
+                resolve()
+                return
+            }
+
+            let completed = 0
+            let hasError = false
+
+            dismissedHintItems.forEach(item => {
+                if (item.dismissedIds && Array.isArray(item.dismissedIds)) {
+                    const updatedIds = item.dismissedIds.filter((id: number) => id !== educationId)
+                    
+                    if (updatedIds.length !== item.dismissedIds.length) {
+                        const putRequest = store.put({
+                            ...item,
+                            dismissedIds: updatedIds,
+                            updatedAt: Date.now()
+                        })
+
+                        putRequest.onsuccess = () => {
+                            completed++
+                            if (completed === dismissedHintItems.length && !hasError) {
+                                resolve()
+                            }
+                        }
+
+                        putRequest.onerror = () => {
+                            hasError = true
+                            reject('Failed to update dismissed hints')
+                        }
+                    } else {
+                        completed++
+                        if (completed === dismissedHintItems.length && !hasError) {
+                            resolve()
+                        }
+                    }
+                } else {
+                    completed++
+                    if (completed === dismissedHintItems.length && !hasError) {
+                        resolve()
+                    }
+                }
+            })
+        }
+
+        getAllRequest.onerror = () => {
+            reject('Failed to retrieve dismissed hints')
+        }
+    })
+}
+
+export const getDismissedCourseHints = async (languageId: string): Promise<number[]> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const store = transaction.objectStore(STORE_NAME)
+        
+        const key = `dismissedCourseHints_${languageId}`
+        const request = store.get(key)
+
+        request.onsuccess = () => {
+            const result = request.result
+            resolve(result?.dismissedIds || [])
+        }
+
+        request.onerror = () => {
+            reject('Failed to retrieve dismissed course hints')
+        }
+    })
+}
+
+export const dismissCourseHint = async (languageId: string, courseId: number): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const key = `dismissedCourseHints_${languageId}`
+        
+        const getRequest = store.get(key)
+
+        getRequest.onsuccess = () => {
+            const existingData = getRequest.result
+            const dismissedIds = existingData?.dismissedIds || []
+            
+            if (!dismissedIds.includes(courseId)) {
+                dismissedIds.push(courseId)
+            }
+            
+            const putRequest = store.put({
+                id: key,
+                dismissedIds,
+                updatedAt: Date.now()
+            })
+
+            putRequest.onsuccess = () => resolve()
+            putRequest.onerror = () => reject('Failed to dismiss course hint')
+        }
+
+        getRequest.onerror = () => {
+            reject('Failed to retrieve dismissed course hints for update')
+        }
+    })
+}
+
+export const removeCourseFromAllDismissed = async (courseId: number): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        const getAllRequest = store.getAll()
+
+        getAllRequest.onsuccess = () => {
+            const allItems = getAllRequest.result
+            const dismissedHintItems = allItems.filter(item => 
+                typeof item.id === 'string' && 
+                item.id.startsWith('dismissedCourseHints_')
+            )
+
+            if (dismissedHintItems.length === 0) {
+                resolve()
+                return
+            }
+
+            let completed = 0
+            let hasError = false
+
+            dismissedHintItems.forEach(item => {
+                if (item.dismissedIds && Array.isArray(item.dismissedIds)) {
+                    const updatedIds = item.dismissedIds.filter((id: number) => id !== courseId)
+                    
+                    if (updatedIds.length !== item.dismissedIds.length) {
+                        const putRequest = store.put({
+                            ...item,
+                            dismissedIds: updatedIds,
+                            updatedAt: Date.now()
+                        })
+
+                        putRequest.onsuccess = () => {
+                            completed++
+                            if (completed === dismissedHintItems.length && !hasError) {
+                                resolve()
+                            }
+                        }
+
+                        putRequest.onerror = () => {
+                            hasError = true
+                            reject('Failed to update dismissed hints')
+                        }
+                    } else {
+                        completed++
+                        if (completed === dismissedHintItems.length && !hasError) {
+                            resolve()
+                        }
+                    }
+                } else {
+                    completed++
+                    if (completed === dismissedHintItems.length && !hasError) {
+                        resolve()
+                    }
+                }
+            })
+        }
+
+        getAllRequest.onerror = () => {
+            reject('Failed to retrieve dismissed hints')
+        }
+    })
+}
+
 export const getAllApplications = async (): Promise<DBApplication[]> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {

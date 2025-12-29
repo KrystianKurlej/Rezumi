@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, ReactNode } from 'react'
+import { useState, ReactNode, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { NewCourse, updateNewCourse, addCourse, resetNewCourse, setLoading } from '@/lib/slices/coursesSlice'
-import { addCourse as addCourseToDB } from '@/lib/db'
+import { addCourse as addCourseToDB, type DBCourse } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -38,13 +38,15 @@ interface CourseAddDialogProps {
   onOpenChange: (open: boolean) => void
   onAdd: () => Promise<void>
   trigger?: ReactNode
+  initialData?: DBCourse | null
 }
 
 export function CourseAddDialog({ 
   open, 
   onOpenChange, 
   onAdd,
-  trigger 
+  trigger,
+  initialData
 }: CourseAddDialogProps) {
   const dispatch = useAppDispatch()
   const newCourse = useAppSelector(state => state.newCourse)
@@ -52,6 +54,19 @@ export function CourseAddDialog({
   const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
   const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
   const [completionDateOpen, setCompletionDateOpen] = useState(false)
+
+  useEffect(() => {
+    if (initialData && open) {
+      dispatch(updateNewCourse({
+        newCourseName: initialData.courseName,
+        newCoursePlatform: initialData.platform,
+        newCourseCompletionDate: initialData.completionDate,
+        newCourseCertificateUrl: initialData.certificateUrl,
+        newCourseDescription: initialData.description,
+        newCourseIsOngoing: initialData.isOngoing
+      }))
+    }
+  }, [initialData, open, dispatch])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target

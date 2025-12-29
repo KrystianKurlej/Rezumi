@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, ReactNode } from 'react'
+import { useState, ReactNode, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { NewEducation, updateNewEducation, addEducation, resetNewEducation, setLoading } from '@/lib/slices/educationSlice'
-import { addEducation as addEducationToDB } from '@/lib/db'
+import { addEducation as addEducationToDB, type DBEducation } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -38,13 +38,15 @@ interface EducationAddDialogProps {
   onOpenChange: (open: boolean) => void
   onAdd: () => Promise<void>
   trigger?: ReactNode
+  initialData?: DBEducation | null
 }
 
 export function EducationAddDialog({ 
   open, 
   onOpenChange, 
   onAdd,
-  trigger 
+  trigger,
+  initialData
 }: EducationAddDialogProps) {
   const dispatch = useAppDispatch()
   const newEducation = useAppSelector(state => state.newEducation)
@@ -53,6 +55,20 @@ export function EducationAddDialog({
   const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
   const [startDateOpen, setStartDateOpen] = useState(false)
   const [endDateOpen, setEndDateOpen] = useState(false)
+
+  useEffect(() => {
+    if (initialData && open) {
+      dispatch(updateNewEducation({
+        newEducationDegree: initialData.degree,
+        newEducationInstitution: initialData.institution,
+        newEducationFieldOfStudy: initialData.fieldOfStudy,
+        newEducationStartDate: initialData.startDate,
+        newEducationEndDate: initialData.endDate,
+        newEducationDescription: initialData.description,
+        newEducationIsOngoing: initialData.isOngoing
+      }))
+    }
+  }, [initialData, open, dispatch])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target
