@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getSettings } from '@/lib/db';
+import type { AppThunk } from '@/lib/store';
 
 export interface SettingsState {
     defaultLanguage: string | null;
@@ -47,5 +49,16 @@ export const {
     setDefaultCurrency,
     resetSettings,
 } = settingsSlice.actions;
+
+export const loadSettingsFromDB = (): AppThunk => async (dispatch) => {
+    try {
+        const savedSettings = await getSettings();
+        if (savedSettings) {
+            dispatch(setSettings(savedSettings));
+        }
+    } catch (error) {
+        console.error('Failed to load settings from DB:', error);
+    }
+};
 
 export default settingsSlice.reducer;

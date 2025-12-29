@@ -3,6 +3,7 @@
 import { useRef, useLayoutEffect, useState } from "react"
 import { Provider } from "react-redux"
 import { makeStore, AppStore } from "@/lib/store"
+import { loadSettingsFromDB } from "@/lib/slices/settingsSlice"
 
 export default function StoreProvider({
     children,
@@ -15,6 +16,7 @@ export default function StoreProvider({
     useLayoutEffect(() => {
         if (storeRef.current === null) {
             storeRef.current = makeStore()
+            storeRef.current.dispatch(loadSettingsFromDB())
         }
         setStore(storeRef.current)
     }, [])
