@@ -45,7 +45,7 @@ export default function PDFViewerWrapper({
     }, [])
 
     if (!Client) {
-        return null
+        return <div className="flex-1"></div>
     }
 
     const { PDFViewer, GenerateCV } = Client

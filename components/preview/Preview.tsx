@@ -7,6 +7,7 @@ const PDFViewerWrapper = dynamic(
     () => import('./PDFViewerWrapper'),
     {
         ssr: false,
+        loading: () => <div className="flex-1"></div>,
     }
 )
 
