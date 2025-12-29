@@ -174,6 +174,7 @@ export default function ApplicationsTable() {
         personal: application.cvData.personal,
         experiences: application.cvData.experiences,
         educations: application.cvData.educations,
+        courses: application.cvData.courses || [],
         skills: application.cvData.skills,
         footer: application.cvData.footer,
         filename: `CV-${application.companyName.replace(/\s+/g, '_')}-${application.dateApplied}.pdf`,

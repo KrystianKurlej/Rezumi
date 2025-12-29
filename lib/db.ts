@@ -7,6 +7,7 @@ export interface DBCVData {
     personal: { firstName: string; lastName: string; email: string; phone: string }
     experiences: DBExperience[]
     educations: DBEducation[]
+    courses: DBCourse[]
     skills: { skillsText: string }
     footer: { footerText: string }
 }

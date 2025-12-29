@@ -22,7 +22,7 @@ import { menuIcons } from "@/components/AppSidebar";
 import { pdf } from '@react-pdf/renderer';
 import GenerateCV from '@/components/GenerateCV';
 import { Input } from '@/components/ui/input';
-import { addApplication as addApplicationToDB, type DBExperience, type DBEducation } from '@/lib/db'
+import { addApplication as addApplicationToDB, type DBExperience, type DBEducation, type DBCourse } from '@/lib/db'
 import { type PersonalInfo } from '@/lib/slices/personalSlice'
 import { type Skills } from '@/lib/slices/skillsSlice'
 import { type Footer } from '@/lib/slices/footerSlice'
@@ -32,17 +32,19 @@ interface DownloadPDFProps {
     personal: PersonalInfo;
     experiences: DBExperience[];
     educations: DBEducation[];
+    courses: DBCourse[];
     skills: Skills;
     footer: Footer;
     filename: string;
 }
 
-export const handleDownloadPDF = async ({ personal, experiences, educations, skills, footer, filename }: DownloadPDFProps) => {
+export const handleDownloadPDF = async ({ personal, experiences, educations, courses, skills, footer, filename }: DownloadPDFProps) => {
     const blob = await pdf(
         <GenerateCV 
             personal={personal}
             experiences={experiences}
             educations={educations}
+            courses={courses}
             skills={skills}
             footer={footer}
         />
@@ -75,6 +77,7 @@ export default function Export() {
     const personal = useAppSelector(state => state.personal)
     const experiences = useAppSelector(state => state.experiences.list)
     const educations = useAppSelector(state => state.educations.list)
+    const courses = useAppSelector(state => state.courses.list)
     const skills = useAppSelector(state => state.skills)
     const footer = useAppSelector(state => state.footer)
     const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
@@ -91,7 +94,7 @@ export default function Export() {
         setLoading(true)
         
         try {
-            await handleDownloadPDF({ personal, experiences, educations, skills, footer, filename })
+            await handleDownloadPDF({ personal, experiences, educations, courses, skills, footer, filename })
         } catch (error) {
             console.error('Error downloading PDF:', error)
         } finally {
@@ -103,7 +106,7 @@ export default function Export() {
         setLoading(true)
         
         try {
-            await handleDownloadPDF({ personal, experiences, educations, skills, footer, filename })
+            await handleDownloadPDF({ personal, experiences, educations, courses, skills, footer, filename })
             
             const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null
             
@@ -120,6 +123,7 @@ export default function Export() {
                     personal,
                     experiences,
                     educations,
+                    courses,
                     skills,
                     footer
                 }
