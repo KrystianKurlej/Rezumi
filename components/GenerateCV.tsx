@@ -7,6 +7,7 @@ import { Skills } from '@/lib/slices/skillsSlice';
 import { Footer } from '@/lib/slices/footerSlice';
 
 interface GenerateCVProps {
+    lang: string;
     personal: PersonalInfo;
     experiences: DBExperience[];
     educations: DBEducation[];
@@ -77,6 +78,7 @@ const styles = StyleSheet.create({
 });
 
 export default function GenerateCV({
+    lang,
     personal,
     experiences,
     educations,
@@ -90,7 +92,7 @@ export default function GenerateCV({
                 <View style={styles.headerSection}>
                     <View>
                         <Text>
-                            {translate('pl', 'cv')}
+                            {translate(lang, 'cv')}
                         </Text>
                         <Text style={styles.title}>{personal.firstName} {personal.lastName}</Text>
                         {personal.email && <Text style={{ marginTop: 2 }}>{personal.email}</Text>}
@@ -103,7 +105,7 @@ export default function GenerateCV({
                 {experiences.length > 0 && (
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>
-                            {translate('pl', 'experience')}
+                            {translate(lang, 'experience')}
                         </Text>
                         {experiences.map((experience) => (
                             <View key={experience.id} style={styles.sectionItem}>
@@ -112,7 +114,7 @@ export default function GenerateCV({
                                         <Text style={{ fontWeight: 'bold' }}>{experience.title} </Text>
                                         <Text>- {experience.company}</Text>
                                     </View>
-                                    <Text>{formatDate(experience.startDate, 'short')} - {experience.isOngoing ? translate('pl', 'present') : formatDate(experience.endDate, 'short')}</Text>
+                                    <Text>{formatDate(experience.startDate, 'short')} - {experience.isOngoing ? translate(lang, 'present') : formatDate(experience.endDate, 'short')}</Text>
                                 </View>
                                 <Text>{experience.description}</Text>
                             </View>
@@ -123,7 +125,7 @@ export default function GenerateCV({
                 {educations.length > 0 && (
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>
-                            {translate('pl', 'education')}
+                            {translate(lang, 'education')}
                         </Text>
                         {educations.map((education) => (
                             <View key={education.id} style={styles.sectionItem}>
@@ -135,7 +137,7 @@ export default function GenerateCV({
                                         </View>
                                         <Text style={{ marginTop: 2 }}>{education.institution}</Text>
                                     </View>
-                                    <Text>{formatDate(education.startDate, 'short')} - {education.isOngoing ? translate('pl', 'present') : formatDate(education.endDate, 'short')}</Text>
+                                    <Text>{formatDate(education.startDate, 'short')} - {education.isOngoing ? translate(lang, 'present') : formatDate(education.endDate, 'short')}</Text>
                                 </View>
                                 <Text>{education.description}</Text>
                             </View>
@@ -146,7 +148,7 @@ export default function GenerateCV({
                 {courses.length > 0 && (
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>
-                            {translate('pl', 'courses_certifications')}
+                            {translate(lang, 'courses_certifications')}
                         </Text>
                         {courses.map((course) => (
                             <View key={course.id} style={styles.sectionItem}>
@@ -155,7 +157,7 @@ export default function GenerateCV({
                                         <Text style={{ fontWeight: 'bold' }}>{course.courseName}</Text>
                                         <Text style={{ marginTop: 2 }}>{course.platform}</Text>
                                     </View>
-                                    <Text>{course.isOngoing ? translate('pl', 'in_progress') : `${translate('pl', 'completed')}: ${formatDate(course.completionDate, 'short')}`}</Text>
+                                    <Text>{course.isOngoing ? translate(lang, 'in_progress') : `${translate(lang, 'completed')}: ${formatDate(course.completionDate, 'short')}`}</Text>
                                 </View>
                                 {course.description && <Text>{course.description}</Text>}
                             </View>
@@ -167,7 +169,7 @@ export default function GenerateCV({
                     <View style={styles.section}>
                         <View style={styles.sectionHeader}>
                             <Text style={styles.sectionTitle}>
-                                {translate('pl', 'skills')}
+                                {translate(lang, 'skills')}
                             </Text>
                         </View>
                         {formatRichText(skills.skillsText).map((segment, index) => (

@@ -7,6 +7,7 @@ import type { Skills } from '@/lib/slices/skillsSlice'
 import type { Footer } from '@/lib/slices/footerSlice'
 
 interface PDFViewerWrapperProps {
+    lang: string
     personal: PersonalInfo
     experiences: DBExperience[]
     educations: DBEducation[]
@@ -21,6 +22,7 @@ interface PDFClient {
 }
 
 export default function PDFViewerWrapper({
+    lang,
     personal,
     experiences,
     educations,
@@ -53,6 +55,7 @@ export default function PDFViewerWrapper({
     return (
         <PDFViewer className='w-full h-full' showToolbar={false}>
             <GenerateCV
+                lang={lang}
                 personal={personal}
                 experiences={experiences}
                 educations={educations}
