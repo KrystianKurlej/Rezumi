@@ -27,16 +27,18 @@ export default function Home() {
   const educations = useAppSelector(state => state.educations.list)
   const skills = useAppSelector(state => state.skills)
   const footer = useAppSelector(state => state.footer)
+  const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
 
   const previewKey = useMemo(() => {
     return JSON.stringify({
+      selectedLanguage,
       personal,
       experiences: experiences.length,
       educations: educations.length,
       skills: skills?.skillsText?.length || 0,
       footer: footer?.footerText?.length || 0
     })
-  }, [personal, experiences, educations, skills, footer])
+  }, [selectedLanguage, personal, experiences, educations, skills, footer])
 
   const pagesWithPreview = ['personal', 'templates', 'themes', 'export'];
 

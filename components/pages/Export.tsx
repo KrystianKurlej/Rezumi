@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/field"
 import { Button } from "@/components/ui/button"
 import { useAppDispatch, useAppSelector, useDefaultCurrency } from '@/lib/hooks'
+import { useLoadCVData } from '@/hooks/use-load-cv-data'
 import { setCurrentPage } from '@/lib/slices/pagesSlice'
 import { menuIcons } from "@/components/AppSidebar";
 import { pdf } from '@react-pdf/renderer';
@@ -57,6 +58,8 @@ export const handleDownloadPDF = async ({ personal, experiences, educations, ski
 
 export default function Export() {
     const dispatch = useAppDispatch()
+
+    useLoadCVData()
 
     const [loading, setLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
