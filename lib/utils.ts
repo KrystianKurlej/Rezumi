@@ -111,10 +111,10 @@ export function formatDate(dateString: string, variant: 'long' | 'short') {
   }
 }
 
-export function translate(lang: 'en' | 'pl', key: string): string {
+export function translate(lang: string, key: string): string {
   const entry = dictionary[key as keyof typeof dictionary]
   
   if (!entry) return key
 
-  return lang === 'pl' ? entry.pl : entry.en
+  return entry[lang as keyof typeof entry] || entry.en || key
 }

@@ -178,6 +178,7 @@ export default function ApplicationsTable() {
         skills: application.cvData.skills,
         footer: application.cvData.footer,
         filename: `CV-${application.companyName.replace(/\s+/g, '_')}-${application.dateApplied}.pdf`,
+        lang: application.cvData.languageId || 'en',
       });
     } catch (error) {
       console.error('Error downloading CV PDF:', error);

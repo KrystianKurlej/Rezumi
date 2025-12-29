@@ -12,7 +12,9 @@ const PDFViewerWrapper = dynamic(
 )
 
 export default function Preview() {
-    const lang = useAppSelector(state => state.preview.selectedLanguage)
+    const selectedLang = useAppSelector(state => state.preview.selectedLanguage)
+    const defaultLang = useAppSelector(state => state.settings.defaultLanguage)
+    const lang = selectedLang || defaultLang || 'en'
     const personal = useAppSelector(state => state.personal)
     const experiences = useAppSelector(state => state.experiences.list)
     const educations = useAppSelector(state => state.educations.list)

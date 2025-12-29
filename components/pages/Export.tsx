@@ -36,9 +36,10 @@ interface DownloadPDFProps {
     skills: Skills;
     footer: Footer;
     filename: string;
+    lang: string;
 }
 
-export const handleDownloadPDF = async ({ personal, experiences, educations, courses, skills, footer, filename }: DownloadPDFProps) => {
+export const handleDownloadPDF = async ({ personal, experiences, educations, courses, skills, footer, filename, lang }: DownloadPDFProps) => {
     const blob = await pdf(
         <GenerateCV 
             personal={personal}
@@ -47,6 +48,7 @@ export const handleDownloadPDF = async ({ personal, experiences, educations, cou
             courses={courses}
             skills={skills}
             footer={footer}
+            lang={lang}
         />
     ).toBlob();
     
@@ -94,7 +96,7 @@ export default function Export() {
         setLoading(true)
         
         try {
-            await handleDownloadPDF({ personal, experiences, educations, courses, skills, footer, filename })
+            await handleDownloadPDF({ personal, experiences, educations, courses, skills, footer, filename, lang: selectedLanguage || defaultLanguage || 'en' })
         } catch (error) {
             console.error('Error downloading PDF:', error)
         } finally {
@@ -106,7 +108,7 @@ export default function Export() {
         setLoading(true)
         
         try {
-            await handleDownloadPDF({ personal, experiences, educations, courses, skills, footer, filename })
+            await handleDownloadPDF({ personal, experiences, educations, courses, skills, footer, filename, lang: selectedLanguage || defaultLanguage || 'en' })
             
             const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null
             
