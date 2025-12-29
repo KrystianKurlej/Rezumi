@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { PersonalInfo, setPersonalInfo } from '@/lib/slices/personalSlice'
-import { getPersonalInfo, updatePersonalInfo as updatePersonalInfoDB } from '@/lib/db'
+import { PersonalInfo, setPersonalInfo, loadPersonalInfoFromDB } from '@/lib/slices/personalSlice'
+import { updatePersonalInfo as updatePersonalInfoDB } from '@/lib/db'
 import {
   AccordionContent,
   AccordionItem,
@@ -20,7 +20,10 @@ import { Button } from '@/components/ui/button'
 export default function PersonalForm() {
     const dispatch = useAppDispatch()
     const personal = useAppSelector(state => state.personal)
+    const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
+    const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
     const [localPersonal, setLocalPersonal] = useState<PersonalInfo>({
+        languageId: personal.languageId,
         firstName: personal.firstName || '',
         lastName: personal.lastName || '',
         email: personal.email || '',
@@ -29,29 +32,12 @@ export default function PersonalForm() {
     const [isSaving, setIsSaving] = useState(false)
 
     useEffect(() => {
-        const loadPersonalInfo = async () => {
-            try {
-                const savedPersonalInfo = await getPersonalInfo()
-                if (savedPersonalInfo) {
-                    const safePersonalInfo = {
-                        firstName: savedPersonalInfo.firstName || '',
-                        lastName: savedPersonalInfo.lastName || '',
-                        email: savedPersonalInfo.email || '',
-                        phone: savedPersonalInfo.phone || ''
-                    }
-                    dispatch(setPersonalInfo(safePersonalInfo))
-                    setLocalPersonal(safePersonalInfo)
-                }
-            } catch (error) {
-                console.error('Error loading personal info:', error)
-            }
-        }
-        
-        loadPersonalInfo()
-    }, [dispatch])
+        dispatch(loadPersonalInfoFromDB())
+    }, [selectedLanguage, dispatch])
 
     useEffect(() => {
         setLocalPersonal({
+            languageId: personal.languageId,
             firstName: personal.firstName || '',
             lastName: personal.lastName || '',
             email: personal.email || '',
@@ -68,8 +54,15 @@ export default function PersonalForm() {
     const handleSave = async () => {
         setIsSaving(true)
         try {
-            await updatePersonalInfoDB(localPersonal)
-            dispatch(setPersonalInfo(localPersonal))
+            const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null
+            
+            const dataToSave = {
+                ...localPersonal,
+                languageId
+            }
+            
+            await updatePersonalInfoDB(dataToSave)
+            dispatch(setPersonalInfo(dataToSave))
         } catch (error) {
             console.error('Error saving personal info:', error)
         } finally {

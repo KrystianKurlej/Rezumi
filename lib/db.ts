@@ -132,7 +132,10 @@ export const updatePersonalInfo = async (personalInfo: { languageId?: string | n
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
         const store = transaction.objectStore(STORE_NAME)
-        const request = store.put({ id: 'personalInfo', ...personalInfo, updatedAt: Date.now() })
+        
+        // Użyj personalInfo dla domyślnego języka, personalInfo_{languageId} dla innych
+        const key = personalInfo.languageId ? `personalInfo_${personalInfo.languageId}` : 'personalInfo'
+        const request = store.put({ id: key, ...personalInfo, updatedAt: Date.now() })
 
         request.onsuccess = () => {
             resolve()
@@ -144,12 +147,15 @@ export const updatePersonalInfo = async (personalInfo: { languageId?: string | n
     })
 }
 
-export const getPersonalInfo = async (): Promise<{ firstName: string; lastName: string; email: string; phone: string } | null> => {
+export const getPersonalInfo = async (languageId?: string | null): Promise<{ languageId?: string | null; firstName: string; lastName: string; email: string; phone: string } | null> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readonly')
         const store = transaction.objectStore(STORE_NAME)
-        const request = store.get('personalInfo')
+        
+        // Użyj personalInfo dla domyślnego języka, personalInfo_{languageId} dla innych
+        const key = languageId ? `personalInfo_${languageId}` : 'personalInfo'
+        const request = store.get(key)
 
         request.onsuccess = () => {
             resolve(request.result || null)
