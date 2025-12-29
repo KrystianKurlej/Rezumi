@@ -250,25 +250,6 @@ export default function Export() {
                                 </Button>
                             </Field>
                         </FieldSet>
-                        {/* <FieldSet className="mt-2 pt-5 border-t">
-                            <div>
-                                <span className="text-lg font-semibold">
-                                    Export CV data
-                                </span>
-                                <FieldDescription>
-                                    Download your CV data as a file. Useful for backups or moving your data to another device.
-                                </FieldDescription>
-                            </div>
-                            <Field>
-                                <Button variant="secondary" disabled={loading}>
-                                    <i className="bi bi-download"></i>
-                                    Export CV Data (JSON)
-                                </Button>
-                                <FieldDescription className="text-center text-xs">
-                                    This file is not a CV. It contains editable data only.
-                                </FieldDescription>
-                            </Field>
-                        </FieldSet> */}
                     </FieldGroup>
                 </div>
             </ScrollArea>

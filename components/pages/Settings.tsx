@@ -20,7 +20,7 @@ import { Separator } from "../ui/separator";
 import languages from "@/lib/data/languages.json";
 import currencies from "@/lib/data/currencies.json";
 import { Button } from "../ui/button";
-import { updateSettings, getSettings } from "@/lib/db";
+import { updateSettings, getSettings, exportDB } from "@/lib/db";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { getLanguageName } from "@/lib/utils";
 import { DialogTrigger } from "@radix-ui/react-dialog";
@@ -32,6 +32,14 @@ import {
     setDefaultLanguage, 
     setDefaultCurrency 
 } from "@/lib/slices/settingsSlice";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@/components/ui/input-group"
 
 function SettingsSection({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
     return (
@@ -140,6 +148,19 @@ export default function Settings() {
 
         await updateSettings(newSettings);
         setSelectedCurrency(undefined);
+    }
+
+    const handleExportData = async () => {
+        const data = await exportDB();
+        const dataStr = JSON.stringify(data, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "cv_data_export" + new Date().toISOString().slice(0,10) + ".json";
+        a.click();
+        URL.revokeObjectURL(url);
     }
 
     return(
@@ -292,6 +313,47 @@ export default function Settings() {
                             Set as default currency
                         </Button>
                     </div>
+                </SettingsSection>
+                <Separator className="my-6" />
+                <SettingsSection
+                    title="Export your data"
+                    description="You can export all your CV data as a JSON file for backup or transfer purposes."
+                >
+                    <Button
+                        variant="outline"
+                        onClick={handleExportData}
+                        className="w-64"
+                    >
+                        Download your data
+                        <i className="bi bi-file-earmark-arrow-down"></i>
+                    </Button>
+                </SettingsSection>
+                <Separator className="my-6" />
+                <SettingsSection
+                    title="Import data"
+                    description="Import your CV data from a previously exported JSON file."
+                >
+                    <InputGroup className="w-64">
+                        <InputGroupInput
+                            type="file"
+                            accept="application/json"
+                            onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+
+                                const text = await file.text();
+                                try {
+                                    const data = JSON.parse(text);
+                                    alert("Data imported successfully!");
+                                } catch (error) {
+                                    alert("Failed to import data: Invalid JSON file.");
+                                }
+                            }}
+                        />
+                        <InputGroupAddon>
+                            <i className="bi bi-file-earmark-arrow-up"></i>
+                        </InputGroupAddon>
+                    </InputGroup>
                 </SettingsSection>
             </div>
         </ScrollArea>

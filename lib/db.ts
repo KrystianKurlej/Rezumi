@@ -97,15 +97,54 @@ export const initDB = (): Promise<IDBDatabase> => {
         request.onupgradeneeded = (event) => {
             const database = (event.target as IDBOpenDBRequest).result
             
-            // Usuń stary store jeśli istnieje
             if (database.objectStoreNames.contains(STORE_NAME)) {
                 database.deleteObjectStore(STORE_NAME)
             }
             
-            // Utwórz nowy store bez autoIncrement
             const store = database.createObjectStore(STORE_NAME, { keyPath: 'id' })
             store.createIndex('updatedAt', 'updatedAt', { unique: false })
         }
+    })
+}
+
+export const exportDB = async (): Promise<string> => {
+    const database = await initDB()
+
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const store = transaction.objectStore(STORE_NAME)
+        const request = store.getAll()
+        request.onsuccess = () => {
+            const allData = request.result
+            const jsonData = JSON.stringify(allData)
+            resolve(jsonData)
+        }
+        request.onerror = () => {
+            reject('Failed to export database')
+        }
+    })
+}
+
+export const importDB = async (jsonData: string): Promise<void> => {
+    const database = await initDB()
+    const data: StoredItem[] = JSON.parse(jsonData)
+    
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        let completed = 0
+        data.forEach(item => {
+            const request = store.put(item)
+            request.onsuccess = () => {
+                completed++
+                if (completed === data.length) {
+                    resolve()
+                }
+            }
+            request.onerror = () => {
+                reject('Failed to import database')
+            }
+        })
     })
 }
 
