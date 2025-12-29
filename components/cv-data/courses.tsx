@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { setCourses, loadCoursesFromDB } from '@/lib/slices/coursesSlice'
+import { loadCoursesFromDB } from '@/lib/slices/coursesSlice'
 import { deleteCourse } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {

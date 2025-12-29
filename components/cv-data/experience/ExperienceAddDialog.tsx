@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, ReactNode } from 'react'
+import { useState, ReactNode, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { NewExperience, updateNewExperience, addExperience, resetNewExperience, setLoading } from '@/lib/slices/experienceSlice'
-import { addExperience as addExperienceToDB } from '@/lib/db'
+import { addExperience as addExperienceToDB, type DBExperience } from '@/lib/db'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -38,13 +38,15 @@ interface ExperienceAddDialogProps {
   onOpenChange: (open: boolean) => void
   onAdd: () => Promise<void>
   trigger?: ReactNode
+  initialData?: DBExperience | null
 }
 
 export function ExperienceAddDialog({ 
   open, 
   onOpenChange, 
   onAdd,
-  trigger 
+  trigger,
+  initialData
 }: ExperienceAddDialogProps) {
   const dispatch = useAppDispatch()
   const newExperience = useAppSelector(state => state.newExperience)
@@ -53,6 +55,19 @@ export function ExperienceAddDialog({
   const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
   const [startDateOpen, setStartDateOpen] = useState(false)
   const [endDateOpen, setEndDateOpen] = useState(false)
+
+  useEffect(() => {
+    if (initialData && open) {
+      dispatch(updateNewExperience({
+        newExperienceTitle: initialData.title,
+        newExperienceCompany: initialData.company,
+        newExperienceStartDate: initialData.startDate,
+        newExperienceEndDate: initialData.endDate,
+        newExperienceDescription: initialData.description,
+        newExperienceIsOngoing: initialData.isOngoing
+      }))
+    }
+  }, [initialData, open, dispatch])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target

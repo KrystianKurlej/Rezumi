@@ -14,10 +14,9 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button'
 import { InputHint } from '../pages/CvData'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
+import { InputGroup, InputGroupInput } from '../ui/input-group'
 
 export default function PersonalForm() {
     const dispatch = useAppDispatch()
@@ -37,7 +36,6 @@ export default function PersonalForm() {
     useEffect(() => {
         dispatch(loadPersonalInfoFromDB())
         
-        // Jeśli nie jesteśmy na domyślnym języku, pobierz dane z domyślnego języka dla hintów
         if (selectedLanguage !== defaultLanguage) {
             getPersonalInfo(null).then(data => {
                 if (data) {
