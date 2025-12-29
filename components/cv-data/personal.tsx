@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { PersonalInfo, setPersonalInfo, loadPersonalInfoFromDB } from '@/lib/slices/personalSlice'
-import { updatePersonalInfo as updatePersonalInfoDB } from '@/lib/db'
+import { updatePersonalInfo as updatePersonalInfoDB, getPersonalInfo } from '@/lib/db'
 import {
   AccordionContent,
   AccordionItem,
@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button'
+import { InputHint } from '../pages/CvData'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
 
 export default function PersonalForm() {
     const dispatch = useAppDispatch()
@@ -30,10 +32,28 @@ export default function PersonalForm() {
         phone: personal.phone || ''
     })
     const [isSaving, setIsSaving] = useState(false)
+    const [defaultLanguageData, setDefaultLanguageData] = useState<PersonalInfo | null>(null)
 
     useEffect(() => {
         dispatch(loadPersonalInfoFromDB())
-    }, [selectedLanguage, dispatch])
+        
+        // Jeśli nie jesteśmy na domyślnym języku, pobierz dane z domyślnego języka dla hintów
+        if (selectedLanguage !== defaultLanguage) {
+            getPersonalInfo(null).then(data => {
+                if (data) {
+                    setDefaultLanguageData({
+                        languageId: null,
+                        firstName: data.firstName || '',
+                        lastName: data.lastName || '',
+                        email: data.email || '',
+                        phone: data.phone || ''
+                    })
+                }
+            })
+        } else {
+            setDefaultLanguageData(null)
+        }
+    }, [selectedLanguage, defaultLanguage, dispatch])
 
     useEffect(() => {
         setLocalPersonal({
@@ -70,6 +90,15 @@ export default function PersonalForm() {
         }
     }
 
+    const getDefaultLanguageHint = (fieldName: keyof PersonalInfo): string | null => {
+        if (selectedLanguage === defaultLanguage) return null
+        if (!defaultLanguageData) return null
+        if (localPersonal[fieldName]) return null
+        if (!defaultLanguageData[fieldName]) return null
+        
+        return defaultLanguageData[fieldName] as string
+    }
+
     return (
         <AccordionItem value="personal-section">
             <AccordionTrigger>
@@ -79,50 +108,98 @@ export default function PersonalForm() {
                 <FieldGroup>
                     <div className="grid grid-cols-2 gap-4">
                         <Field>
-                            <FieldLabel htmlFor="fistName">
+                            <FieldLabel htmlFor="firstName">
                                 First Name
                             </FieldLabel>
-                            <Input
-                                id="firstName"
-                                value={localPersonal.firstName}
-                                onChange={handleChange}
-                                placeholder='John'
-                            />
+                            <InputGroup>
+                                <InputGroupInput
+                                    id="firstName"
+                                    value={localPersonal.firstName}
+                                    onChange={handleChange}
+                                    placeholder='John'
+                                />
+                                {getDefaultLanguageHint('firstName') && (
+                                    <InputHint onClick={() => {
+                                        setLocalPersonal(prev => ({
+                                            ...prev,
+                                            firstName: getDefaultLanguageHint('firstName') || ''
+                                        }))
+                                    }}>
+                                        {getDefaultLanguageHint('firstName')}
+                                    </InputHint>
+                                )}
+                            </InputGroup>
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="lastName">
                                 Last Name
                             </FieldLabel>
-                            <Input
-                                id="lastName"
-                                value={localPersonal.lastName}
-                                onChange={handleChange}
-                                placeholder='Doe'
-                            />
+                            <InputGroup>
+                                <InputGroupInput
+                                    id="lastName"
+                                    value={localPersonal.lastName}
+                                    onChange={handleChange}
+                                    placeholder='Doe'
+                                />
+                                {getDefaultLanguageHint('lastName') && (
+                                    <InputHint onClick={() => {
+                                        setLocalPersonal(prev => ({
+                                            ...prev,
+                                            lastName: getDefaultLanguageHint('lastName') || ''
+                                        }))
+                                    }}>
+                                        {getDefaultLanguageHint('lastName')}
+                                    </InputHint>
+                                )}
+                            </InputGroup>
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="email">
                                 Email Address
                             </FieldLabel>
-                            <Input
-                                id="email"
-                                type="email"
-                                value={localPersonal.email}
-                                onChange={handleChange}
-                                placeholder='john.doe@gmail.com'
-                            />
+                            <InputGroup>
+                                <InputGroupInput
+                                    id="email"
+                                    type="email"
+                                    value={localPersonal.email}
+                                    onChange={handleChange}
+                                    placeholder='john.doe@gmail.com'
+                                />
+                                {getDefaultLanguageHint('email') && (
+                                    <InputHint onClick={() => {
+                                        setLocalPersonal(prev => ({
+                                            ...prev,
+                                            email: getDefaultLanguageHint('email') || ''
+                                        }))
+                                    }}>
+                                        {getDefaultLanguageHint('email')}
+                                    </InputHint>
+                                )}
+                            </InputGroup>
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="phone">
                                 Phone Number
                             </FieldLabel>
-                            <Input
-                                id="phone"
-                                type="tel"
-                                value={localPersonal.phone}
-                                onChange={handleChange}
-                                placeholder='+1 234 567 8900'
-                            />
+                            <InputGroup>
+                                <InputGroupInput
+                                    id="phone"
+                                    type="tel"
+                                    value={localPersonal.phone}
+                                    onChange={handleChange}
+                                    placeholder='+1 234 567 8900'
+                                />
+                                {getDefaultLanguageHint('phone') && (
+                                    <InputHint onClick={() => {
+                                        setLocalPersonal(prev => ({
+                                            ...prev,
+                                            phone: getDefaultLanguageHint('phone') || ''
+                                        }))
+                                    }}>
+                                        {getDefaultLanguageHint('phone')}
+                                    </InputHint>
+                                )}
+                            </InputGroup>
                         </Field>
                     </div>
                     <Button

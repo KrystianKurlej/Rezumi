@@ -13,6 +13,25 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { menuIcons } from "@/components/AppSidebar";
 import { getLanguageName } from "@/lib/utils";
 import { useAppSelector } from "@/lib/hooks";
+import { InputGroupAddon, InputGroupButton } from "../ui/input-group";
+
+export function InputHint({ children, onClick }: { 
+    children: React.ReactNode; 
+    onClick: () => void;
+}) {
+    return (
+        <InputGroupAddon align="inline-end" className="max-w-[50%]">
+            <InputGroupButton
+                variant="secondary"
+                onClick={onClick}
+                className="max-w-[100%] gap-0"
+            >
+                <i className="bi bi-copy text-xs"></i>&nbsp;
+                <span className="truncate">{children}</span>
+            </InputGroupButton>
+        </InputGroupAddon>
+    )
+}
 
 export default function CvData() {
     const selectedLanguage = useAppSelector((state) => state.preview.selectedLanguage);
