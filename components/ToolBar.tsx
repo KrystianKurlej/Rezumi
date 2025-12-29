@@ -1,35 +1,23 @@
-'use client';
-
-import { useState, useEffect } from "react";
 import { setCurrentPage } from "@/lib/slices/pagesSlice";
 import { Button } from "./ui/button";
-import { useAppDispatch } from '@/lib/hooks'
-import { getSettings } from "@/lib/db";
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { ButtonGroup } from "./ui/button-group";
 import { getLanguageName } from "@/lib/utils";
+import { setSelectedLanguage } from "@/lib/slices/previewSlice";
 
 export default function ToolBar() {
     const dispatch = useAppDispatch()
-    const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
-    const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+    const availableLanguages = useAppSelector((state) => state.settings.availableLanguages);
+    const selectedLanguage = useAppSelector((state) => state.preview.selectedLanguage);
+    const defaultLanguage = useAppSelector((state) => state.settings.defaultLanguage);
 
-    useEffect(() => {
-        const loadSettings = async () => {
-            const savedSettings = await getSettings();
-            
-            if (savedSettings && savedSettings.availableLanguages.length > 0 && savedSettings.defaultLanguage) {
-                setSelectedLanguage(savedSettings.defaultLanguage);
-                setAvailableLanguages(savedSettings.availableLanguages);
-            }
-        };
-
-        loadSettings();
-    }, []);
+    const handleLanguageChange = (language: string) => {
+        dispatch(setSelectedLanguage(language));
+    };
 
     return (
         <div className="bg-sidebar p-1 text-sm border-t flex items-center justify-between text-gray-600">
             <div className="px-1">
-                Zoom: 100%
             </div>
             {availableLanguages.length > 0 ? (
                 <div className="flex items-center gap-1">
@@ -37,10 +25,11 @@ export default function ToolBar() {
                         {availableLanguages.map((language) => (
                             <Button 
                                 key={language}
-                                onClick={() => setSelectedLanguage(language)}
+                                onClick={() => handleLanguageChange(language)}
                                 variant={selectedLanguage === language ? "default" : "outline"}
                                 size="sm"
                             >
+                                {language === defaultLanguage && <i className="bi bi-star"></i>}
                                 {getLanguageName(language)}
                             </Button>
                         ))}

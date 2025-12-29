@@ -3,7 +3,7 @@ const DB_VERSION = 4
 const STORE_NAME = 'rezumiStore'
 
 export interface DBCVData {
-    // languageId: string
+    languageId: string | null
     personal: { firstName: string; lastName: string; email: string; phone: string }
     experiences: DBExperience[]
     educations: DBEducation[]
@@ -127,7 +127,7 @@ export const getSettings = async (): Promise<Settings | null> => {
     })
 }
 
-export const updatePersonalInfo = async (personalInfo: { firstName: string; lastName: string; email: string; phone: string }): Promise<void> => {
+export const updatePersonalInfo = async (personalInfo: { languageId?: string | null; firstName: string; lastName: string; email: string; phone: string }): Promise<void> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
