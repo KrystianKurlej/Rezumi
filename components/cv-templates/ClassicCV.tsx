@@ -152,7 +152,7 @@ export default function ClassicCV({
                                             {experience.title} · {experience.company}
                                         </Text>
                                     </View>
-                                    <Text style={{ fontSize: 9, color: 'gray', whiteSpace: 'nowrap' }}>
+                                    <Text style={{ fontSize: 9, color: 'gray' }}>
                                         {formatDate(experience.startDate, 'short')} - {experience.isOngoing ? translate(lang, 'present') : formatDate(experience.endDate, 'short')}
                                     </Text>
                                 </View>
@@ -178,7 +178,7 @@ export default function ClassicCV({
                                         </Text>
                                         <Text style={{ marginTop: 2, fontSize: 10 }}>{education.institution}</Text>
                                     </View>
-                                    <Text style={{ fontSize: 9, color: 'gray', whiteSpace: 'nowrap' }}>
+                                    <Text style={{ fontSize: 9, color: 'gray' }}>
                                         {formatDate(education.startDate, 'short')} - {education.isOngoing ? translate(lang, 'present') : formatDate(education.endDate, 'short')}
                                     </Text>
                                 </View>
@@ -202,7 +202,7 @@ export default function ClassicCV({
                                         <Text style={{ fontWeight: 'bold', fontSize: 11 }}>{course.courseName}</Text>
                                         <Text style={{ marginTop: 2, fontSize: 10 }}>{course.platform}</Text>
                                     </View>
-                                    <Text style={{ fontSize: 9, color: 'gray', whiteSpace: 'nowrap' }}>
+                                    <Text style={{ fontSize: 9, color: 'gray' }}>
                                         {course.isOngoing ? translate(lang, 'in_progress') : `${translate(lang, 'completed')}: ${formatDate(course.completionDate, 'short')}`}
                                     </Text>
                                 </View>
