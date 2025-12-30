@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   PageHeader, 
   PageHeaderTitle, 
@@ -14,10 +14,18 @@ import {
   FieldSet,
   FieldGroup,
 } from "@/components/ui/field"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { useAppDispatch, useAppSelector, useDefaultCurrency } from '@/lib/hooks'
 import { useLoadCVData } from '@/hooks/use-load-cv-data'
 import { setCurrentPage } from '@/lib/slices/pagesSlice'
+import { selectTemplate, setCurrentDesignId } from '@/lib/slices/templatesSlice'
 import { menuIcons } from "@/components/AppSidebar";
 import { pdf } from '@react-pdf/renderer';
 import GenerateCV from '@/components/GenerateCV';
@@ -28,6 +36,8 @@ import { type PersonalInfo } from '@/lib/slices/personalSlice'
 import { type Skills } from '@/lib/slices/skillsSlice'
 import { type Footer } from '@/lib/slices/footerSlice'
 import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, DialogTitle } from '../ui/dialog';
+import { getAllTemplates } from '@/lib/db/templates';
+import { DBTemplates } from '@/lib/db/types';
 
 interface DownloadPDFProps {
     personal: PersonalInfo;
@@ -75,6 +85,7 @@ export default function Export() {
         salary: '',
         notes: '',
     });
+    const [templates, setTemplates] = useState<DBTemplates[]>([]);
     const defaultCurrency = useDefaultCurrency()
 
     const personal = useAppSelector(state => state.personal)
@@ -85,12 +96,44 @@ export default function Export() {
     const footer = useAppSelector(state => state.footer)
     const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
     const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
+    const selectedTemplateId = useAppSelector(state => state.templates.selectedTemplate)
+    const currentDesignId = useAppSelector(state => state.templates.currentDesignId)
     const filename = 'CV-' + personal.firstName + '_' + personal.lastName + '.pdf'
+
+    const loadTemplates = async () => {
+        try {
+            const allTemplates = await getAllTemplates();
+            setTemplates(allTemplates);
+        } catch (error) {
+            console.error('Failed to load templates:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchTemplates = async () => {
+            await loadTemplates();
+        };
+        fetchTemplates();
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target
         const key = id as keyof typeof exportData
         setExportData(prev => ({ ...prev, [key]: value }))
+    }
+
+    const handleTemplateChange = (templateId: string) => {
+        dispatch(selectTemplate(templateId))
+        
+        // Znajdź designId dla wybranego szablonu
+        if (templateId === 'classic') {
+            dispatch(setCurrentDesignId('classic'))
+        } else {
+            const template = templates.find(t => t.id?.toString() === templateId)
+            if (template) {
+                dispatch(setCurrentDesignId(template.designId || 'classic'))
+            }
+        }
     }
 
     const handleDownload = async () => {
@@ -153,6 +196,28 @@ export default function Export() {
                 <div className="p-4 pb-16">
                     <FieldGroup>
                         <FieldSet>
+                            <Field className="mt-1">
+                                <FieldLabel>
+                                    Select CV Template
+                                </FieldLabel>
+                                <Select value={selectedTemplateId || 'classic'} onValueChange={handleTemplateChange}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Choose template..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem key="default" value="classic">
+                                            Default Template
+                                        </SelectItem>
+                                        {templates.map((template) => (
+                                            <SelectItem key={template.id} value={template.id?.toString() || ''}>
+                                                {template.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </Field>
+                        </FieldSet>
+                        <FieldSet className="mt-2 pt-5 border-t">
                             <div>
                                 <span className="text-lg font-semibold">
                                     Send CV for a specific job
