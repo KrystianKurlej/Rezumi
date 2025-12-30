@@ -9,6 +9,7 @@ export interface PersonalInfo {
     email: string
     phone: string
     aboutDescription?: string
+    photo?: string
 }
 
 const initialState: PersonalInfo = {
@@ -18,6 +19,7 @@ const initialState: PersonalInfo = {
     email: '',
     phone: '',
     aboutDescription: '',
+    photo: '',
 };
 
 const personalSlice = createSlice({
@@ -50,6 +52,7 @@ export const loadPersonalInfoFromDB = (): AppThunk => async (dispatch, getState)
                 email: savedPersonalInfo.email || '',
                 phone: savedPersonalInfo.phone || '',
                 aboutDescription: savedPersonalInfo.aboutDescription || '',
+                photo: savedPersonalInfo.photo || '',
             };
             dispatch(setPersonalInfo(personalInfo));
         } else {
@@ -60,6 +63,7 @@ export const loadPersonalInfoFromDB = (): AppThunk => async (dispatch, getState)
                 email: '',
                 phone: '',
                 aboutDescription: '',
+                photo: '',
             }));
         }
     } catch (error) {

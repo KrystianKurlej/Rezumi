@@ -1,5 +1,5 @@
 import { Font } from '@react-pdf/renderer';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import { formatDate, formatRichText, translate } from "@/lib/utils"
 import { PersonalInfo } from '@/lib/slices/personalSlice';
 import { DBExperience, DBEducation, DBCourse } from '@/lib/db';
@@ -45,6 +45,13 @@ const classicStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 12,
+    },
+    profilePhoto: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        objectFit: 'cover',
+        marginBottom: 8,
     },
     title: {
         fontSize: 18,
@@ -95,6 +102,12 @@ export default function ClassicCV({
             <Page size="A4" style={classicStyles.page}>
                 <View style={classicStyles.headerSection}>
                     <View>
+                        {personal.photo && (
+                            <Image
+                                src={personal.photo}
+                                style={classicStyles.profilePhoto}
+                            />
+                        )}
                         <Text>
                             {translate(lang, 'cv')}
                         </Text>

@@ -1,6 +1,6 @@
 import { initDB, STORE_NAME } from './base'
 
-export const updatePersonalInfo = async (personalInfo: { languageId?: string | null; firstName: string; lastName: string; email: string; phone: string }): Promise<void> => {
+export const updatePersonalInfo = async (personalInfo: { languageId?: string | null; firstName: string; lastName: string; email: string; phone: string; aboutDescription?: string; photo?: string }): Promise<void> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
@@ -19,7 +19,7 @@ export const updatePersonalInfo = async (personalInfo: { languageId?: string | n
     })
 }
 
-export const getPersonalInfo = async (languageId?: string | null): Promise<{ languageId?: string | null; firstName: string; lastName: string; email: string; phone: string } | null> => {
+export const getPersonalInfo = async (languageId?: string | null): Promise<{ languageId?: string | null; firstName: string; lastName: string; email: string; phone: string; aboutDescription?: string; photo?: string } | null> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readonly')

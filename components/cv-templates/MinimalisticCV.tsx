@@ -1,5 +1,5 @@
 import { Font } from '@react-pdf/renderer';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import { formatDate, formatRichText, translate } from "@/lib/utils"
 import type { CVTemplateProps } from './ClassicCV';
 
@@ -40,6 +40,14 @@ const minimalisticStyles = StyleSheet.create({
     },
     headerSection: {
         marginBottom: 20,
+        alignItems: 'center',
+    },
+    profilePhoto: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        objectFit: 'cover',
+        marginBottom: 12,
     },
     title: {
         fontSize: 28,
@@ -105,6 +113,12 @@ export default function MinimalisticCV({
         <Document>
             <Page size="A4" style={minimalisticStyles.page}>
                 <View style={minimalisticStyles.headerSection}>
+                    {personal.photo && (
+                        <Image
+                            src={personal.photo}
+                            style={minimalisticStyles.profilePhoto}
+                        />
+                    )}
                     <Text>{translate(lang, 'cv')}</Text>
                     <Text style={minimalisticStyles.title}>{personal.firstName}</Text>
                     <Text style={minimalisticStyles.title}>{personal.lastName}</Text>

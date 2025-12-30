@@ -13,11 +13,13 @@ import {
   Field,
   FieldGroup,
   FieldLabel,
+  FieldDescription,   
 } from "@/components/ui/field"
 import { Button } from '@/components/ui/button'
 import { InputHint } from '../pages/CvData'
 import { InputGroup, InputGroupInput } from '../ui/input-group'
 import { Textarea } from "@/components/ui/textarea"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 
 export default function PersonalForm() {
     const dispatch = useAppDispatch()
@@ -30,7 +32,8 @@ export default function PersonalForm() {
         lastName: personal.lastName || '',
         email: personal.email || '',
         phone: personal.phone || '',
-        aboutDescription: personal.aboutDescription || ''
+        aboutDescription: personal.aboutDescription || '',
+        photo: personal.photo || ''
     })
     const [isSaving, setIsSaving] = useState(false)
     const [defaultLanguageData, setDefaultLanguageData] = useState<PersonalInfo | null>(null)
@@ -47,7 +50,8 @@ export default function PersonalForm() {
                         lastName: data.lastName || '',
                         email: data.email || '',
                         phone: data.phone || '',
-                        aboutDescription: data.aboutDescription || ''
+                        aboutDescription: data.aboutDescription || '',
+                        photo: data.photo || ''
                     })
                 }
             })
@@ -63,6 +67,7 @@ export default function PersonalForm() {
             lastName: personal.lastName || '',
             email: personal.email || '',
             phone: personal.phone || '',
+            photo: personal.photo || '',
             aboutDescription: personal.aboutDescription || ''
         })
     }, [personal])
@@ -71,6 +76,21 @@ export default function PersonalForm() {
         const { id, value } = e.target
         const key = id as keyof PersonalInfo
         setLocalPersonal(prev => ({ ...prev, [key]: value }))
+    }
+
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                setLocalPersonal(prev => ({ ...prev, photo: reader.result as string }))
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+
+    const handleRemovePhoto = () => {
+        setLocalPersonal(prev => ({ ...prev, photo: '' }))
     }
 
     const handleSave = async () => {
@@ -204,6 +224,49 @@ export default function PersonalForm() {
                             </InputGroup>
                         </Field>
                     </div>
+                    <Field>
+                        <FieldLabel htmlFor="photo">
+                            Profile Photo
+                        </FieldLabel>
+                        <div className="flex gap-4">
+                            {localPersonal.photo && (
+                                <Avatar className="h-20 w-20">
+                                    <AvatarImage src={localPersonal.photo} alt="Profile" />
+                                </Avatar>
+                            )}
+                            <div>
+                                <input
+                                    id="photo"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handlePhotoChange}
+                                    className="hidden"
+                                />
+                                <FieldDescription className="text-xs pt-1 mb-2">
+                                    Select a profile photo to display on your CV. You&apos;ll get best results with a square image (e.g. 1:1 aspect ratio in jpg format)
+                                </FieldDescription>
+                                <div className="flex gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => document.getElementById('photo')?.click()}
+                                    >
+                                        {localPersonal.photo ? 'Change Photo' : 'Upload Photo'} <i className="bi bi-upload"></i>
+                                    </Button>
+                                    {localPersonal.photo && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={handleRemovePhoto}
+                                        >
+                                            Remove Photo
+                                            <i className="bi bi-trash"></i>
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </Field>
                     <Field>
                         <FieldLabel htmlFor="aboutDescription">
                             About
