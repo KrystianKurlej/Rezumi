@@ -3,7 +3,8 @@ import { Button } from "./ui/button";
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { ButtonGroup } from "./ui/button-group";
 import { getLanguageName } from "@/lib/utils";
-import { setSelectedLanguage } from "@/lib/slices/previewSlice";
+import { setSelectedLanguage, reloadPreview } from "@/lib/slices/previewSlice";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function ToolBar() {
     const dispatch = useAppDispatch()
@@ -17,7 +18,21 @@ export default function ToolBar() {
 
     return (
         <div className="bg-sidebar p-1 text-sm border-t flex items-center justify-between text-gray-600">
-            <div className="px-1">
+            <div>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            onClick={() => dispatch(reloadPreview())}
+                        >
+                            <i className="bi bi-arrow-clockwise"></i>
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        Reload Preview
+                    </TooltipContent>
+                </Tooltip>
             </div>
             {availableLanguages.length > 0 ? (
                 <div className="flex items-center gap-1">
@@ -32,13 +47,20 @@ export default function ToolBar() {
                                 {language === defaultLanguage ? <span>Default <bdi className="uppercase">({language})</bdi></span> : getLanguageName(language)}
                             </Button>
                         ))}
-                        <Button
-                            variant="outline"
-                            size="icon-sm"
-                            onClick={() => dispatch(setCurrentPage('settings'))}
-                        >
-                            <i className="bi bi-plus"></i>
-                        </Button>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    size="icon-sm"
+                                    onClick={() => dispatch(setCurrentPage('settings'))}
+                                >
+                                    <i className="bi bi-plus"></i>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Manage Languages
+                            </TooltipContent>
+                        </Tooltip>
                     </ButtonGroup>
                 </div>
             ) : (

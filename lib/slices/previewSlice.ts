@@ -4,12 +4,14 @@ export interface PreviewSettings {
     scale: number,
     selectedLanguage?: string,
     defaultLanguage?: string,
+    reloadKey: number,
 }
 
 const initialState: PreviewSettings = {
     scale: 1,
     defaultLanguage: undefined,
     selectedLanguage: undefined,
+    reloadKey: 0,
 };
 
 const previewSlice = createSlice({
@@ -25,8 +27,11 @@ const previewSlice = createSlice({
         setDefaultLanguage(state, action: PayloadAction<string | undefined>) {
             state.defaultLanguage = action.payload;
         },
+        reloadPreview(state) {
+            state.reloadKey = state.reloadKey + 1;
+        },
     },
 });
 
-export const { setScale, setSelectedLanguage, setDefaultLanguage } = previewSlice.actions;
+export const { setScale, setSelectedLanguage, setDefaultLanguage, reloadPreview } = previewSlice.actions;
 export default previewSlice.reducer;
