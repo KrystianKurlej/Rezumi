@@ -47,7 +47,7 @@ export default function ToolBar() {
                             <Button 
                                 key={language}
                                 onClick={() => handleLanguageChange(language)}
-                                variant={selectedLanguage === language ? "default" : "outline"}
+                                variant={selectedLanguage === language ? "outline" : "secondary"}
                                 size="sm"
                             >
                                 {language === defaultLanguage ? <span>Default <bdi className="uppercase">({language})</bdi></span> : getLanguageName(language)}
@@ -56,7 +56,7 @@ export default function ToolBar() {
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <Button
-                                    variant="outline"
+                                    variant="secondary"
                                     size="icon-sm"
                                     onClick={() => dispatch(setCurrentPage('settings'))}
                                 >
