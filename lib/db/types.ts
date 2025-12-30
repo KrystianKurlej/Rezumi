@@ -68,4 +68,13 @@ export interface Settings {
     defaultCurrency: string
 }
 
+export interface DBTemplates {
+    id?: number
+    type: 'design'
+    name: string
+    description: string
+    designId: string
+    createdAt: number
+}
+
 export type StoredItem = DBExperience | DBEducation | DBCourse | DBApplication | { id: string; type?: string }

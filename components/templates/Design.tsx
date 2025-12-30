@@ -3,7 +3,8 @@ import {
   AvatarColor
 } from "@/components/ui/avatar"
 import { useAppDispatch, useAppSelector } from "@/lib/hooks"
-import { selectDesign } from "@/lib/slices/designSlice"
+import { selectDesign } from "@/lib/slices/templatesSlice"
+import { designs } from "@/lib/data/designs"
 
 interface DesignCardProps {
     id: string
@@ -11,29 +12,6 @@ interface DesignCardProps {
     title: string
     description?: string
     colors: string[]
-}
-
-export const designs = {
-    "classic": {
-        title: "Classic",
-        description: "A traditional layout with clear sections and headings.",
-        colors: ['#000000', '#555555', '#AAAAAA']
-    },
-    "modern": {
-        title: "Modern",
-        description: "A sleek design with emphasis on typography and spacing.",
-        colors: ['#1E3A8A', '#3B82F6', '#93C5FD']
-    },
-    "creative": {
-        title: "Creative",
-        description: "A visually engaging layout with unique elements.",
-        colors: ['#9D174D', '#F472B6', '#FBCFE8']
-    },
-    "minimalist": {
-        title: "Minimalist",
-        description: "A clean and simple design focusing on content.",
-        colors: ['#374151', '#6B7280', '#D1D5DB']
-    }
 }
 
 export function DesignAvatar({ designId }: { designId: string }) {
@@ -54,7 +32,7 @@ export function DesignAvatar({ designId }: { designId: string }) {
 
 function DesignCard({ id, title, description }: DesignCardProps) {
     const dispatch = useAppDispatch()
-    const selectedDesign = useAppSelector(state => state.design.selectedDesign)
+    const selectedDesign = useAppSelector(state => state.templates.selectedDesign)
 
     const handleSelect = () => {
         dispatch(selectDesign(id))
@@ -67,7 +45,7 @@ function DesignCard({ id, title, description }: DesignCardProps) {
             onClick={handleSelect}
         >
             <DesignAvatar designId={id} />
-            <span className="font-semibold">{title}</span>
+            <span className="font-semibold text-sm">{title}</span>
             {description && (
                 <p className="text-gray-600 text-sm">{description}</p>
             )}

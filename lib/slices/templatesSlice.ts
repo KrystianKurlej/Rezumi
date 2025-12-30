@@ -1,16 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppThunk } from '@/lib/store';
 
-export interface DesignState {
+export interface NewTemplate {
+    title: string;
+    description?: string;
     selectedDesign: string;
 }
 
-const initialState: DesignState = {
+const initialState: NewTemplate = {
+    title: '',
+    description: '',
     selectedDesign: 'classic',
 };
 
-const designSlice = createSlice({
-    name: 'design',
+const templatesSlice = createSlice({
+    name: 'templates',
     initialState,
     reducers: {
         setSelectedDesign(state, action: PayloadAction<string>) {
@@ -19,10 +23,10 @@ const designSlice = createSlice({
     },
 });
 
-export const { setSelectedDesign } = designSlice.actions;
+export const { setSelectedDesign } = templatesSlice.actions;
 
 export const selectDesign = (designId: string): AppThunk => async (dispatch) => {
     dispatch(setSelectedDesign(designId));
 };
 
-export default designSlice.reducer;
+export default templatesSlice.reducer;
