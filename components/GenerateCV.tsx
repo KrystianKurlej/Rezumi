@@ -29,7 +29,7 @@ Font.register({
     ],
 });
 
-const styles = StyleSheet.create({
+const classicStyles = StyleSheet.create({
     page: {
         flexDirection: 'column',
         backgroundColor: 'white',
@@ -88,13 +88,13 @@ export default function GenerateCV({
 }: GenerateCVProps) {
     return(
         <Document>
-            <Page size="A4" style={styles.page}>
-                <View style={styles.headerSection}>
+            <Page size="A4" style={classicStyles.page}>
+                <View style={classicStyles.headerSection}>
                     <View>
                         <Text>
                             {translate(lang, 'cv')}
                         </Text>
-                        <Text style={styles.title}>{personal.firstName} {personal.lastName}</Text>
+                        <Text style={classicStyles.title}>{personal.firstName} {personal.lastName}</Text>
                         {personal.email && <Text style={{ marginTop: 2 }}>{personal.email}</Text>}
                         {personal.phone && <Text style={{ marginTop: 2 }}>{personal.phone}</Text>}
                     </View>
@@ -103,13 +103,13 @@ export default function GenerateCV({
                 </View>
 
                 {experiences.length > 0 && (
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>
+                    <View style={classicStyles.section}>
+                        <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'experience')}
                         </Text>
                         {experiences.map((experience) => (
-                            <View key={experience.id} style={styles.sectionItem}>
-                                <View style={styles.sectionItemHeader}>
+                            <View key={experience.id} style={classicStyles.sectionItem}>
+                                <View style={classicStyles.sectionItemHeader}>
                                     <View style={{ flexDirection: 'row' }}>
                                         <Text style={{ fontWeight: 'bold' }}>{experience.title} </Text>
                                         <Text>- {experience.company}</Text>
@@ -123,13 +123,13 @@ export default function GenerateCV({
                 )}
 
                 {educations.length > 0 && (
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>
+                    <View style={classicStyles.section}>
+                        <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'education')}
                         </Text>
                         {educations.map((education) => (
-                            <View key={education.id} style={styles.sectionItem}>
-                                <View style={styles.sectionItemHeader}>
+                            <View key={education.id} style={classicStyles.sectionItem}>
+                                <View style={classicStyles.sectionItemHeader}>
                                     <View>
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text style={{ fontWeight: 'bold' }}>{education.degree} </Text>
@@ -146,13 +146,13 @@ export default function GenerateCV({
                 )}
 
                 {courses.length > 0 && (
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>
+                    <View style={classicStyles.section}>
+                        <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'courses_certifications')}
                         </Text>
                         {courses.map((course) => (
-                            <View key={course.id} style={styles.sectionItem}>
-                                <View style={styles.sectionItemHeader}>
+                            <View key={course.id} style={classicStyles.sectionItem}>
+                                <View style={classicStyles.sectionItemHeader}>
                                     <View>
                                         <Text style={{ fontWeight: 'bold' }}>{course.courseName}</Text>
                                         <Text style={{ marginTop: 2 }}>{course.platform}</Text>
@@ -166,9 +166,9 @@ export default function GenerateCV({
                 )}
 
                 {skills.skillsText && (
-                    <View style={styles.section}>
-                        <View style={styles.sectionHeader}>
-                            <Text style={styles.sectionTitle}>
+                    <View style={classicStyles.section}>
+                        <View style={classicStyles.sectionHeader}>
+                            <Text style={classicStyles.sectionTitle}>
                                 {translate(lang, 'skills')}
                             </Text>
                         </View>
@@ -188,8 +188,8 @@ export default function GenerateCV({
                 )}
 
                 {footer.footerText && (
-                    <View style={styles.footer}>
-                        <Text style={styles.footerText}>{footer.footerText}</Text>
+                    <View style={classicStyles.footer}>
+                        <Text style={classicStyles.footerText}>{footer.footerText}</Text>
                     </View>
                 )}
             </Page>

@@ -3,14 +3,14 @@ import type { AppThunk } from '@/lib/store';
 
 export interface NewTemplate {
     title: string;
-    description?: string;
     selectedDesign: string;
+    selectedTemplate?: string;
 }
 
 const initialState: NewTemplate = {
     title: '',
-    description: '',
     selectedDesign: 'classic',
+    selectedTemplate: 'classic',
 };
 
 const templatesSlice = createSlice({
@@ -20,13 +20,20 @@ const templatesSlice = createSlice({
         setSelectedDesign(state, action: PayloadAction<string>) {
             state.selectedDesign = action.payload;
         },
+        setSelectedTemplate(state, action: PayloadAction<string>) {
+            state.selectedTemplate = action.payload;
+        },
     },
 });
 
-export const { setSelectedDesign } = templatesSlice.actions;
+export const { setSelectedDesign, setSelectedTemplate } = templatesSlice.actions;
 
 export const selectDesign = (designId: string): AppThunk => async (dispatch) => {
     dispatch(setSelectedDesign(designId));
+};
+
+export const selectTemplate = (templateId: string): AppThunk => async (dispatch) => {
+    dispatch(setSelectedTemplate(templateId));
 };
 
 export default templatesSlice.reducer;

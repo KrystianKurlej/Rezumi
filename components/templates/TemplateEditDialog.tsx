@@ -55,7 +55,6 @@ export function TemplateEditDialog({
       
       const updatedData = {
         name: editingTemplate.name ?? template.name,
-        description: editingTemplate.description ?? template.description,
         designId: selectedDesign
       }
       

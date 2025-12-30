@@ -10,7 +10,6 @@ import {
   Item,
   ItemActions,
   ItemContent,
-  ItemDescription,
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
@@ -21,20 +20,26 @@ import { DBTemplates } from "@/lib/db/types";
 import { TemplateAddDialog } from "@/components/templates/TemplateAddDialog";
 import { TemplateEditDialog } from "@/components/templates/TemplateEditDialog";
 import { TemplateDeleteDialog } from "@/components/templates/TemplateDeleteDialog";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { selectTemplate } from "@/lib/slices/templatesSlice";
 
 interface TemplateCardProps {
   id: number | string
   title: string
-  description?: string
   designId?: string
   isDefault: boolean
   template?: DBTemplates
   onUpdate?: () => Promise<void>
 }
 
-function TemplateCard({id, title, description, designId, isDefault, template, onUpdate}: TemplateCardProps) {
+function TemplateCard({id, title, designId, isDefault, template, onUpdate}: TemplateCardProps) {
+    const dispatch = useAppDispatch()
     const [editDialogOpen, setEditDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+
+    const selectedTemplate = useAppSelector(state => {
+        return state.templates.selectedTemplate;
+    })
 
     const handleDelete = async () => {
         if (template?.id) {
@@ -42,10 +47,23 @@ function TemplateCard({id, title, description, designId, isDefault, template, on
             if (onUpdate) await onUpdate()
         }
     }
-    
+
+    const handleSelectTemplate = () => {
+        dispatch(selectTemplate(id.toString()))
+    }
+
     return (
         <>
-            <Item variant="outline" className="mb-1 cursor-pointer">
+            <Item
+                variant="outline"
+                className="mb-1 cursor-pointer items-center hover:bg-accent"
+                onClick={handleSelectTemplate}
+            >
+                {id == selectedTemplate ? (
+                    <i className="bi bi-check-circle-fill text-lg"></i>
+                ) : (
+                    <i className="bi bi-circle text-lg"></i>
+                )}
                 {designId && (
                     <ItemMedia>
                         <DesignAvatar designId={designId} />
@@ -55,14 +73,9 @@ function TemplateCard({id, title, description, designId, isDefault, template, on
                     {title && (
                         <ItemTitle>{title}</ItemTitle>
                     )}
-                    {description &&  (
-                        <ItemDescription>
-                            {description}
-                        </ItemDescription>
-                    )}
                 </ItemContent>
                 {!isDefault && template && onUpdate && (
-                    <ItemActions>
+                    <ItemActions onClick={(e) => e.stopPropagation()}>
                         <TemplateEditDialog
                             template={template}
                             open={editDialogOpen}
@@ -89,28 +102,6 @@ function TemplateCard({id, title, description, designId, isDefault, template, on
                 )}
             </Item>
         </>
-    )
-}
-
-function DefaultTemplateCard({id, title, description, designId, isDefault}: {id: number | string, title: string, description?: string, designId?: string, isDefault: boolean}) {
-    return (
-        <Item variant="outline" className="mb-1 cursor-pointer">
-            {designId && (
-                <ItemMedia>
-                    <DesignAvatar designId={designId} />
-                </ItemMedia>
-            )}
-            <ItemContent>
-                {title && (
-                    <ItemTitle>{title}</ItemTitle>
-                )}
-                {description &&  (
-                    <ItemDescription>
-                        {description}
-                    </ItemDescription>
-                )}
-            </ItemContent>
-        </Item>
     )
 }
 
@@ -146,10 +137,9 @@ export default function Templates() {
             </PageHeader>
             <div className="p-4 pb-16">
                 <div className="mb-2">
-                    <DefaultTemplateCard
-                        id="default"
+                    <TemplateCard
+                        id="classic"
                         title="Default Template"
-                        description="The standard CV template that displays all information."
                         designId="classic"
                         isDefault={true}
                     />
@@ -158,7 +148,6 @@ export default function Templates() {
                             key={template.id}
                             id={template.id!}
                             title={template.name}
-                            description={template.description}
                             designId={template.designId}
                             isDefault={false}
                             template={template}

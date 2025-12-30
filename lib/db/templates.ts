@@ -30,7 +30,7 @@ export const createTemplate = async (template: { name: string; description: stri
     })
 }
 
-export const updateTemplate = async (templateId: number, updatedData: { name: string; description: string; designId: string }): Promise<void> => {
+export const updateTemplate = async (templateId: number, updatedData: { name: string; designId: string }): Promise<void> => {
     const database = await initDB()
 
     return new Promise((resolve, reject) => {

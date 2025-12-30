@@ -72,7 +72,6 @@ export interface DBTemplates {
     id?: number
     type: 'design'
     name: string
-    description: string
     designId: string
     createdAt: number
 }

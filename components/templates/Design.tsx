@@ -20,7 +20,7 @@ export function DesignAvatar({ designId }: { designId: string }) {
     if (!design) return null
 
     return (
-        <div className="flex -space-x-3 mb-2">
+        <div className="flex -space-x-3">
             {design.colors.map((color, index) => (
                 <Avatar key={index}>
                     <AvatarColor style={{ backgroundColor: color }} />
