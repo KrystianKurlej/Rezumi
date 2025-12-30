@@ -21,7 +21,7 @@ import { TemplateAddDialog } from "@/components/templates/TemplateAddDialog";
 import { TemplateEditDialog } from "@/components/templates/TemplateEditDialog";
 import { TemplateDeleteDialog } from "@/components/templates/TemplateDeleteDialog";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
-import { selectTemplate } from "@/lib/slices/templatesSlice";
+import { selectTemplate, selectDesign } from "@/lib/slices/templatesSlice";
 
 interface TemplateCardProps {
   id: number | string
@@ -50,6 +50,7 @@ function TemplateCard({id, title, designId, isDefault, template, onUpdate}: Temp
 
     const handleSelectTemplate = () => {
         dispatch(selectTemplate(id.toString()))
+        dispatch(selectDesign(designId || 'classic'))
     }
 
     return (
