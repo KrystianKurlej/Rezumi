@@ -57,7 +57,7 @@ function TemplateCard({id, title, designId, isDefault, template, onUpdate}: Temp
         <>
             <Item
                 variant="outline"
-                className="mb-1 cursor-pointer items-center hover:bg-accent"
+                className={`mb-1 cursor-pointer items-center ${id == selectedTemplate ? 'border-primary' : 'hover:bg-accent'}`}
                 onClick={handleSelectTemplate}
             >
                 {id == selectedTemplate ? (
