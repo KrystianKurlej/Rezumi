@@ -9,6 +9,7 @@ import footerReducer from './slices/footerSlice'
 import skillsReducer from './slices/skillsSlice'
 import pagesReducer from './slices/pagesSlice'
 import settingsReducer from './slices/settingsSlice'
+import designReducer from './slices/designSlice'
 
 export const makeStore = () => {
     return configureStore({
@@ -27,6 +28,7 @@ export const makeStore = () => {
             footer: footerReducer,
             skills: skillsReducer,
             settings: settingsReducer,
+            design: designReducer,
         },
     })
 }

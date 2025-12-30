@@ -37,7 +37,7 @@ const menuItems = [
     slug: "templates",
     icon: menuIcons.templates,
     isActive: false,
-    isDisabled: true,
+    isDisabled: false,
   },
   {
     title: "Applications",
