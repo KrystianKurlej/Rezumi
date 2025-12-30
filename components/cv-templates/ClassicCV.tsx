@@ -43,44 +43,55 @@ const classicStyles = StyleSheet.create({
     },
     headerSection: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 12,
+        marginBottom: 16,
+        alignItems: 'flex-start',
+        gap: 16,
+    },
+    headerContent: {
+        flex: 1,
     },
     profilePhoto: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
+        width: 80,
+        height: 80,
         objectFit: 'cover',
-        marginBottom: 8,
     },
     title: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
-    },
-    section: {
-        marginBottom: 10
-    },
-    sectionHeader: {
         marginBottom: 4,
     },
+    contactInfo: {
+        marginTop: 6,
+        gap: 2,
+    },
+    section: {
+        marginTop: 16,
+        paddingTop: 12,
+        borderTop: '1px solid #e0e0e0',
+    },
+    sectionHeader: {
+        marginBottom: 8,
+    },
     sectionTitle: {
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: 'bold',
-        borderBottom: '1px solid gray',
-        paddingBottom: 4,
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
     },
     sectionItem: {
-        paddingTop: 6,
-        paddingBottom: 6,
-        borderBottom: '1px solid lightgray',
+        paddingTop: 8,
+        paddingBottom: 8,
     },
     sectionItemHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 4,
+        gap: 8,
     },
     footer: {
-        marginTop: 12,
+        marginTop: 20,
+        paddingTop: 12,
+        borderTop: '1px solid #e0e0e0',
     },
     footerText: {
         fontSize: 8,
@@ -101,24 +112,30 @@ export default function ClassicCV({
         <Document>
             <Page size="A4" style={classicStyles.page}>
                 <View style={classicStyles.headerSection}>
-                    <View>
-                        {personal.photo && (
-                            <Image
-                                src={personal.photo}
-                                style={classicStyles.profilePhoto}
-                            />
-                        )}
-                        <Text>
+                    {personal.photo && (
+                        <Image
+                            src={personal.photo}
+                            style={classicStyles.profilePhoto}
+                        />
+                    )}
+                    <View style={classicStyles.headerContent}>
+                        <Text style={{ fontSize: 8, color: 'gray', marginBottom: 2 }}>
                             {translate(lang, 'cv')}
                         </Text>
-                        <Text style={classicStyles.title}>{personal.firstName} {personal.lastName}</Text>
-                        {personal.aboutDescription && <Text style={{ marginTop: 6 }}>{personal.aboutDescription}</Text>}
-                        {!personal.aboutDescription && personal.phone && <Text style={{ marginTop: 2 }}>{personal.phone}</Text>}
-                        {!personal.aboutDescription && personal.email && <Text style={{ marginTop: 2 }}>{personal.email}</Text>}
-                    </View>
-                    <View>
-                        {personal.aboutDescription && personal.phone && <Text style={{ marginTop: 2 }}>{personal.phone}</Text>}
-                        {personal.aboutDescription && personal.email && <Text style={{ marginTop: 2 }}>{personal.email}</Text>}
+                        <Text style={classicStyles.title}>
+                            {personal.firstName} {personal.lastName}
+                        </Text>
+                        
+                        <View style={classicStyles.contactInfo}>
+                            {personal.email && <Text>{personal.email}</Text>}
+                            {personal.phone && <Text>{personal.phone}</Text>}
+                        </View>
+
+                        {personal.aboutDescription && (
+                            <Text style={{ marginTop: 8 }}>
+                                {personal.aboutDescription}
+                            </Text>
+                        )}
                     </View>
                 </View>
 
@@ -127,16 +144,21 @@ export default function ClassicCV({
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'experience')}
                         </Text>
-                        {experiences.map((experience) => (
+                        {experiences.map((experience, index) => (
                             <View key={experience.id} style={classicStyles.sectionItem}>
                                 <View style={classicStyles.sectionItemHeader}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{ fontWeight: 'bold' }}>{experience.title} </Text>
-                                        <Text>- {experience.company}</Text>
+                                    <View style={{ flex: 1 }}>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 11 }}>
+                                            {experience.title} · {experience.company}
+                                        </Text>
                                     </View>
-                                    <Text>{formatDate(experience.startDate, 'short')} - {experience.isOngoing ? translate(lang, 'present') : formatDate(experience.endDate, 'short')}</Text>
+                                    <Text style={{ fontSize: 9, color: 'gray', whiteSpace: 'nowrap' }}>
+                                        {formatDate(experience.startDate, 'short')} - {experience.isOngoing ? translate(lang, 'present') : formatDate(experience.endDate, 'short')}
+                                    </Text>
                                 </View>
-                                <Text>{experience.description}</Text>
+                                {experience.description && (
+                                    <Text>{experience.description}</Text>
+                                )}
                             </View>
                         ))}
                     </View>
@@ -150,16 +172,19 @@ export default function ClassicCV({
                         {educations.map((education) => (
                             <View key={education.id} style={classicStyles.sectionItem}>
                                 <View style={classicStyles.sectionItemHeader}>
-                                    <View>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ fontWeight: 'bold' }}>{education.degree} </Text>
-                                            <Text>- {education.fieldOfStudy}</Text>
-                                        </View>
-                                        <Text style={{ marginTop: 2 }}>{education.institution}</Text>
+                                    <View style={{ flex: 1 }}>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 11 }}>
+                                            {education.degree} · {education.fieldOfStudy}
+                                        </Text>
+                                        <Text style={{ marginTop: 2, fontSize: 10 }}>{education.institution}</Text>
                                     </View>
-                                    <Text>{formatDate(education.startDate, 'short')} - {education.isOngoing ? translate(lang, 'present') : formatDate(education.endDate, 'short')}</Text>
+                                    <Text style={{ fontSize: 9, color: 'gray', whiteSpace: 'nowrap' }}>
+                                        {formatDate(education.startDate, 'short')} - {education.isOngoing ? translate(lang, 'present') : formatDate(education.endDate, 'short')}
+                                    </Text>
                                 </View>
-                                <Text>{education.description}</Text>
+                                {education.description && (
+                                    <Text>{education.description}</Text>
+                                )}
                             </View>
                         ))}
                     </View>
@@ -173,13 +198,17 @@ export default function ClassicCV({
                         {courses.map((course) => (
                             <View key={course.id} style={classicStyles.sectionItem}>
                                 <View style={classicStyles.sectionItemHeader}>
-                                    <View>
-                                        <Text style={{ fontWeight: 'bold' }}>{course.courseName}</Text>
-                                        <Text style={{ marginTop: 2 }}>{course.platform}</Text>
+                                    <View style={{ flex: 1 }}>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 11 }}>{course.courseName}</Text>
+                                        <Text style={{ marginTop: 2, fontSize: 10 }}>{course.platform}</Text>
                                     </View>
-                                    <Text>{course.isOngoing ? translate(lang, 'in_progress') : `${translate(lang, 'completed')}: ${formatDate(course.completionDate, 'short')}`}</Text>
+                                    <Text style={{ fontSize: 9, color: 'gray', whiteSpace: 'nowrap' }}>
+                                        {course.isOngoing ? translate(lang, 'in_progress') : `${translate(lang, 'completed')}: ${formatDate(course.completionDate, 'short')}`}
+                                    </Text>
                                 </View>
-                                {course.description && <Text>{course.description}</Text>}
+                                {course.description && (
+                                    <Text>{course.description}</Text>
+                                )}
                             </View>
                         ))}
                     </View>
@@ -187,23 +216,23 @@ export default function ClassicCV({
 
                 {skills.skillsText && (
                     <View style={classicStyles.section}>
-                        <View style={classicStyles.sectionHeader}>
-                            <Text style={classicStyles.sectionTitle}>
-                                {translate(lang, 'skills')}
-                            </Text>
+                        <Text style={classicStyles.sectionTitle}>
+                            {translate(lang, 'skills')}
+                        </Text>
+                        <View style={{ marginTop: 8 }}>
+                            {formatRichText(skills.skillsText).map((segment, index) => (
+                                <Text
+                                    key={index}
+                                    style={{
+                                        marginBottom: 1,
+                                        fontWeight: segment.bold ? 'bold' : 'normal',
+                                        fontStyle: segment.italic ? 'italic' : 'normal',
+                                    }}
+                                >
+                                    {segment.text}
+                                </Text>
+                            ))}
                         </View>
-                        {formatRichText(skills.skillsText).map((segment, index) => (
-                            <Text
-                                key={index}
-                                style={{
-                                    marginBottom: 1,
-                                    fontWeight: segment.bold ? 'bold' : 'normal',
-                                    fontStyle: segment.italic ? 'italic' : 'normal',
-                                }}
-                            >
-                                {segment.text}
-                            </Text>
-                        ))}
                     </View>
                 )}
 
