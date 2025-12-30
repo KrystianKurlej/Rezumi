@@ -30,6 +30,45 @@ export const createTemplate = async (template: { name: string; description: stri
     })
 }
 
+export const updateTemplate = async (templateId: number, updatedData: { name: string; description: string; designId: string }): Promise<void> => {
+    const database = await initDB()
+
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+
+        const getRequest = store.get(templateId)
+
+        getRequest.onsuccess = () => {
+            const existingTemplate = getRequest.result
+
+            if (!existingTemplate) {
+                reject('Template not found')
+                return
+            }
+
+            const updatedTemplate = {
+                ...existingTemplate,
+                ...updatedData,
+            }
+
+            const putRequest = store.put(updatedTemplate)
+
+            putRequest.onsuccess = () => {
+                resolve()
+            }
+
+            putRequest.onerror = () => {
+                reject('Failed to update template')
+            }
+        }
+
+        getRequest.onerror = () => {
+            reject('Failed to retrieve template')
+        }
+    })
+}
+
 export const deleteTemplate = async (templateId: number): Promise<void> => {
     const database = await initDB()
 
