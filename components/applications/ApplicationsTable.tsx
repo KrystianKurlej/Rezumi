@@ -29,7 +29,8 @@ import { ApplicationEditDialog } from "./application/ApplicationEditDialog"
 import { ApplicationDeleteDialog } from "./application/ApplicationDeleteDialog"
 import { ApplicationNotesDialog } from "./application/ApplicationNotesDialog"
 import { ApplicationAddNewDialog } from "./application/ApplicationAddNewDialog"
-import { getAllApplications, deleteApplication as deleteApplicationFromDB, type DBApplication } from '@/lib/db'
+import { getAllApplications, deleteApplication as deleteApplicationFromDB } from '@/lib/db/applications'
+import { DBApplication } from '@/lib/db/types'
 import { formatDate } from '@/lib/utils'
 import { handleDownloadPDF } from "../pages/Export"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group"

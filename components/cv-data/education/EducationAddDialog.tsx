@@ -3,7 +3,8 @@
 import { useState, ReactNode, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { NewEducation, updateNewEducation, addEducation, resetNewEducation, setLoading } from '@/lib/slices/educationSlice'
-import { addEducation as addEducationToDB, type DBEducation } from '@/lib/db'
+import { addEducation as addEducationToDB } from '@/lib/db/educations'
+import { DBEducation } from '@/lib/db/types'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,

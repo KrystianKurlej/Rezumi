@@ -3,7 +3,7 @@
 import { useState, ReactNode } from 'react'
 import { useAppDispatch, useAppSelector, useDefaultCurrency } from '@/lib/hooks'
 import { NewApplication, updateNewApplication, resetNewApplication } from '@/lib/slices/applicationsSlice'
-import { addApplication as addApplicationToDB } from '@/lib/db'
+import { addApplication as addApplicationToDB } from '@/lib/db/applications'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,

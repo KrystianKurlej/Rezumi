@@ -22,7 +22,8 @@ import { menuIcons } from "@/components/AppSidebar";
 import { pdf } from '@react-pdf/renderer';
 import GenerateCV from '@/components/GenerateCV';
 import { Input } from '@/components/ui/input';
-import { addApplication as addApplicationToDB, type DBExperience, type DBEducation, type DBCourse } from '@/lib/db'
+import { addApplication as addApplicationToDB } from '@/lib/db/applications'
+import { DBExperience, DBEducation, DBCourse } from '@/lib/db/types'
 import { type PersonalInfo } from '@/lib/slices/personalSlice'
 import { type Skills } from '@/lib/slices/skillsSlice'
 import { type Footer } from '@/lib/slices/footerSlice'

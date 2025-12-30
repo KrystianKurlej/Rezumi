@@ -3,7 +3,8 @@
 import { useState, ReactNode, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { NewExperience, updateNewExperience, addExperience, resetNewExperience, setLoading } from '@/lib/slices/experienceSlice'
-import { addExperience as addExperienceToDB, type DBExperience } from '@/lib/db'
+import { addExperience as addExperienceToDB } from '@/lib/db/experiences'
+import { DBExperience } from '@/lib/db/types'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,

@@ -3,7 +3,8 @@
 import { useState, ReactNode, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { NewCourse, updateNewCourse, addCourse, resetNewCourse, setLoading } from '@/lib/slices/coursesSlice'
-import { addCourse as addCourseToDB, type DBCourse } from '@/lib/db'
+import { addCourse as addCourseToDB } from '@/lib/db/courses'
+import { DBCourse } from '@/lib/db/types'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
