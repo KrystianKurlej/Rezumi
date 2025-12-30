@@ -34,8 +34,9 @@ const minimalisticStyles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: 'white',
         padding: 40,
-        fontSize: 11,
+        fontSize: 10,
         fontFamily: 'Roboto',
+        fontWeight: 'light',
     },
     headerSection: {
         marginBottom: 20,
@@ -85,7 +86,7 @@ const minimalisticStyles = StyleSheet.create({
         marginTop: 12,
     },
     footerText: {
-        fontSize: 9,
+        fontSize: 8,
         color: 'gray',
         textAlign: 'center',
     },
@@ -114,6 +115,11 @@ export default function MinimalisticCV({
                             {personal.email && <Text style={{ marginTop: 2 }}>{personal.email}</Text>}
                             {personal.phone && <Text style={{ marginTop: 2 }}>{personal.phone}</Text>}
                         </View>
+                        {personal.aboutDescription && (
+                            <View style={minimalisticStyles.columnSection}>
+                                <Text style={{ marginBottom: 4 }}>{personal.aboutDescription}</Text>
+                            </View>
+                        )}
                         {skills.skillsText && (
                             <View style={minimalisticStyles.columnSection}>
                                 <Text style={minimalisticStyles.sectionTitle}>

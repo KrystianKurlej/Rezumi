@@ -16,12 +16,13 @@ import { getLanguageName } from "@/lib/utils";
 import { useAppSelector } from "@/lib/hooks";
 import { InputGroupAddon, InputGroupButton } from "../ui/input-group";
 
-export function InputHint({ children, onClick }: { 
+export function InputHint({ children, onClick, variant }: { 
     children: React.ReactNode; 
     onClick: () => void;
+    variant?: "short" | "full";
 }) {
     return (
-        <InputGroupAddon align="inline-end" className="max-w-[50%]">
+        <InputGroupAddon align="inline-end" className={variant === "full" ? "max-w-[100%]" : "max-w-[50%]"}>
             <InputGroupButton
                 variant="secondary"
                 onClick={onClick}

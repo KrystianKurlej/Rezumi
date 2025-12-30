@@ -38,9 +38,8 @@ const classicStyles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: 'white',
         padding: 40,
-        fontSize: 11,
+        fontSize: 10,
         fontFamily: 'Roboto',
-        fontWeight: 'light',
     },
     headerSection: {
         flexDirection: 'row',
@@ -77,7 +76,7 @@ const classicStyles = StyleSheet.create({
         marginTop: 12,
     },
     footerText: {
-        fontSize: 9,
+        fontSize: 8,
         color: 'gray',
     },
 });
@@ -100,10 +99,13 @@ export default function ClassicCV({
                             {translate(lang, 'cv')}
                         </Text>
                         <Text style={classicStyles.title}>{personal.firstName} {personal.lastName}</Text>
-                        {personal.email && <Text style={{ marginTop: 2 }}>{personal.email}</Text>}
-                        {personal.phone && <Text style={{ marginTop: 2 }}>{personal.phone}</Text>}
+                        {personal.aboutDescription && <Text style={{ marginTop: 6 }}>{personal.aboutDescription}</Text>}
+                        {!personal.aboutDescription && personal.phone && <Text style={{ marginTop: 2 }}>{personal.phone}</Text>}
+                        {!personal.aboutDescription && personal.email && <Text style={{ marginTop: 2 }}>{personal.email}</Text>}
                     </View>
                     <View>
+                        {personal.aboutDescription && personal.phone && <Text style={{ marginTop: 2 }}>{personal.phone}</Text>}
+                        {personal.aboutDescription && personal.email && <Text style={{ marginTop: 2 }}>{personal.email}</Text>}
                     </View>
                 </View>
 

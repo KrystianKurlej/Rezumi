@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { InputHint } from '../pages/CvData'
 import { InputGroup, InputGroupInput } from '../ui/input-group'
+import { Textarea } from "@/components/ui/textarea"
 
 export default function PersonalForm() {
     const dispatch = useAppDispatch()
@@ -28,7 +29,8 @@ export default function PersonalForm() {
         firstName: personal.firstName || '',
         lastName: personal.lastName || '',
         email: personal.email || '',
-        phone: personal.phone || ''
+        phone: personal.phone || '',
+        aboutDescription: personal.aboutDescription || ''
     })
     const [isSaving, setIsSaving] = useState(false)
     const [defaultLanguageData, setDefaultLanguageData] = useState<PersonalInfo | null>(null)
@@ -44,7 +46,8 @@ export default function PersonalForm() {
                         firstName: data.firstName || '',
                         lastName: data.lastName || '',
                         email: data.email || '',
-                        phone: data.phone || ''
+                        phone: data.phone || '',
+                        aboutDescription: data.aboutDescription || ''
                     })
                 }
             })
@@ -59,7 +62,8 @@ export default function PersonalForm() {
             firstName: personal.firstName || '',
             lastName: personal.lastName || '',
             email: personal.email || '',
-            phone: personal.phone || ''
+            phone: personal.phone || '',
+            aboutDescription: personal.aboutDescription || ''
         })
     }, [personal])
 
@@ -200,6 +204,30 @@ export default function PersonalForm() {
                             </InputGroup>
                         </Field>
                     </div>
+                    <Field>
+                        <FieldLabel htmlFor="aboutDescription">
+                            About
+                        </FieldLabel>
+                        <Textarea
+                            id="aboutDescription"
+                            value={localPersonal.aboutDescription}
+                            onChange={(e) => setLocalPersonal(prev => ({
+                                ...prev,
+                                aboutDescription: e.target.value
+                            }))}
+                            placeholder='A brief summary about yourself...'
+                        />
+                        {getDefaultLanguageHint('aboutDescription') && (
+                            <InputHint variant="full" onClick={() => {
+                                setLocalPersonal(prev => ({
+                                    ...prev,
+                                    aboutDescription: getDefaultLanguageHint('aboutDescription') || ''
+                                }))
+                            }}>
+                                {getDefaultLanguageHint('aboutDescription')}
+                            </InputHint>
+                        )}
+                    </Field>
                     <Button
                         onClick={handleSave}
                         disabled={isSaving}
