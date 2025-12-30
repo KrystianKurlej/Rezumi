@@ -86,7 +86,7 @@ export default function Applications() {
                     Save snapshots of your CV for specific job applications and keep track of what you’ve sent.
                 </PageHeaderDescription>
             </PageHeader>
-            <div className="p-4">
+            <div className="p-4 pb-16">
                 {!hasApplications ? (
                     <Empty>
                         <EmptyHeader>

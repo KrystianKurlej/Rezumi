@@ -150,7 +150,7 @@ export default function Export() {
                         Create a PDF version of your CV and save it together with job details, so you always know what you sent and where.
                     </PageHeaderDescription>
                 </PageHeader>
-                <div className="p-4 pb-12">
+                <div className="p-4 pb-16">
                     <FieldGroup>
                         <FieldSet>
                             <div>

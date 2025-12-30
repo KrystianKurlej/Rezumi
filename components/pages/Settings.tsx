@@ -172,7 +172,7 @@ export default function Settings() {
                     Manage your application settings here.
                 </PageHeaderDescription>
             </PageHeader>
-            <div className="p-4">
+            <div className="p-4 pb-16">
                 <SettingsSection
                     title="Default Language"
                     description="Set your preferred default language for your CV. This will be the base language used when creating translated versions."

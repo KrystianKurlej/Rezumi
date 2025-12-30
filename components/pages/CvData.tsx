@@ -47,7 +47,7 @@ export default function CvData() {
                     Set up your core CV information. Add experience, skills, education, and personal details once and reuse them everywhere.
                 </PageHeaderDescription>
             </PageHeader>
-            <div className="p-2 pb-10">
+            <div className="p-2 pb-16">
                 {selectedLanguage && (
                     <p className="text-xs text-gray-600 px-3 py-2">
                         <i className="bi bi-info-circle mr-1"></i>

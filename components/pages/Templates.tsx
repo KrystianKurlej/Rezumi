@@ -144,7 +144,7 @@ export default function Templates() {
                     Create different CV versions by choosing the layout and deciding what to show, hide, or rewrite for specific roles.
                 </PageHeaderDescription>
             </PageHeader>
-            <div className="p-4">
+            <div className="p-4 pb-16">
                 <div className="mb-2">
                     <DefaultTemplateCard
                         id="default"
