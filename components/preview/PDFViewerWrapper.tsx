@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useAppSelector } from '@/lib/hooks'
 import type { PersonalInfo } from '@/lib/slices/personalSlice'
 import type { DBExperience, DBEducation, DBCourse } from '@/lib/db'
 import type { Skills } from '@/lib/slices/skillsSlice'
 import type { Footer } from '@/lib/slices/footerSlice'
+import { loadCVTemplate, type CVTemplateProps } from '@/components/cv-templates'
 
 interface PDFViewerWrapperProps {
     lang: string
@@ -17,8 +19,9 @@ interface PDFViewerWrapperProps {
 }
 
 interface PDFClient {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     PDFViewer: React.ComponentType<any>
-    GenerateCV: React.ComponentType<any>
+    CVTemplate: React.ComponentType<CVTemplateProps>
 }
 
 export default function PDFViewerWrapper({
@@ -31,30 +34,31 @@ export default function PDFViewerWrapper({
     footer
 }: PDFViewerWrapperProps) {
     const [Client, setClient] = useState<PDFClient | null>(null)
+    const currentDesignId = useAppSelector((state) => state.templates.currentDesignId)
 
     useEffect(() => {
         const loadPDF = async () => {
             const { PDFViewer } = await import('@react-pdf/renderer')
-            const GenerateCV = (await import('../GenerateCV')).default
+            const CVTemplate = await loadCVTemplate(currentDesignId || 'classic')
             
             setClient({
                 PDFViewer,
-                GenerateCV
+                CVTemplate
             })
         }
         
         loadPDF()
-    }, [])
+    }, [currentDesignId])
 
     if (!Client) {
         return <div className="flex-1"></div>
     }
 
-    const { PDFViewer, GenerateCV } = Client
+    const { PDFViewer, CVTemplate } = Client
 
     return (
-        <PDFViewer className='w-full h-full' showToolbar={false}>
-            <GenerateCV
+        <PDFViewer key={currentDesignId} className='w-full h-full' showToolbar={false}>
+            <CVTemplate
                 lang={lang}
                 personal={personal}
                 experiences={experiences}
