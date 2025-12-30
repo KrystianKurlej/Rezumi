@@ -16,6 +16,12 @@ export default function ToolBar() {
         dispatch(setSelectedLanguage(language));
     };
 
+    const sortedLanguages = [...availableLanguages].sort((a, b) => {
+        if (a === defaultLanguage) return -1;
+        if (b === defaultLanguage) return 1;
+        return getLanguageName(a).localeCompare(getLanguageName(b));
+    });
+
     return (
         <div className="bg-sidebar p-1 text-sm border-t flex items-center justify-between text-gray-600">
             <div>
@@ -37,7 +43,7 @@ export default function ToolBar() {
             {availableLanguages.length > 0 ? (
                 <div className="flex items-center gap-1">
                     <ButtonGroup>
-                        {availableLanguages.map((language) => (
+                        {sortedLanguages.map((language) => (
                             <Button 
                                 key={language}
                                 onClick={() => handleLanguageChange(language)}
