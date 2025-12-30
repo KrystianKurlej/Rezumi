@@ -28,7 +28,6 @@ import { setCurrentPage } from '@/lib/slices/pagesSlice'
 import { selectTemplate, setCurrentDesignId } from '@/lib/slices/templatesSlice'
 import { menuIcons } from "@/components/AppSidebar";
 import { pdf } from '@react-pdf/renderer';
-import GenerateCV from '@/components/GenerateCV';
 import { Input } from '@/components/ui/input';
 import { addApplication as addApplicationToDB } from '@/lib/db/applications'
 import { DBExperience, DBEducation, DBCourse } from '@/lib/db/types'
@@ -48,11 +47,16 @@ interface DownloadPDFProps {
     footer: Footer;
     filename: string;
     lang: string;
+    designId?: string; // ID designu do użycia
 }
 
-export const handleDownloadPDF = async ({ personal, experiences, educations, courses, skills, footer, filename, lang }: DownloadPDFProps) => {
+export const handleDownloadPDF = async ({ personal, experiences, educations, courses, skills, footer, filename, lang, designId }: DownloadPDFProps) => {
+    // Dynamicznie ładuj szablon na podstawie designId
+    const { loadCVTemplate } = await import('@/components/cv-templates')
+    const CVTemplate = await loadCVTemplate(designId || 'classic')
+    
     const blob = await pdf(
-        <GenerateCV 
+        <CVTemplate 
             personal={personal}
             experiences={experiences}
             educations={educations}
@@ -140,7 +144,17 @@ export default function Export() {
         setLoading(true)
         
         try {
-            await handleDownloadPDF({ personal, experiences, educations, courses, skills, footer, filename, lang: selectedLanguage || defaultLanguage || 'en' })
+            await handleDownloadPDF({ 
+                personal, 
+                experiences, 
+                educations, 
+                courses, 
+                skills, 
+                footer, 
+                filename, 
+                lang: selectedLanguage || defaultLanguage || 'en',
+                designId: currentDesignId || 'classic'
+            })
         } catch (error) {
             console.error('Error downloading PDF:', error)
         } finally {
@@ -152,7 +166,17 @@ export default function Export() {
         setLoading(true)
         
         try {
-            await handleDownloadPDF({ personal, experiences, educations, courses, skills, footer, filename, lang: selectedLanguage || defaultLanguage || 'en' })
+            await handleDownloadPDF({ 
+                personal, 
+                experiences, 
+                educations, 
+                courses, 
+                skills, 
+                footer, 
+                filename, 
+                lang: selectedLanguage || defaultLanguage || 'en',
+                designId: currentDesignId || 'classic'
+            })
             
             const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null
             
@@ -166,6 +190,7 @@ export default function Export() {
                 status: 'submitted',
                 cvData: {
                     languageId,
+                    designId: currentDesignId || 'classic', // Zapisz designId
                     personal,
                     experiences,
                     educations,

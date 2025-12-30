@@ -1,5 +1,6 @@
 export interface DBCVData {
     languageId: string | null
+    designId?: string // ID designu szablonu używanego do wygenerowania CV
     personal: { firstName: string; lastName: string; email: string; phone: string }
     experiences: DBExperience[]
     educations: DBEducation[]
