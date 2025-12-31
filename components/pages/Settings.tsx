@@ -38,9 +38,9 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 
-function SettingsSection({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
+function SettingsSection({ title, description, children, className }: { title: string; description: string; children: React.ReactNode; className?: string }) {
     return (
-        <div>
+        <div className={className}>
             <h2 className="font-semibold">{title}</h2>
             <p className="text-sm text-gray-600">{description}</p>
             <div className="mt-3">{children}</div>
@@ -314,138 +314,140 @@ export default function Settings() {
                     </div>
                 </SettingsSection>
                 <Separator className="my-6" />
-                <SettingsSection
-                    title="Export your data"
-                    description="You can export all your CV data as a JSON file for backup or transfer purposes."
-                >
-                    <Button
-                        variant="outline"
-                        onClick={handleExportData}
-                        className="w-64"
+                <div className="grid grid-cols-3">
+                    <SettingsSection
+                        title="Export your data"
+                        description="You can export all your CV data as a JSON file for backup or transfer purposes."
+                        className="pr-6 border-r"
                     >
-                        Download your data
-                        <i className="bi bi-file-earmark-arrow-down"></i>
-                    </Button>
-                </SettingsSection>
-                <Separator className="my-6" />
-                <SettingsSection
-                    title="Import data"
-                    description="Import your CV data from a previously exported JSON file."
-                >
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="outline" className="w-64">
-                                Import data
-                                <i className="bi bi-file-earmark-arrow-up"></i>
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Import CV Data</DialogTitle>
-                                <DialogDescription>
-                                    <strong>This will overwrite your current data</strong>, so please make sure to back up any important information before proceeding.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <InputGroup className="my-4">
-                                <InputGroupInput
-                                    type="file"
-                                    accept="application/json"
-                                    onChange={async (e) => {
-                                        const file = e.target.files?.[0];
-                                        if (!file) return;
-
-                                        const text = await file.text();
-                                        try {
-                                            await importDB(text);
-                                            setIsImportSuccessOpen(true);
-                                        } catch (error) {
-                                            console.error("Error importing data:", error);
-                                            setIsImportErrorOpen(true);
-                                        }
-                                    }}
-                                />
-                                <InputGroupAddon>
+                        <Button
+                            variant="outline"
+                            onClick={handleExportData}
+                            className="w-64"
+                        >
+                            Download your data
+                            <i className="bi bi-file-earmark-arrow-down"></i>
+                        </Button>
+                    </SettingsSection>
+                    <SettingsSection
+                        title="Import data"
+                        description="Import your CV data from a previously exported JSON file."
+                        className="px-6 border-r"
+                    >
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="outline" className="w-64">
+                                    Import data
                                     <i className="bi bi-file-earmark-arrow-up"></i>
-                                </InputGroupAddon>
-                            </InputGroup>
-                            <DialogFooter>
-                                <DialogClose asChild>
-                                    <Button variant="outline">Cancel</Button>
-                                </DialogClose>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                    <Dialog open={isImportErrorOpen} onOpenChange={setIsImportErrorOpen}>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Something went wrong</DialogTitle>
-                                <DialogDescription>
-                                    Import of your data failed. Please make sure you are using a valid JSON export file from this application and try again.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                                <DialogClose asChild>
-                                    <Button variant="outline">Close</Button>
-                                </DialogClose>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                    <Dialog open={isImportSuccessOpen} onOpenChange={setIsImportSuccessOpen}>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Import Successful!</DialogTitle>
-                                <DialogDescription>
-                                    Your data has been imported successfully. Please reload the page to see the changes.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                                <Button onClick={() => window.location.reload()}>
-                                    Reload Page
                                 </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                </SettingsSection>
-                <Separator className="my-6" />
-                <SettingsSection
-                    title="Remove all data"
-                    description="If you want to start fresh, you can remove all your CV data from the application."
-                >
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="outline" className="w-64">
-                                Remove all data
-                                <i className="bi bi-trash"></i>
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Remove All Data?</DialogTitle>
-                                <DialogDescription>
-                                    Are you sure you want to remove all your CV data? This action cannot be undone.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                                <DialogClose asChild>
-                                    <Button variant="outline">
-                                        Cancel
-                                    </Button>
-                                </DialogClose>
-                                <DialogClose asChild>
-                                    <Button 
-                                        variant="destructive"
-                                        onClick={async () => {
-                                            await importDB('{"cvData":[],"templates":[],"settings":{}}');
-                                            window.location.reload();
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Import CV Data</DialogTitle>
+                                    <DialogDescription>
+                                        <strong>This will overwrite your current data</strong>, so please make sure to back up any important information before proceeding.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <InputGroup className="my-4">
+                                    <InputGroupInput
+                                        type="file"
+                                        accept="application/json"
+                                        onChange={async (e) => {
+                                            const file = e.target.files?.[0];
+                                            if (!file) return;
+                                            const text = await file.text();
+                                            try {
+                                                await importDB(text);
+                                                setIsImportSuccessOpen(true);
+                                            } catch (error) {
+                                                console.error("Error importing data:", error);
+                                                setIsImportErrorOpen(true);
+                                            }
                                         }}
-                                    >
-                                        Remove all data
+                                    />
+                                    <InputGroupAddon>
+                                        <i className="bi bi-file-earmark-arrow-up"></i>
+                                    </InputGroupAddon>
+                                </InputGroup>
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button variant="outline">Cancel</Button>
+                                    </DialogClose>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                        <Dialog open={isImportErrorOpen} onOpenChange={setIsImportErrorOpen}>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Something went wrong</DialogTitle>
+                                    <DialogDescription>
+                                        Import of your data failed. Please make sure you are using a valid JSON export file from this application and try again.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button variant="outline">Close</Button>
+                                    </DialogClose>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                        <Dialog open={isImportSuccessOpen} onOpenChange={setIsImportSuccessOpen}>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Import Successful!</DialogTitle>
+                                    <DialogDescription>
+                                        Your data has been imported successfully. Please reload the page to see the changes.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <Button onClick={() => window.location.reload()}>
+                                        Reload Page
                                     </Button>
-                                </DialogClose>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                </SettingsSection>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                    </SettingsSection>
+                    <SettingsSection
+                        title="Remove all data"
+                        description="If you want to start fresh, you can remove all your CV data from the application."
+                        className="pl-6"
+                    >
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="outline" className="w-64">
+                                    Remove all data
+                                    <i className="bi bi-trash"></i>
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Remove All Data?</DialogTitle>
+                                    <DialogDescription>
+                                        Are you sure you want to remove all your CV data? This action cannot be undone.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button variant="outline">
+                                            Cancel
+                                        </Button>
+                                    </DialogClose>
+                                    <DialogClose asChild>
+                                        <Button
+                                            variant="destructive"
+                                            onClick={async () => {
+                                                await importDB('{"cvData":[],"templates":[],"settings":{}}');
+                                                window.location.reload();
+                                            }}
+                                        >
+                                            Remove all data
+                                        </Button>
+                                    </DialogClose>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                    </SettingsSection>
+                </div>
             </div>
         </ScrollArea>
     )
