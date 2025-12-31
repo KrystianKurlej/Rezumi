@@ -5,6 +5,7 @@ import { PersonalInfo } from '@/lib/slices/personalSlice';
 import { DBExperience, DBEducation, DBCourse } from '@/lib/db';
 import { Skills } from '@/lib/slices/skillsSlice';
 import { Footer } from '@/lib/slices/footerSlice';
+import { Freelance } from '@/lib/slices/freelanceSlice';
 
 export interface CVTemplateProps {
     lang: string;
@@ -13,6 +14,7 @@ export interface CVTemplateProps {
     educations: DBEducation[];
     courses: DBCourse[];
     skills: Skills;
+    freelance: Freelance;
     footer: Footer;
 }
 
@@ -106,6 +108,7 @@ export default function ClassicCV({
     educations,
     courses,
     skills,
+    freelance,
     footer
 }: CVTemplateProps) {
     return (
@@ -144,7 +147,7 @@ export default function ClassicCV({
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'experience')}
                         </Text>
-                        {experiences.map((experience, index) => (
+                        {experiences.map((experience) => (
                             <View key={experience.id} style={classicStyles.sectionItem}>
                                 <View style={classicStyles.sectionItemHeader}>
                                     <View style={{ flex: 1 }}>
@@ -221,6 +224,28 @@ export default function ClassicCV({
                         </Text>
                         <View style={{ marginTop: 8 }}>
                             {formatRichText(skills.skillsText).map((segment, index) => (
+                                <Text
+                                    key={index}
+                                    style={{
+                                        marginBottom: 1,
+                                        fontWeight: segment.bold ? 'bold' : 'normal',
+                                        fontStyle: segment.italic ? 'italic' : 'normal',
+                                    }}
+                                >
+                                    {segment.text}
+                                </Text>
+                            ))}
+                        </View>
+                    </View>
+                )}
+
+                {freelance.freelanceText && (
+                    <View style={classicStyles.section}>
+                        <Text style={classicStyles.sectionTitle}>
+                            {translate(lang, 'freelance')}
+                        </Text>
+                        <View style={{ marginTop: 8 }}>
+                            {formatRichText(freelance.freelanceText).map((segment, index) => (
                                 <Text
                                     key={index}
                                     style={{

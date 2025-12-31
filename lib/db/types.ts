@@ -12,6 +12,7 @@ export interface DBCVData {
     educations: DBEducation[]
     courses: DBCourse[]
     skills: { skillsText: string }
+    freelance: { freelanceText: string }
     footer: { footerText: string }
 }
 

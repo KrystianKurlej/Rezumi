@@ -7,6 +7,7 @@ import { newCourseReducer, coursesReducer } from './slices/coursesSlice'
 import { newApplicationReducer, applicationsReducer } from './slices/applicationsSlice'
 import footerReducer from './slices/footerSlice'
 import skillsReducer from './slices/skillsSlice'
+import freelanceReducer from './slices/freelanceSlice'
 import pagesReducer from './slices/pagesSlice'
 import settingsReducer from './slices/settingsSlice'
 import templatesReducer from './slices/templatesSlice'
@@ -27,6 +28,7 @@ export const makeStore = () => {
             applications: applicationsReducer,
             footer: footerReducer,
             skills: skillsReducer,
+            freelance: freelanceReducer,
             settings: settingsReducer,
             templates: templatesReducer,
         },

@@ -37,6 +37,7 @@ import { type Footer } from '@/lib/slices/footerSlice'
 import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, DialogTitle } from '../ui/dialog';
 import { getAllTemplates } from '@/lib/db/templates';
 import { DBTemplates } from '@/lib/db/types';
+import { type Freelance } from '@/lib/slices/freelanceSlice';
 
 interface DownloadPDFProps {
     personal: PersonalInfo;
@@ -44,13 +45,14 @@ interface DownloadPDFProps {
     educations: DBEducation[];
     courses: DBCourse[];
     skills: Skills;
+    freelance: Freelance;
     footer: Footer;
     filename: string;
     lang: string;
     designId?: string; // ID designu do użycia
 }
 
-export const handleDownloadPDF = async ({ personal, experiences, educations, courses, skills, footer, filename, lang, designId }: DownloadPDFProps) => {
+export const handleDownloadPDF = async ({ personal, experiences, educations, courses, skills, freelance, footer, filename, lang, designId }: DownloadPDFProps) => {
     // Dynamicznie ładuj szablon na podstawie designId
     const { loadCVTemplate } = await import('@/components/cv-templates')
     const CVTemplate = await loadCVTemplate(designId || 'classic')
@@ -62,6 +64,7 @@ export const handleDownloadPDF = async ({ personal, experiences, educations, cou
             educations={educations}
             courses={courses}
             skills={skills}
+            freelance={freelance}
             footer={footer}
             lang={lang}
         />
@@ -97,6 +100,7 @@ export default function Export() {
     const educations = useAppSelector(state => state.educations.list)
     const courses = useAppSelector(state => state.courses.list)
     const skills = useAppSelector(state => state.skills)
+    const freelance = useAppSelector(state => state.freelance)
     const footer = useAppSelector(state => state.footer)
     const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
     const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
@@ -149,7 +153,8 @@ export default function Export() {
                 experiences, 
                 educations, 
                 courses, 
-                skills, 
+                skills,
+                freelance,
                 footer, 
                 filename, 
                 lang: selectedLanguage || defaultLanguage || 'en',
@@ -171,7 +176,8 @@ export default function Export() {
                 experiences, 
                 educations, 
                 courses, 
-                skills, 
+                skills,
+                freelance,
                 footer, 
                 filename, 
                 lang: selectedLanguage || defaultLanguage || 'en',
@@ -196,6 +202,7 @@ export default function Export() {
                     educations,
                     courses,
                     skills,
+                    freelance,
                     footer
                 }
             })

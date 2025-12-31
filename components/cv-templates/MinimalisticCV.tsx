@@ -107,6 +107,7 @@ export default function MinimalisticCV({
     educations,
     courses,
     skills,
+    freelance,
     footer
 }: CVTemplateProps) {
     return (
@@ -200,6 +201,25 @@ export default function MinimalisticCV({
                                         </View>
                                         {course.description && <Text>{course.description}</Text>}
                                     </View>
+                                ))}
+                            </View>
+                        )}
+                        {freelance.freelanceText && (
+                            <View style={minimalisticStyles.columnSection}>
+                                <Text style={minimalisticStyles.sectionTitle}>
+                                    {translate(lang, 'freelance')}
+                                </Text>
+                                {formatRichText(freelance.freelanceText).map((segment, index) => (
+                                    <Text
+                                        key={index}
+                                        style={{
+                                            marginBottom: 1,
+                                            fontWeight: segment.bold ? 'bold' : 'normal',
+                                            fontStyle: segment.italic ? 'italic' : 'normal',
+                                        }}
+                                    >
+                                        {segment.text}
+                                    </Text>
                                 ))}
                             </View>
                         )}

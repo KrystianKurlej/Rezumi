@@ -21,6 +21,7 @@ export default function Preview() {
     const educations = useAppSelector(state => state.educations.list)
     const courses = useAppSelector(state => state.courses.list)
     const skills = useAppSelector(state => state.skills)
+    const freelance = useAppSelector(state => state.freelance)
     const footer = useAppSelector(state => state.footer)
 
     return(
@@ -32,6 +33,7 @@ export default function Preview() {
             educations={educations}
             courses={courses}
             skills={skills}
+            freelance={freelance}
             footer={footer}
         />
     )

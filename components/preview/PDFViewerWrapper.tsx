@@ -7,6 +7,7 @@ import type { DBExperience, DBEducation, DBCourse } from '@/lib/db'
 import type { Skills } from '@/lib/slices/skillsSlice'
 import type { Footer } from '@/lib/slices/footerSlice'
 import { loadCVTemplate, type CVTemplateProps } from '@/components/cv-templates'
+import { Freelance } from '@/lib/slices/freelanceSlice'
 
 interface PDFViewerWrapperProps {
     lang: string
@@ -15,6 +16,7 @@ interface PDFViewerWrapperProps {
     educations: DBEducation[]
     courses: DBCourse[]
     skills: Skills
+    freelance: Freelance
     footer: Footer
 }
 
@@ -31,6 +33,7 @@ export default function PDFViewerWrapper({
     educations,
     courses,
     skills,
+    freelance,
     footer
 }: PDFViewerWrapperProps) {
     const [Client, setClient] = useState<PDFClient | null>(null)
@@ -65,6 +68,7 @@ export default function PDFViewerWrapper({
                 educations={educations}
                 courses={courses}
                 skills={skills}
+                freelance={freelance}
                 footer={footer}
             />
         </PDFViewer>
