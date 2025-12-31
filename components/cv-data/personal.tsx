@@ -243,7 +243,7 @@ export default function PersonalForm() {
                                     className="hidden"
                                 />
                                 <FieldDescription className="text-xs pt-1 mb-2">
-                                    Select a profile photo to display on your CV. You&apos;ll get best results with a square image (e.g. 1:1 aspect ratio in jpg format)
+                                    Select a profile photo to display on your CV. You&apos;ll get best results with a square image (e.g. 512x512px in jpg format)
                                 </FieldDescription>
                                 <div className="flex gap-2">
                                     <Button
