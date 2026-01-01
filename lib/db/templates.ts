@@ -16,6 +16,39 @@ export const createTemplate = async (template: { name: string; description: stri
             id,
             type: 'design',
             createdAt: timestamp,
+            personalInformation: {
+                profilePicture: {
+                    disabled: false,
+                },
+                about: {
+                    disabled: false,
+                    customValue: '',
+                }
+            },
+            experience: {
+                disabled: [],
+                customValues: {},
+            },
+            education: {
+                disabled: [],
+                customValues: {},
+            },
+            courses: {
+                disabled: [],
+                customValues: {},
+            },
+            skills: {
+                disabled: false,
+                customValue: '',
+            },
+            freelance: {
+                disabled: false,
+                customValue: '',
+            },
+            footer: {
+                disabled: false,
+                customValue: '',
+            },
         }
 
         const request = store.add(newTemplate)
@@ -30,7 +63,19 @@ export const createTemplate = async (template: { name: string; description: stri
     })
 }
 
-export const updateTemplate = async (templateId: number, updatedData: { name: string; designId: string }): Promise<void> => {
+export const updateTemplate = async (templateId: number, updatedData: { 
+    name: string; 
+    designId: string;
+    personalInformation?: {
+        profilePicture?: {
+            disabled?: boolean;
+        };
+        about?: {
+            disabled?: boolean;
+            customValue?: string;
+        };
+    };
+}): Promise<void> => {
     const database = await initDB()
 
     return new Promise((resolve, reject) => {
@@ -50,6 +95,18 @@ export const updateTemplate = async (templateId: number, updatedData: { name: st
             const updatedTemplate = {
                 ...existingTemplate,
                 ...updatedData,
+                personalInformation: updatedData.personalInformation ? {
+                    ...existingTemplate.personalInformation,
+                    ...updatedData.personalInformation,
+                    profilePicture: updatedData.personalInformation.profilePicture ? {
+                        ...existingTemplate.personalInformation?.profilePicture,
+                        ...updatedData.personalInformation.profilePicture
+                    } : existingTemplate.personalInformation?.profilePicture,
+                    about: updatedData.personalInformation.about ? {
+                        ...existingTemplate.personalInformation?.about,
+                        ...updatedData.personalInformation.about
+                    } : existingTemplate.personalInformation?.about,
+                } : existingTemplate.personalInformation,
             }
 
             const putRequest = store.put(updatedTemplate)

@@ -81,6 +81,39 @@ export interface DBTemplates {
     type: 'design'
     name: string
     designId: string
+    personalInformation: {
+        profilePicture: {
+            disabled: boolean
+        }
+        about: {
+            disabled: boolean
+            customValue?: string
+        }
+    }
+    experience: {
+        disabled?: string[]
+        customValues?: { [key: string]: string }
+    }
+    education: {
+        disabled?: string[]
+        customValues?: { [key: string]: string }
+    }
+    courses: {
+        disabled?: string[]
+        customValues?: { [key: string]: string }
+    }
+    skills: {
+        disabled: boolean
+        customValue?: string
+    }
+    freelance: {
+        disabled: boolean
+        customValue?: string
+    }
+    footer: {
+        disabled: boolean
+        customValue?: string
+    }
     createdAt: number
 }
 

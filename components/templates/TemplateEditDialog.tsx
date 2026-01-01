@@ -58,6 +58,24 @@ export function TemplateEditDialog({
   const selectedDesign = useAppSelector(state => state.templates.selectedDesign)
   const [editingTemplate, setEditingTemplate] = useState<DBTemplates | null>(null)
 
+  const handleResetValues = () => {
+    if (!editingTemplate) return
+    
+    setEditingTemplate({
+      ...editingTemplate,
+      personalInformation: {
+        ...editingTemplate.personalInformation,
+        profilePicture: {
+          disabled: false,
+        },
+        about: {
+          disabled: false,
+          customValue: '',
+        }
+      }
+    })
+  }
+
   const handleEditChange = (field: keyof DBTemplates, value: string) => {
     setEditingTemplate((prev: DBTemplates | null) => ({
       ...prev,
@@ -71,7 +89,8 @@ export function TemplateEditDialog({
       
       const updatedData = {
         name: editingTemplate.name ?? template.name,
-        designId: selectedDesign
+        designId: selectedDesign,
+        personalInformation: editingTemplate.personalInformation
       }
       
       await updateTemplate(template.id!, updatedData)
@@ -140,25 +159,89 @@ export function TemplateEditDialog({
                       <div className='border p-3 rounded mb-1'>
                         <div className="text-gray-600 mb-1">Profile picture</div>
                         <div className="flex items-center space-x-2 py-1">
-                          <Switch id="profile-picture-show" checked />
+                          <Switch 
+                            id="profile-picture-show" 
+                            checked={!editingTemplate?.personalInformation?.profilePicture?.disabled}
+                            onCheckedChange={(checked) => {
+                              setEditingTemplate(prev => prev ? {
+                                ...prev,
+                                personalInformation: {
+                                  ...prev.personalInformation,
+                                  profilePicture: {
+                                    disabled: !checked
+                                  }
+                                }
+                              } : null)
+                            }}
+                          />
                           <Label htmlFor="profile-picture-show">Show section</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 py-1">
-                          <Switch id="profile-picture-custom" />
-                          <Label htmlFor="profile-picture-custom">Use custom content</Label>
                         </div>
                       </div>
                       <div className='border p-3 rounded'>
                         <div className="text-gray-600 mb-1">About</div>
                         <div className="flex items-center space-x-2 py-1">
-                          <Switch id="about-show" checked />
+                          <Switch 
+                            id="about-show" 
+                            checked={!editingTemplate?.personalInformation?.about?.disabled}
+                            onCheckedChange={(checked) => {
+                              setEditingTemplate(prev => prev ? {
+                                ...prev,
+                                personalInformation: {
+                                  ...prev.personalInformation,
+                                  about: {
+                                    ...prev.personalInformation?.about,
+                                    disabled: !checked
+                                  }
+                                }
+                              } : null)
+                            }}
+                          />
                           <Label htmlFor="about-show">Show section</Label>
                         </div>
                         <div className="flex items-center space-x-2 py-1">
-                          <Switch id="about-custom" checked/>
+                          <Switch 
+                            id="about-custom" 
+                            checked={editingTemplate?.personalInformation?.about?.customValue !== undefined && editingTemplate?.personalInformation?.about?.customValue !== ''}
+                            onCheckedChange={(checked) => {
+                              setEditingTemplate(prev => {
+                                if (!prev) return null
+                                
+                                // If turning on, show textarea with current value or empty
+                                // If turning off, clear the custom value
+                                return {
+                                  ...prev,
+                                  personalInformation: {
+                                    ...prev.personalInformation,
+                                    about: {
+                                      ...prev.personalInformation?.about,
+                                      customValue: checked ? (prev.personalInformation?.about?.customValue || ' ') : ''
+                                    }
+                                  }
+                                }
+                              })
+                            }}
+                          />
                           <Label htmlFor="about-custom">Use custom content</Label>
                         </div>
-                        <Textarea className="mt-2" placeholder="Write something about yourself" />
+                        {(editingTemplate?.personalInformation?.about?.customValue !== undefined && editingTemplate?.personalInformation?.about?.customValue !== '') && (
+                          <Textarea 
+                            className="mt-2" 
+                            placeholder="Write something about yourself" 
+                            value={editingTemplate?.personalInformation?.about?.customValue || ''}
+                            onChange={(e) => {
+                              setEditingTemplate(prev => prev ? {
+                                ...prev,
+                                personalInformation: {
+                                  ...prev.personalInformation,
+                                  about: {
+                                    ...prev.personalInformation?.about,
+                                    customValue: e.target.value
+                                  }
+                                }
+                              } : null)
+                            }}
+                          />
+                        )}
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -168,7 +251,7 @@ export function TemplateEditDialog({
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
-                <Button variant="outline" size="sm" className="mt-1">
+                <Button variant="outline" size="sm" className="mt-1" onClick={handleResetValues}>
                   Reset all content customizations
                   <i className="bi bi-arrow-clockwise ml-2"></i>
                 </Button>

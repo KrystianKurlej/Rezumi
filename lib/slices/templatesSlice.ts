@@ -6,6 +6,39 @@ export interface NewTemplate {
     selectedDesign: string; // Design wybrany w formularzu (tymczasowy)
     selectedTemplate?: string; // ID aktywnego szablonu
     currentDesignId?: string; // DesignId aktywnego szablonu (do renderowania PDF)
+    personalInformation?: {
+        profile?: {
+            disabled?: boolean;
+        }
+        about?: {
+            disabled?: boolean;
+            customValue?: string;
+        }
+    }
+    experience?: {
+        disabled?: string[];
+        customValues?: { [key: string]: string };
+    }
+    education?: {
+        disabled?: string[];
+        customValues?: { [key: string]: string };
+    }
+    courses?: {
+        disabled?: string[];
+        customValues?: { [key: string]: string };
+    }
+    skills?: {
+        disabled?: boolean;
+        customValue?: string;
+    }
+    freelance?: {
+        disabled?: boolean;
+        customValue?: string;
+    }
+    footer?: {
+        disabled?: boolean;
+        customValue?: string;
+    }
 }
 
 const initialState: NewTemplate = {
@@ -13,6 +46,39 @@ const initialState: NewTemplate = {
     selectedDesign: 'classic',
     selectedTemplate: 'classic',
     currentDesignId: 'classic',
+    personalInformation: {
+        profile: {
+            disabled: false,
+        },
+        about: {
+            disabled: false,
+            customValue: '',
+        }
+    },
+    experience: {
+        disabled: [],
+        customValues: {},
+    },
+    education: {
+        disabled: [],
+        customValues: {},
+    },
+    courses: {
+        disabled: [],
+        customValues: {},
+    },
+    skills: {
+        disabled: false,
+        customValue: '',
+    },
+    freelance: {
+        disabled: false,
+        customValue: '',
+    },
+    footer: {
+        disabled: false,
+        customValue: '',
+    },
 };
 
 const templatesSlice = createSlice({
