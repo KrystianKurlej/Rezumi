@@ -28,7 +28,7 @@ export default function ToolBar() {
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
-                            variant="ghost"
+                            variant="secondary"
                             size="icon-sm"
                             onClick={() => dispatch(reloadPreview())}
                         >
