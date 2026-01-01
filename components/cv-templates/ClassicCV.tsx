@@ -45,17 +45,16 @@ const classicStyles = StyleSheet.create({
     },
     headerSection: {
         flexDirection: 'row',
-        marginBottom: 16,
         alignItems: 'flex-start',
         gap: 16,
     },
+    profilePhoto: {
+        width: 100,
+        height: 125,
+        objectFit: 'cover',
+    },
     headerContent: {
         flex: 1,
-    },
-    profilePhoto: {
-        width: 80,
-        height: 80,
-        objectFit: 'cover',
     },
     title: {
         fontSize: 20,
@@ -67,7 +66,7 @@ const classicStyles = StyleSheet.create({
         gap: 2,
     },
     section: {
-        marginTop: 16,
+        marginTop: 8,
         paddingTop: 12,
         borderTop: '1px solid #e0e0e0',
     },
@@ -77,18 +76,22 @@ const classicStyles = StyleSheet.create({
     sectionTitle: {
         fontSize: 13,
         fontWeight: 'bold',
-        textTransform: 'uppercase',
-        letterSpacing: 0.5,
     },
     sectionItem: {
         paddingTop: 8,
+    },
+    sectionLastItem: {
+        paddingTop: 8,
         paddingBottom: 8,
+        borderBottom: '1px solid #f2f2f2',
     },
     sectionItemHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 4,
         gap: 8,
+    },
+    sectionItemDescription: {
+        marginTop: 4,
     },
     footer: {
         marginTop: 20,
@@ -148,19 +151,19 @@ export default function ClassicCV({
                             {translate(lang, 'experience')}
                         </Text>
                         {experiences.map((experience) => (
-                            <View key={experience.id} style={classicStyles.sectionItem}>
+                            <View key={experience.id} style={experiences[experiences.length - 1].id === experience.id ? classicStyles.sectionItem : classicStyles.sectionLastItem}>
                                 <View style={classicStyles.sectionItemHeader}>
                                     <View style={{ flex: 1 }}>
                                         <Text style={{ fontWeight: 'bold', fontSize: 11 }}>
                                             {experience.title} · {experience.company}
                                         </Text>
                                     </View>
-                                    <Text style={{ fontSize: 9, color: 'gray' }}>
+                                    <Text>
                                         {formatDate(experience.startDate, 'short')} - {experience.isOngoing ? translate(lang, 'present') : formatDate(experience.endDate, 'short')}
                                     </Text>
                                 </View>
                                 {experience.description && (
-                                    <Text>{experience.description}</Text>
+                                    <Text style={classicStyles.sectionItemDescription}>{experience.description}</Text>
                                 )}
                             </View>
                         ))}
@@ -173,7 +176,7 @@ export default function ClassicCV({
                             {translate(lang, 'education')}
                         </Text>
                         {educations.map((education) => (
-                            <View key={education.id} style={classicStyles.sectionItem}>
+                            <View key={education.id} style={educations[educations.length - 1].id === education.id ? classicStyles.sectionItem : classicStyles.sectionLastItem}>
                                 <View style={classicStyles.sectionItemHeader}>
                                     <View style={{ flex: 1 }}>
                                         <Text style={{ fontWeight: 'bold', fontSize: 11 }}>
@@ -181,12 +184,12 @@ export default function ClassicCV({
                                         </Text>
                                         <Text style={{ marginTop: 2, fontSize: 10 }}>{education.institution}</Text>
                                     </View>
-                                    <Text style={{ fontSize: 9, color: 'gray' }}>
+                                    <Text>
                                         {formatDate(education.startDate, 'short')} - {education.isOngoing ? translate(lang, 'present') : formatDate(education.endDate, 'short')}
                                     </Text>
                                 </View>
                                 {education.description && (
-                                    <Text>{education.description}</Text>
+                                    <Text style={classicStyles.sectionItemDescription}>{education.description}</Text>
                                 )}
                             </View>
                         ))}
@@ -199,18 +202,18 @@ export default function ClassicCV({
                             {translate(lang, 'courses_certifications')}
                         </Text>
                         {courses.map((course) => (
-                            <View key={course.id} style={classicStyles.sectionItem}>
+                            <View key={course.id} style={courses[courses.length - 1].id === course.id ? classicStyles.sectionItem : classicStyles.sectionLastItem}>
                                 <View style={classicStyles.sectionItemHeader}>
                                     <View style={{ flex: 1 }}>
                                         <Text style={{ fontWeight: 'bold', fontSize: 11 }}>{course.courseName}</Text>
                                         <Text style={{ marginTop: 2, fontSize: 10 }}>{course.platform}</Text>
                                     </View>
-                                    <Text style={{ fontSize: 9, color: 'gray' }}>
+                                    <Text>
                                         {course.isOngoing ? translate(lang, 'in_progress') : `${translate(lang, 'completed')}: ${formatDate(course.completionDate, 'short')}`}
                                     </Text>
                                 </View>
                                 {course.description && (
-                                    <Text>{course.description}</Text>
+                                    <Text style={classicStyles.sectionItemDescription}>{course.description}</Text>
                                 )}
                             </View>
                         ))}
