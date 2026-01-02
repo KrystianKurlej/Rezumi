@@ -64,6 +64,9 @@ export function usePrepareData({
 
     const preparedData: PreparedData = (() => {
         let modifiedPersonal = { ...personal }
+        let modifiedExperiences = [...experiences]
+        let modifiedEducations = [...educations]
+        let modifiedCourses = [...courses]
 
         if (currentTemplate) {
             if (currentTemplate.personalInformation?.profilePicture?.disabled) {
@@ -84,14 +87,80 @@ export function usePrepareData({
                     aboutDescription: currentTemplate.personalInformation.about.customValue
                 }
             }
+
+            if (currentTemplate.experience?.disabled && currentTemplate.experience.disabled.length > 0) {
+                modifiedExperiences = modifiedExperiences.filter(exp =>
+                    !currentTemplate.experience?.disabled?.includes(exp.id?.toString() || '')
+                )
+            }
+
+            if (currentTemplate.experience?.customValues) {
+                modifiedExperiences = modifiedExperiences.map(exp => {
+                    const expId = exp.id?.toString() || ''
+                    const customDescription = currentTemplate.experience?.customValues?.[expId]
+
+                    if (customDescription !== undefined && customDescription !== '') {
+                        return {
+                            ...exp,
+                            description: customDescription
+                        }
+                    }
+
+                    return exp
+                })
+            }
+
+            if (currentTemplate.education?.disabled && currentTemplate.education.disabled.length > 0) {
+                modifiedEducations = modifiedEducations.filter(edu =>
+                    !currentTemplate.education?.disabled?.includes(edu.id?.toString() || '')
+                )
+            }
+
+            if (currentTemplate.education?.customValues) {
+                modifiedEducations = modifiedEducations.map(edu => {
+                    const eduId = edu.id?.toString() || ''
+                    const customDescription = currentTemplate.education?.customValues?.[eduId]
+
+                    if (customDescription !== undefined && customDescription !== '') {
+                        return {
+                            ...edu,
+                            description: customDescription
+                        }
+                    }
+
+                    return edu
+                })
+            }
+
+            if (currentTemplate.courses?.disabled && currentTemplate.courses.disabled.length > 0) {
+                modifiedCourses = modifiedCourses.filter(course =>
+                    !currentTemplate.courses?.disabled?.includes(course.id?.toString() || '')
+                )
+            }
+
+            if (currentTemplate.courses?.customValues) {
+                modifiedCourses = modifiedCourses.map(course => {
+                    const courseId = course.id?.toString() || ''
+                    const customDescription = currentTemplate.courses?.customValues?.[courseId]
+
+                    if (customDescription !== undefined && customDescription !== '') {
+                        return {
+                            ...course,
+                            description: customDescription
+                        }
+                    }
+
+                    return course
+                })
+            }
         }
 
         return {
             lang,
             personal: modifiedPersonal,
-            experiences,
-            educations,
-            courses,
+            experiences: modifiedExperiences,
+            educations: modifiedEducations,
+            courses: modifiedCourses,
             skills,
             freelance,
             footer

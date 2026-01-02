@@ -38,6 +38,9 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { Textarea } from '../ui/textarea'
+import { ExperienceTemplateSection } from './ExperienceTemplateSection'
+import { EducationTemplateSection } from './EducationTemplateSection'
+import { CoursesTemplateSection } from './CoursesTemplateSection'
 
 interface TemplateEditDialogProps {
   template: DBTemplates
@@ -56,6 +59,9 @@ export function TemplateEditDialog({
 }: TemplateEditDialogProps) {
   const dispatch = useAppDispatch()
   const selectedDesign = useAppSelector(state => state.templates.selectedDesign)
+  const experiences = useAppSelector(state => state.experiences.list)
+  const educations = useAppSelector(state => state.educations.list)
+  const courses = useAppSelector(state => state.courses.list)
   const [editingTemplate, setEditingTemplate] = useState<DBTemplates | null>(null)
 
   const handleResetValues = () => {
@@ -72,6 +78,18 @@ export function TemplateEditDialog({
           disabled: false,
           customValue: '',
         }
+      },
+      experience: {
+        disabled: [],
+        customValues: {}
+      },
+      education: {
+        disabled: [],
+        customValues: {}
+      },
+      courses: {
+        disabled: [],
+        customValues: {}
       }
     })
   }
@@ -90,7 +108,10 @@ export function TemplateEditDialog({
       const updatedData = {
         name: editingTemplate.name ?? template.name,
         designId: selectedDesign,
-        personalInformation: editingTemplate.personalInformation
+        personalInformation: editingTemplate.personalInformation,
+        experience: editingTemplate.experience,
+        education: editingTemplate.education,
+        courses: editingTemplate.courses
       }
       
       await updateTemplate(template.id!, updatedData)
@@ -206,8 +227,6 @@ export function TemplateEditDialog({
                               setEditingTemplate(prev => {
                                 if (!prev) return null
                                 
-                                // If turning on, show textarea with current value or empty
-                                // If turning off, clear the custom value
                                 return {
                                   ...prev,
                                   personalInformation: {
@@ -248,6 +267,31 @@ export function TemplateEditDialog({
                   <AccordionItem value="experience">
                     <AccordionTrigger>Experience</AccordionTrigger>
                     <AccordionContent>
+                      <ExperienceTemplateSection 
+                        experiences={experiences}
+                        editingTemplate={editingTemplate}
+                        onUpdate={setEditingTemplate}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="education">
+                    <AccordionTrigger>Education</AccordionTrigger>
+                    <AccordionContent>
+                      <EducationTemplateSection 
+                        educations={educations}
+                        editingTemplate={editingTemplate}
+                        onUpdate={setEditingTemplate}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="courses">
+                    <AccordionTrigger>Courses</AccordionTrigger>
+                    <AccordionContent>
+                      <CoursesTemplateSection 
+                        courses={courses}
+                        editingTemplate={editingTemplate}
+                        onUpdate={setEditingTemplate}
+                      />
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>

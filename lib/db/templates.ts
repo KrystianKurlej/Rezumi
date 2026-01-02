@@ -75,6 +75,18 @@ export const updateTemplate = async (templateId: number, updatedData: {
             customValue?: string;
         };
     };
+    experience?: {
+        disabled?: string[];
+        customValues?: { [key: string]: string };
+    };
+    education?: {
+        disabled?: string[];
+        customValues?: { [key: string]: string };
+    };
+    courses?: {
+        disabled?: string[];
+        customValues?: { [key: string]: string };
+    };
 }): Promise<void> => {
     const database = await initDB()
 
@@ -107,6 +119,18 @@ export const updateTemplate = async (templateId: number, updatedData: {
                         ...updatedData.personalInformation.about
                     } : existingTemplate.personalInformation?.about,
                 } : existingTemplate.personalInformation,
+                experience: updatedData.experience ? {
+                    ...existingTemplate.experience,
+                    ...updatedData.experience
+                } : existingTemplate.experience,
+                education: updatedData.education ? {
+                    ...existingTemplate.education,
+                    ...updatedData.education
+                } : existingTemplate.education,
+                courses: updatedData.courses ? {
+                    ...existingTemplate.courses,
+                    ...updatedData.courses
+                } : existingTemplate.courses,
             }
 
             const putRequest = store.put(updatedTemplate)
