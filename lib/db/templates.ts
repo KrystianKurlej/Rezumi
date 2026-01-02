@@ -164,3 +164,27 @@ export const getAllTemplates = async (): Promise<DBTemplates[]> => {
         }
     })
 }
+
+export const getTemplateById = async (templateId: number): Promise<DBTemplates | null> => {
+    const database = await initDB()
+
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const store = transaction.objectStore(STORE_NAME)
+
+        const request = store.get(templateId)
+
+        request.onsuccess = () => {
+            const template = request.result
+            if (template && template.type === 'design') {
+                resolve(template as DBTemplates)
+            } else {
+                resolve(null)
+            }
+        }
+
+        request.onerror = () => {
+            reject('Failed to retrieve template')
+        }
+    })
+}

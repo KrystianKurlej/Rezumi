@@ -24,6 +24,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { useAppDispatch, useAppSelector, useDefaultCurrency } from '@/lib/hooks'
 import { useLoadCVData } from '@/hooks/use-load-cv-data'
+import { usePrepareData } from '@/hooks/use-prepare-cv-data'
 import { setCurrentPage } from '@/lib/slices/pagesSlice'
 import { selectTemplate, setCurrentDesignId } from '@/lib/slices/templatesSlice'
 import { menuIcons } from "@/components/AppSidebar";
@@ -106,7 +107,20 @@ export default function Export() {
     const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
     const selectedTemplateId = useAppSelector(state => state.templates.selectedTemplate)
     const currentDesignId = useAppSelector(state => state.templates.currentDesignId)
-    const filename = 'CV-' + personal.firstName + '_' + personal.lastName + '.pdf'
+    
+    // Użyj hooka do przygotowania danych zgodnie z ustawieniami szablonu
+    const preparedData = usePrepareData({
+        lang: selectedLanguage || defaultLanguage || 'en',
+        personal,
+        experiences,
+        educations,
+        courses,
+        skills,
+        freelance,
+        footer
+    })
+    
+    const filename = 'CV-' + preparedData.personal.firstName + '_' + preparedData.personal.lastName + '.pdf'
 
     const loadTemplates = async () => {
         try {
@@ -149,15 +163,15 @@ export default function Export() {
         
         try {
             await handleDownloadPDF({ 
-                personal, 
-                experiences, 
-                educations, 
-                courses, 
-                skills,
-                freelance,
-                footer, 
+                personal: preparedData.personal, 
+                experiences: preparedData.experiences, 
+                educations: preparedData.educations, 
+                courses: preparedData.courses, 
+                skills: preparedData.skills,
+                freelance: preparedData.freelance,
+                footer: preparedData.footer, 
                 filename, 
-                lang: selectedLanguage || defaultLanguage || 'en',
+                lang: preparedData.lang,
                 designId: currentDesignId || 'classic'
             })
         } catch (error) {
@@ -172,15 +186,15 @@ export default function Export() {
         
         try {
             await handleDownloadPDF({ 
-                personal, 
-                experiences, 
-                educations, 
-                courses, 
-                skills,
-                freelance,
-                footer, 
+                personal: preparedData.personal, 
+                experiences: preparedData.experiences, 
+                educations: preparedData.educations, 
+                courses: preparedData.courses, 
+                skills: preparedData.skills,
+                freelance: preparedData.freelance,
+                footer: preparedData.footer, 
                 filename, 
-                lang: selectedLanguage || defaultLanguage || 'en',
+                lang: preparedData.lang,
                 designId: currentDesignId || 'classic'
             })
             
@@ -196,14 +210,15 @@ export default function Export() {
                 status: 'submitted',
                 cvData: {
                     languageId,
-                    designId: currentDesignId || 'classic', // Zapisz designId
-                    personal,
-                    experiences,
-                    educations,
-                    courses,
-                    skills,
-                    freelance,
-                    footer
+                    designId: currentDesignId || 'classic',
+                    templateId: selectedTemplateId,
+                    personal: preparedData.personal,
+                    experiences: preparedData.experiences,
+                    educations: preparedData.educations,
+                    courses: preparedData.courses,
+                    skills: preparedData.skills,
+                    freelance: preparedData.freelance,
+                    footer: preparedData.footer
                 }
             })
             setLoading(false)

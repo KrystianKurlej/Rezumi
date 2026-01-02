@@ -181,7 +181,7 @@ export default function ApplicationsTable() {
         footer: application.cvData.footer,
         filename: `CV-${application.companyName.replace(/\s+/g, '_')}-${application.dateApplied}.pdf`,
         lang: application.cvData.languageId || 'en',
-        designId: application.cvData.designId || 'classic', // Użyj zapisanego designId
+        designId: application.cvData.designId || 'classic',
       });
     } catch (error) {
       console.error('Error downloading CV PDF:', error);
