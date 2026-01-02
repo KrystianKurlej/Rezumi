@@ -67,6 +67,9 @@ export function usePrepareData({
         let modifiedExperiences = [...experiences]
         let modifiedEducations = [...educations]
         let modifiedCourses = [...courses]
+        let modifiedSkills = { ...skills }
+        let modifiedFreelance = { ...freelance }
+        let modifiedFooter = { ...footer }
 
         if (currentTemplate) {
             if (currentTemplate.personalInformation?.profilePicture?.disabled) {
@@ -153,6 +156,36 @@ export function usePrepareData({
                     return course
                 })
             }
+
+            if (currentTemplate.skills?.disabled) {
+                modifiedSkills = {
+                    skillsText: ''
+                }
+            } else if (currentTemplate.skills?.customValue) {
+                modifiedSkills = {
+                    skillsText: currentTemplate.skills.customValue
+                }
+            }
+
+            if (currentTemplate.freelance?.disabled) {
+                modifiedFreelance = {
+                    freelanceText: ''
+                }
+            } else if (currentTemplate.freelance?.customValue) {
+                modifiedFreelance = {
+                    freelanceText: currentTemplate.freelance.customValue
+                }
+            }
+
+            if (currentTemplate.footer?.disabled) {
+                modifiedFooter = {
+                    footerText: ''
+                }
+            } else if (currentTemplate.footer?.customValue) {
+                modifiedFooter = {
+                    footerText: currentTemplate.footer.customValue
+                }
+            }
         }
 
         return {
@@ -161,9 +194,9 @@ export function usePrepareData({
             experiences: modifiedExperiences,
             educations: modifiedEducations,
             courses: modifiedCourses,
-            skills,
-            freelance,
-            footer
+            skills: modifiedSkills,
+            freelance: modifiedFreelance,
+            footer: modifiedFooter
         }
     })()
 

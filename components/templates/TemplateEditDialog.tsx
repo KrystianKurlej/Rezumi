@@ -90,6 +90,18 @@ export function TemplateEditDialog({
       courses: {
         disabled: [],
         customValues: {}
+      },
+      skills: {
+        disabled: false,
+        customValue: ''
+      },
+      freelance: {
+        disabled: false,
+        customValue: ''
+      },
+      footer: {
+        disabled: false,
+        customValue: ''
       }
     })
   }
@@ -111,7 +123,10 @@ export function TemplateEditDialog({
         personalInformation: editingTemplate.personalInformation,
         experience: editingTemplate.experience,
         education: editingTemplate.education,
-        courses: editingTemplate.courses
+        courses: editingTemplate.courses,
+        skills: editingTemplate.skills,
+        freelance: editingTemplate.freelance,
+        footer: editingTemplate.footer
       }
       
       await updateTemplate(template.id!, updatedData)
@@ -292,6 +307,198 @@ export function TemplateEditDialog({
                         editingTemplate={editingTemplate}
                         onUpdate={setEditingTemplate}
                       />
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="skills">
+                    <AccordionTrigger>Skills</AccordionTrigger>
+                    <AccordionContent>
+                      <div className='border p-3 rounded'>
+                        <div className="text-gray-600 mb-1">Skills</div>
+                        <div className="flex items-center space-x-2 py-1">
+                          <Switch 
+                            id="skills-show" 
+                            checked={!editingTemplate?.skills?.disabled}
+                            onCheckedChange={(checked) => {
+                              setEditingTemplate(prev => prev ? {
+                                ...prev,
+                                skills: {
+                                  ...prev.skills,
+                                  disabled: !checked
+                                }
+                              } : null)
+                            }}
+                          />
+                          <Label htmlFor="skills-show">Show section</Label>
+                        </div>
+                        {!editingTemplate?.skills?.disabled && (
+                          <>
+                            <div className="flex items-center space-x-2 py-1">
+                              <Switch 
+                                id="skills-custom" 
+                                checked={editingTemplate?.skills?.customValue !== undefined && editingTemplate?.skills?.customValue !== ''}
+                                onCheckedChange={(checked) => {
+                                  setEditingTemplate(prev => {
+                                    if (!prev) return null
+                                    return {
+                                      ...prev,
+                                      skills: {
+                                        ...prev.skills,
+                                        customValue: checked ? (prev.skills?.customValue || ' ') : ''
+                                      }
+                                    }
+                                  })
+                                }}
+                              />
+                              <Label htmlFor="skills-custom">Use custom content</Label>
+                            </div>
+                            {(editingTemplate?.skills?.customValue !== undefined && editingTemplate?.skills?.customValue !== '') && (
+                              <Textarea 
+                                className="mt-2" 
+                                placeholder="Custom skills content" 
+                                value={editingTemplate?.skills?.customValue || ''}
+                                onChange={(e) => {
+                                  setEditingTemplate(prev => prev ? {
+                                    ...prev,
+                                    skills: {
+                                      ...prev.skills,
+                                      customValue: e.target.value
+                                    }
+                                  } : null)
+                                }}
+                                rows={4}
+                              />
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="freelance">
+                    <AccordionTrigger>Freelance</AccordionTrigger>
+                    <AccordionContent>
+                      <div className='border p-3 rounded'>
+                        <div className="text-gray-600 mb-1">Freelance</div>
+                        <div className="flex items-center space-x-2 py-1">
+                          <Switch 
+                            id="freelance-show" 
+                            checked={!editingTemplate?.freelance?.disabled}
+                            onCheckedChange={(checked) => {
+                              setEditingTemplate(prev => prev ? {
+                                ...prev,
+                                freelance: {
+                                  ...prev.freelance,
+                                  disabled: !checked
+                                }
+                              } : null)
+                            }}
+                          />
+                          <Label htmlFor="freelance-show">Show section</Label>
+                        </div>
+                        {!editingTemplate?.freelance?.disabled && (
+                          <>
+                            <div className="flex items-center space-x-2 py-1">
+                              <Switch 
+                                id="freelance-custom" 
+                                checked={editingTemplate?.freelance?.customValue !== undefined && editingTemplate?.freelance?.customValue !== ''}
+                                onCheckedChange={(checked) => {
+                                  setEditingTemplate(prev => {
+                                    if (!prev) return null
+                                    return {
+                                      ...prev,
+                                      freelance: {
+                                        ...prev.freelance,
+                                        customValue: checked ? (prev.freelance?.customValue || ' ') : ''
+                                      }
+                                    }
+                                  })
+                                }}
+                              />
+                              <Label htmlFor="freelance-custom">Use custom content</Label>
+                            </div>
+                            {(editingTemplate?.freelance?.customValue !== undefined && editingTemplate?.freelance?.customValue !== '') && (
+                              <Textarea 
+                                className="mt-2" 
+                                placeholder="Custom freelance content" 
+                                value={editingTemplate?.freelance?.customValue || ''}
+                                onChange={(e) => {
+                                  setEditingTemplate(prev => prev ? {
+                                    ...prev,
+                                    freelance: {
+                                      ...prev.freelance,
+                                      customValue: e.target.value
+                                    }
+                                  } : null)
+                                }}
+                                rows={4}
+                              />
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="footer">
+                    <AccordionTrigger>Footer</AccordionTrigger>
+                    <AccordionContent>
+                      <div className='border p-3 rounded'>
+                        <div className="text-gray-600 mb-1">Footer</div>
+                        <div className="flex items-center space-x-2 py-1">
+                          <Switch 
+                            id="footer-show" 
+                            checked={!editingTemplate?.footer?.disabled}
+                            onCheckedChange={(checked) => {
+                              setEditingTemplate(prev => prev ? {
+                                ...prev,
+                                footer: {
+                                  ...prev.footer,
+                                  disabled: !checked
+                                }
+                              } : null)
+                            }}
+                          />
+                          <Label htmlFor="footer-show">Show section</Label>
+                        </div>
+                        {!editingTemplate?.footer?.disabled && (
+                          <>
+                            <div className="flex items-center space-x-2 py-1">
+                              <Switch 
+                                id="footer-custom" 
+                                checked={editingTemplate?.footer?.customValue !== undefined && editingTemplate?.footer?.customValue !== ''}
+                                onCheckedChange={(checked) => {
+                                  setEditingTemplate(prev => {
+                                    if (!prev) return null
+                                    return {
+                                      ...prev,
+                                      footer: {
+                                        ...prev.footer,
+                                        customValue: checked ? (prev.footer?.customValue || ' ') : ''
+                                      }
+                                    }
+                                  })
+                                }}
+                              />
+                              <Label htmlFor="footer-custom">Use custom content</Label>
+                            </div>
+                            {(editingTemplate?.footer?.customValue !== undefined && editingTemplate?.footer?.customValue !== '') && (
+                              <Textarea 
+                                className="mt-2" 
+                                placeholder="Custom footer content" 
+                                value={editingTemplate?.footer?.customValue || ''}
+                                onChange={(e) => {
+                                  setEditingTemplate(prev => prev ? {
+                                    ...prev,
+                                    footer: {
+                                      ...prev.footer,
+                                      customValue: e.target.value
+                                    }
+                                  } : null)
+                                }}
+                                rows={4}
+                              />
+                            )}
+                          </>
+                        )}
+                      </div>
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
