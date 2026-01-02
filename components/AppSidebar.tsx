@@ -90,6 +90,10 @@ export function AppSidebar() {
                 <SidebarGroup className="mt-auto">
                     <SidebarGroupContent>
                         <SidebarMenu>
+                            <SidebarMenuButton>
+                                <i className={`bi bi-book`}></i>
+                                <span>How it works</span>
+                            </SidebarMenuButton>
                             <SidebarMenuButton
                                 isActive={currentPage === 'settings'}
                                 onClick={() => dispatch(setCurrentPage('settings'))}
