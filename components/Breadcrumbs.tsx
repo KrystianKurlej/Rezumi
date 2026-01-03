@@ -20,16 +20,15 @@ export default function Breadcrumbs({
         <BreadcrumbList>
             <BreadcrumbItem>
                 <BreadcrumbLink href="/">Rezumi</BreadcrumbLink>
-                <BreadcrumbSeparator />
             </BreadcrumbItem>
             {items.map((item, index) => (
             <BreadcrumbItem key={index}>
+				<BreadcrumbSeparator />
                 {item.href ? (
-                <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
+                	<BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
                 ) : (
-                <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                	<BreadcrumbPage>{item.label}</BreadcrumbPage>
                 )}
-                {index < items.length - 1 && <BreadcrumbSeparator />}
             </BreadcrumbItem>
             ))}
         </BreadcrumbList>
