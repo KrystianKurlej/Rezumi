@@ -7,9 +7,9 @@ export default function PrivacyPolicyPage() {
             <Navbar />
             <div className="max-w-3xl mx-auto">
                 <main className="p-4">
-                    <header className="text-center py-12">
-                        <h1 className="text-6xl font-medium">Privacy Policy</h1>
-                        <p className="mt-4 text-sm text-gray-600">Effective date: January 2nd, 2026</p>
+                    <header className="text-center pt-20 pb-24">
+                        <h1 className="text-4xl font-medium">Privacy Policy</h1>
+                        <p className="mt-4 text-sm text-gray-600 max-w-lg mx-auto">Effective date: January 2nd, 2026</p>
                     </header>
 
                     <section className="space-y-6">

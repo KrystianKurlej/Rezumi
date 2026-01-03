@@ -3,9 +3,9 @@ import HowItWorksCard from "./HowItWorksCard"
 export default function HowItWorksPage() {
     return (
         <main className="p-4">
-            <header className="text-center py-12">
-                <h1 className="text-6xl font-medium">How It Works</h1>
-                <p className="mt-4 text-sm text-gray-600">Rezumi is a simple and intuitive tool designed to help you create and manage multiple versions of your CV with ease. Here&apos;s how it works:</p>
+            <header className="text-center pt-20 pb-24">
+                <h1 className="text-4xl font-medium">How It Works</h1>
+                <p className="mt-4 text-sm text-gray-600 max-w-lg mx-auto">Rezumi is a simple and intuitive tool designed to help you create and manage multiple versions of your CV with ease. Here&apos;s how it works:</p>
             </header>
 
             <h2 className="text-3xl font-medium my-8">Learn about the key features of Rezumi</h2>

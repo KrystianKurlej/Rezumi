@@ -66,7 +66,7 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon">
-            <SidebarHeader>
+            <SidebarHeader className="pt-4">
                 <Logo />
             </SidebarHeader>
             <SidebarContent>

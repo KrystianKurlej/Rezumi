@@ -52,7 +52,7 @@ export default function Intro({ onComplete }: IntroProps) {
     const isFormValid = selectedLanguage && selectedCurrency;
 
     return (
-        <main className="min-h-screen flex flex-col justify-center items-center p-12">
+        <main className="min-h-screen flex flex-col justify-center items-center p-12 pb-0">
             <div className="max-w-md flex-1 flex-col flex justify-center">
                 <h1 className="text-4xl font-medium text-center">
                     Set up your CV workspace
@@ -118,10 +118,7 @@ export default function Intro({ onComplete }: IntroProps) {
                     </FieldGroup>
                 </FieldSet>
             </div>
-            <div className="pt-8 flex flex-col items-center">
-                <Logo />
-                <Footer />
-            </div>
+            <Footer variant="page"/>
         </main>
     )
 }
