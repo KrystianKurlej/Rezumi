@@ -48,26 +48,34 @@ const confidentStyles = StyleSheet.create({
         width: '33%',
         backgroundColor: '#2C3E50',
         color: '#ffffff',
-        padding: 32,
+        padding: 30,
     },
     initialsCircle: {
         width: 80,
         height: 80,
         borderRadius: 40,
-        border: '2px solid #ffffff',
+        border: '1px solid #ffffff',
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
-        marginBottom: 32,
+        marginBottom: 16,
+    },
+    photoCircle: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        objectFit: 'cover',
+        alignSelf: 'center',
+        marginBottom: 16,
     },
     initials: {
         fontSize: 24,
         color: '#ffffff',
-        fontWeight: 'bold',
+        fontWeight: 'light',
         textTransform: 'uppercase',
     },
     sidebarSection: {
-        marginBottom: 24,
+        marginBottom: 8,
     },
     sidebarSectionTitle: {
         fontSize: 11,
@@ -75,10 +83,15 @@ const confidentStyles = StyleSheet.create({
         letterSpacing: 1.5,
         fontWeight: 'bold',
         color: '#ffffff',
-        marginBottom: 12,
+        marginBottom: 6,
     },
     sidebarItem: {
-        marginBottom: 10,
+        marginBottom: 6,
+    },
+    sidebarItemContact: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 6,
     },
     sidebarItemLabel: {
         fontSize: 10,
@@ -94,15 +107,11 @@ const confidentStyles = StyleSheet.create({
     // Main content (prawa kolumna)
     mainContent: {
         width: '67%',
-        padding: 40,
+        padding: 30,
         backgroundColor: '#ffffff',
     },
-    header: {
-        marginBottom: 32,
-    },
     fullName: {
-        fontSize: 36,
-        fontWeight: 'light',
+        fontSize: 28,
         color: '#333333',
         textTransform: 'uppercase',
         marginBottom: 4,
@@ -112,7 +121,6 @@ const confidentStyles = StyleSheet.create({
         textTransform: 'uppercase',
         letterSpacing: 2,
         color: '#6b7280',
-        marginBottom: 12,
     },
     contactLine: {
         fontSize: 9,
@@ -123,48 +131,39 @@ const confidentStyles = StyleSheet.create({
     
     // Sekcje główne
     mainSection: {
-        marginTop: 24,
+        marginBottom: 12,
     },
     mainSectionTitle: {
         fontSize: 11,
         textTransform: 'uppercase',
         letterSpacing: 2,
         color: '#6b7280',
-        marginBottom: 16,
+        marginBottom: 4,
         fontWeight: 'bold',
     },
     summaryText: {
-        fontSize: 10,
+        fontSize: 9,
         color: '#333333',
-        lineHeight: 1.6,
+        lineHeight: 1.2,
+        marginTop: 4,
     },
     
     // Timeline
     timelineContainer: {
         position: 'relative',
-        paddingLeft: 20,
+        padding: 10,
     },
     timelineLine: {
         position: 'absolute',
-        left: 4,
-        top: 4,
+        left: 0,
+        top: 0,
         bottom: 4,
-        width: 2,
+        width: 1,
         backgroundColor: '#d1d5db',
     },
     timelineItem: {
         position: 'relative',
-        marginBottom: 20,
-    },
-    timelineDot: {
-        position: 'absolute',
-        left: -16,
-        top: 2,
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        backgroundColor: '#ffffff',
-        border: '2px solid #d1d5db',
+        marginBottom: 8,
     },
     timelineContent: {
         paddingLeft: 4,
@@ -218,9 +217,43 @@ export default function ConfidentCV({
             <Page size="A4" style={confidentStyles.page}>
                 {/* Sidebar - Lewa Kolumna */}
                 <View style={confidentStyles.sidebar}>
-                    {/* Logo/Inicjały */}
-                    <View style={confidentStyles.initialsCircle}>
-                        <Text style={confidentStyles.initials}>{initials}</Text>
+                    {/* Logo/Inicjały/Obraz profilowy */}
+                    {personal.photo ? (
+                        <Image
+                            src={personal.photo}
+                            style={confidentStyles.photoCircle}
+                        />
+                    ) : (
+                        <View style={confidentStyles.initialsCircle}>
+                            <Text style={confidentStyles.initials}>{initials}</Text>
+                        </View>
+                    )}
+
+                    {/* Contact */}
+                    <View style={confidentStyles.sidebarSection}>
+                        <Text style={confidentStyles.sidebarSectionTitle}>
+                            {translate(lang, 'contact')}
+                        </Text>
+                        {personal.phone && (
+                            <View style={confidentStyles.sidebarItemContact}>
+                                <Svg width="12" height="12" viewBox="0 0 24 24" style={{ marginRight: 6 }}>
+                                    <Path fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M22 16.92v3a2 2 0 0 1-2.18 2a19.79 19.79 0 0 1-8.63-3.07a19.5 19.5 0 0 1-6-6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72a12.84 12.84 0 0 0 .7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45a12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92" />
+                                </Svg>
+                                <Text style={confidentStyles.sidebarItemValue}>
+                                    {personal.phone}
+                                </Text>
+                            </View>
+                        )}
+                        {personal.email && (
+                            <View style={confidentStyles.sidebarItemContact}>
+                                <Svg width="12" height="12" viewBox="0 0 24 24" style={{ marginRight: 6 }}>
+                                    <Path fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2" />
+                                </Svg>
+                                <Text style={confidentStyles.sidebarItemValue}>
+                                    {personal.email}
+                                </Text>
+                            </View>
+                        )}
                     </View>
 
                     {/* Skills */}
@@ -272,53 +305,23 @@ export default function ConfidentCV({
                             </View>
                         </View>
                     )}
-
-                    {/* Contact */}
-                    <View style={confidentStyles.sidebarSection}>
-                        <Text style={confidentStyles.sidebarSectionTitle}>
-                            {translate(lang, 'contact')}
-                        </Text>
-                        {personal.phone && (
-                            <View style={confidentStyles.sidebarItem}>
-                                <Text style={confidentStyles.sidebarItemLabel}>
-                                    {translate(lang, 'phone')}
-                                </Text>
-                                <Text style={confidentStyles.sidebarItemValue}>
-                                    {personal.phone}
-                                </Text>
-                            </View>
-                        )}
-                        {personal.email && (
-                            <View style={confidentStyles.sidebarItem}>
-                                <Text style={confidentStyles.sidebarItemLabel}>
-                                    {translate(lang, 'email')}
-                                </Text>
-                                <Text style={confidentStyles.sidebarItemValue}>
-                                    {personal.email}
-                                </Text>
-                            </View>
-                        )}
-                    </View>
                 </View>
 
                 {/* Main Content - Prawa Kolumna */}
                 <View style={confidentStyles.mainContent}>
                     {/* Header */}
-                    <View style={confidentStyles.header}>
-                        <Text style={confidentStyles.fullName}>
-                            {personal.firstName} {personal.lastName}
-                        </Text>
+                    <View>
                         <Text style={confidentStyles.jobTitle}>
                             {translate(lang, 'cv')}
+                        </Text>
+                        <Text style={confidentStyles.fullName}>
+                            {personal.firstName} {personal.lastName}
                         </Text>
                     </View>
 
                     {/* Summary */}
                     {personal.aboutDescription && (
                         <View style={confidentStyles.mainSection}>
-                            <Text style={confidentStyles.mainSectionTitle}>
-                                {translate(lang, 'summary')}
-                            </Text>
                             <Text style={confidentStyles.summaryText}>
                                 {personal.aboutDescription}
                             </Text>
@@ -335,7 +338,6 @@ export default function ConfidentCV({
                                 <View style={confidentStyles.timelineLine} />
                                 {experiences.map((experience) => (
                                     <View key={experience.id} style={confidentStyles.timelineItem}>
-                                        <View style={confidentStyles.timelineDot} />
                                         <View style={confidentStyles.timelineContent}>
                                             <Text style={confidentStyles.entryTitle}>
                                                 {experience.title}
@@ -368,7 +370,6 @@ export default function ConfidentCV({
                                 <View style={confidentStyles.timelineLine} />
                                 {educations.map((education) => (
                                     <View key={education.id} style={confidentStyles.timelineItem}>
-                                        <View style={confidentStyles.timelineDot} />
                                         <View style={confidentStyles.timelineContent}>
                                             <Text style={confidentStyles.entryTitle}>
                                                 {education.degree} - {education.fieldOfStudy}
@@ -401,7 +402,6 @@ export default function ConfidentCV({
                                 <View style={confidentStyles.timelineLine} />
                                 {courses.map((course) => (
                                     <View key={course.id} style={confidentStyles.timelineItem}>
-                                        <View style={confidentStyles.timelineDot} />
                                         <View style={confidentStyles.timelineContent}>
                                             <Text style={confidentStyles.entryTitle}>
                                                 {course.courseName}
