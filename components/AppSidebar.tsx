@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { setCurrentPage } from '@/lib/slices/pagesSlice'
 import Logo from './Logo'
 import Footer from './Footer'
+import Link from "next/link"
 
 export const menuIcons = {
   personal: "bi-file-earmark-person",
@@ -90,9 +91,11 @@ export function AppSidebar() {
                 <SidebarGroup className="mt-auto">
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            <SidebarMenuButton>
-                                <i className={`bi bi-book`}></i>
-                                <span>How it works</span>
+                            <SidebarMenuButton asChild>
+                                <Link href="/how-it-works">
+                                    <i className={`bi bi-book`}></i>
+                                    <span>How it works</span>
+                                </Link>
                             </SidebarMenuButton>
                             <SidebarMenuButton
                                 isActive={currentPage === 'settings'}

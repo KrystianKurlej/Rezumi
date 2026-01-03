@@ -1,21 +1,15 @@
 import Footer from "@/components/Footer"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import Navbar from "@/components/Navbar";
 
 export default function PrivacyPolicyPage() {
     return (
         <>
-            <div className="p-4">
-                <Button variant="secondary" className="sticky top-4" asChild>
-                    <Link href="/">
-                        <i className="bi bi-arrow-left-short"></i>
-                        Back to Home
-                    </Link>
-                </Button>
-                <main className="max-w-2xl mx-auto">
+            <Navbar />
+            <div className="max-w-3xl mx-auto">
+                <main className="p-4">
                     <header className="text-center py-12">
-                        <h1 className="text-4xl font-medium">Privacy Policy</h1>
-                        <p className="mt-2 text-sm text-gray-600">Effective date: January 2nd, 2026</p>
+                        <h1 className="text-6xl font-medium">Privacy Policy</h1>
+                        <p className="mt-4 text-sm text-gray-600">Effective date: January 2nd, 2026</p>
                     </header>
 
                     <section className="space-y-6">
