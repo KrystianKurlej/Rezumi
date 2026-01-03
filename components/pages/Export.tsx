@@ -147,7 +147,6 @@ export default function Export() {
     const handleTemplateChange = (templateId: string) => {
         dispatch(selectTemplate(templateId))
         
-        // Znajdź designId dla wybranego szablonu
         if (templateId === 'classic') {
             dispatch(setCurrentDesignId('classic'))
         } else {
