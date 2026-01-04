@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { PersonalInfo, setPersonalInfo, loadPersonalInfoFromDB } from '@/lib/slices/personalSlice'
+import { setPersonalInfo, loadPersonalInfoFromDB } from '@/lib/slices/personalSlice'
+import { PersonalInfo } from '@/lib/db/types'
 import { updatePersonalInfo as updatePersonalInfoDB, getPersonalInfo } from '@/lib/db'
 import {
   AccordionContent,
@@ -30,6 +31,7 @@ export default function PersonalForm() {
         languageId: personal.languageId,
         firstName: personal.firstName || '',
         lastName: personal.lastName || '',
+        role: personal.role || '',
         email: personal.email || '',
         phone: personal.phone || '',
         aboutDescription: personal.aboutDescription || '',
@@ -48,6 +50,7 @@ export default function PersonalForm() {
                         languageId: null,
                         firstName: data.firstName || '',
                         lastName: data.lastName || '',
+                        role: data.role || '',
                         email: data.email || '',
                         phone: data.phone || '',
                         aboutDescription: data.aboutDescription || '',
@@ -65,6 +68,7 @@ export default function PersonalForm() {
             languageId: personal.languageId,
             firstName: personal.firstName || '',
             lastName: personal.lastName || '',
+            role: personal.role || '',
             email: personal.email || '',
             phone: personal.phone || '',
             photo: personal.photo || '',
@@ -142,7 +146,7 @@ export default function PersonalForm() {
                                 />
                                 {getDefaultLanguageHint('firstName') && (
                                     <InputHint onClick={() => {
-                                        setLocalPersonal(prev => ({
+                                        setLocalPersonal((prev: PersonalInfo) => ({
                                             ...prev,
                                             firstName: getDefaultLanguageHint('firstName') || ''
                                         }))
@@ -165,12 +169,35 @@ export default function PersonalForm() {
                                 />
                                 {getDefaultLanguageHint('lastName') && (
                                     <InputHint onClick={() => {
-                                        setLocalPersonal(prev => ({
+                                        setLocalPersonal((prev: PersonalInfo) => ({
                                             ...prev,
                                             lastName: getDefaultLanguageHint('lastName') || ''
                                         }))
                                     }}>
                                         {getDefaultLanguageHint('lastName')}
+                                    </InputHint>
+                                )}
+                            </InputGroup>
+                        </Field>
+                        <Field className='col-span-2'>
+                            <FieldLabel htmlFor="role">
+                                Professional Role
+                            </FieldLabel>
+                            <InputGroup>
+                                <InputGroupInput
+                                    id="role"
+                                    value={localPersonal.role}
+                                    onChange={handleChange}
+                                    placeholder='Software Engineer'
+                                />
+                                {getDefaultLanguageHint('role') && (
+                                    <InputHint onClick={() => {
+                                        setLocalPersonal((prev: PersonalInfo) => ({
+                                            ...prev,
+                                            role: getDefaultLanguageHint('role') || ''
+                                        }))
+                                    }}>
+                                        {getDefaultLanguageHint('role')}
                                     </InputHint>
                                 )}
                             </InputGroup>
@@ -189,7 +216,7 @@ export default function PersonalForm() {
                                 />
                                 {getDefaultLanguageHint('email') && (
                                     <InputHint onClick={() => {
-                                        setLocalPersonal(prev => ({
+                                        setLocalPersonal((prev: PersonalInfo) => ({
                                             ...prev,
                                             email: getDefaultLanguageHint('email') || ''
                                         }))
@@ -213,7 +240,7 @@ export default function PersonalForm() {
                                 />
                                 {getDefaultLanguageHint('phone') && (
                                     <InputHint onClick={() => {
-                                        setLocalPersonal(prev => ({
+                                        setLocalPersonal((prev: PersonalInfo) => ({
                                             ...prev,
                                             phone: getDefaultLanguageHint('phone') || ''
                                         }))
@@ -282,7 +309,7 @@ export default function PersonalForm() {
                         />
                         {getDefaultLanguageHint('aboutDescription') && (
                             <InputHint variant="full" onClick={() => {
-                                setLocalPersonal(prev => ({
+                                setLocalPersonal((prev: PersonalInfo) => ({
                                     ...prev,
                                     aboutDescription: getDefaultLanguageHint('aboutDescription') || ''
                                 }))

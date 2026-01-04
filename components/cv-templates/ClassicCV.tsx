@@ -111,7 +111,7 @@ export default function ClassicCV({
                     )}
                     <View style={classicStyles.headerContent}>
                         <Text style={{ fontSize: 8, color: 'gray', marginBottom: 2 }}>
-                            {translate(lang, 'cv')}
+                            {personal.role || translate(lang, 'cv')}
                         </Text>
                         <Text style={classicStyles.title}>
                             {personal.firstName} {personal.lastName}

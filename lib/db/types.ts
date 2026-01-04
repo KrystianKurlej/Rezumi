@@ -17,6 +17,17 @@ export interface DBCVData {
     footer: { footerText: string }
 }
 
+export interface PersonalInfo {
+    languageId?: string | null
+    firstName: string
+    lastName: string
+    role?: string
+    email: string
+    phone: string
+    aboutDescription?: string
+    photo?: string
+}
+
 export interface DBExperience {
     id?: number
     type: 'experience'

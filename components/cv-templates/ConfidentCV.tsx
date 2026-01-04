@@ -297,7 +297,7 @@ export default function ConfidentCV({
                     {/* Header */}
                     <View>
                         <Text style={confidentStyles.jobTitle}>
-                            {translate(lang, 'cv')}
+                            {personal.role || translate(lang, 'cv')}
                         </Text>
                         <Text style={confidentStyles.fullName}>
                             {personal.firstName} {personal.lastName}

@@ -121,7 +121,7 @@ export default function MinimalisticCV({
                             style={minimalisticStyles.profilePhoto}
                         />
                     )}
-                    <Text>{translate(lang, 'cv')}</Text>
+                    <Text>{personal.role || translate(lang, 'cv')}</Text>
                     <Text style={minimalisticStyles.title}>{personal.firstName}</Text>
                     <Text style={minimalisticStyles.title}>{personal.lastName}</Text>
                 </View>

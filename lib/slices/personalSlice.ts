@@ -1,21 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getPersonalInfo } from '@/lib/db';
 import type { AppThunk } from '@/lib/store';
-
-export interface PersonalInfo {
-    languageId?: string | null
-    firstName: string
-    lastName: string
-    email: string
-    phone: string
-    aboutDescription?: string
-    photo?: string
-}
+import { PersonalInfo } from '@/lib/db/types'
 
 const initialState: PersonalInfo = {
     languageId: null,
     firstName: '',
     lastName: '',
+    role: '',
     email: '',
     phone: '',
     aboutDescription: '',
@@ -49,6 +41,7 @@ export const loadPersonalInfoFromDB = (): AppThunk => async (dispatch, getState)
                 languageId: savedPersonalInfo.languageId || null,
                 firstName: savedPersonalInfo.firstName || '',
                 lastName: savedPersonalInfo.lastName || '',
+                role: savedPersonalInfo.role || '',
                 email: savedPersonalInfo.email || '',
                 phone: savedPersonalInfo.phone || '',
                 aboutDescription: savedPersonalInfo.aboutDescription || '',
@@ -60,6 +53,7 @@ export const loadPersonalInfoFromDB = (): AppThunk => async (dispatch, getState)
                 languageId,
                 firstName: '',
                 lastName: '',
+                role: '',
                 email: '',
                 phone: '',
                 aboutDescription: '',
