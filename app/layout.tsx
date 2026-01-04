@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import StoreProvider from "./StoreProvider";
@@ -32,6 +33,7 @@ export default function RootLayout({
         <StoreProvider>
           {children}
         </StoreProvider>
+        <Analytics />
       </body>
     </html>
   );
