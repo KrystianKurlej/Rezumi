@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '@/lib/hooks'
-import type { PersonalInfo } from '@/lib/slices/personalSlice'
-import type { DBExperience, DBEducation, DBCourse } from '@/lib/db'
+import type { PersonalInfo, DBExperience, DBEducation, DBCourse } from '@/lib/db'
 import type { Skills } from '@/lib/slices/skillsSlice'
 import type { Footer } from '@/lib/slices/footerSlice'
 import { loadCVTemplate, type CVTemplateProps } from '@/components/cv-templates'

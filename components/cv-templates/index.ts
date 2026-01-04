@@ -1,4 +1,4 @@
-import { PersonalInfo } from '@/lib/slices/personalSlice';
+import { PersonalInfo } from '@/lib/db/types';
 import { DBExperience, DBEducation, DBCourse } from '@/lib/db';
 import { Skills } from '@/lib/slices/skillsSlice';
 import { Footer } from '@/lib/slices/footerSlice';

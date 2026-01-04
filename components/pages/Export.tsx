@@ -31,8 +31,7 @@ import { menuIcons } from "@/components/AppSidebar";
 import { pdf } from '@react-pdf/renderer';
 import { Input } from '@/components/ui/input';
 import { addApplication as addApplicationToDB } from '@/lib/db/applications'
-import { DBExperience, DBEducation, DBCourse } from '@/lib/db/types'
-import { type PersonalInfo } from '@/lib/slices/personalSlice'
+import { DBExperience, DBEducation, DBCourse, type PersonalInfo } from '@/lib/db/types'
 import { type Skills } from '@/lib/slices/skillsSlice'
 import { type Footer } from '@/lib/slices/footerSlice'
 import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, DialogTitle } from '../ui/dialog';
