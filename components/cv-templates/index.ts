@@ -4,7 +4,6 @@ const CV_TEMPLATES = {
     classic: () => import('./ClassicCV'),
     minimalist: () => import('./MinimalisticCV'),
     confident: () => import('./ConfidentCV'),
-    pastels: () => import('./PastelsCV'),
 } as const;
 
 export type CVTemplateType = keyof typeof CV_TEMPLATES;

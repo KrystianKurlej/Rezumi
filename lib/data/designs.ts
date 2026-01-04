@@ -14,9 +14,4 @@ export const designs = {
         description: "A bold design with strong typography and accents.",
         colors: ['#171717ff', '#2C3E50', '#5581adff']
     },
-    "pastels": {
-        title: "Pastels",
-        description: "A soft and gentle design with pastel colors.",
-        colors: ['#666', '#E8D5C4', '#fcf1e9ff']
-    },
 }
