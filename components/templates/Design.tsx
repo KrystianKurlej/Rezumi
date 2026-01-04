@@ -1,7 +1,3 @@
-import {
-  Avatar,
-  AvatarColor
-} from "@/components/ui/avatar"
 import { useAppDispatch, useAppSelector } from "@/lib/hooks"
 import { selectDesign } from "@/lib/slices/templatesSlice"
 import { designs } from "@/components/cv-templates/index"
@@ -12,23 +8,6 @@ interface DesignCardProps {
     selected?: boolean
     title: string
     description?: string
-    colors: string[]
-}
-
-export function DesignAvatar({ designId, thumbnail }: { designId: string, thumbnail?: boolean }) {
-    const design = designs[designId as keyof typeof designs]
-
-    if (!design) return null
-
-    return (
-        <div className={`flex -space-x-3 ${thumbnail && `absolute bottom-2 left-2`}`}>
-            {design.colors.map((color, index) => (
-                <Avatar key={index}>
-                    <AvatarColor style={{ backgroundColor: color }} />
-                </Avatar>
-            ))}
-        </div>
-    )
 }
 
 function DesignCard({ id, title, description }: DesignCardProps) {
@@ -52,7 +31,6 @@ function DesignCard({ id, title, description }: DesignCardProps) {
                     width={400}
                     height={200}
                 />
-                <DesignAvatar designId={id} thumbnail={true} />
             </div>
             <div className="p-4">
                 <span className="font-semibold text-sm">{title}</span>
@@ -74,7 +52,6 @@ export default function DesignForm() {
                     id={id}
                     title={design.title}
                     description={design.description}
-                    colors={design.colors}
                 />
             ))}
         </div>

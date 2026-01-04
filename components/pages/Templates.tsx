@@ -5,7 +5,6 @@ import {
 } from "@/components/PageHeader";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { menuIcons } from "@/components/AppSidebar";
-import { DesignAvatar } from "@/components/templates/Design";
 import {
   Item,
   ItemActions,
@@ -64,11 +63,6 @@ function TemplateCard({id, title, designId, isDefault, template, onUpdate}: Temp
                     <i className="bi bi-check-circle-fill text-lg"></i>
                 ) : (
                     <i className="bi bi-circle text-lg"></i>
-                )}
-                {designId && (
-                    <ItemMedia>
-                        <DesignAvatar designId={designId} />
-                    </ItemMedia>
                 )}
                 <ItemContent>
                     {title && (
