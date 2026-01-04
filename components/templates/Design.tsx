@@ -4,7 +4,7 @@ import {
 } from "@/components/ui/avatar"
 import { useAppDispatch, useAppSelector } from "@/lib/hooks"
 import { selectDesign } from "@/lib/slices/templatesSlice"
-import { designs } from "@/lib/data/designs"
+import { designs } from "@/components/cv-templates/index"
 import Image from "next/image"
 
 interface DesignCardProps {

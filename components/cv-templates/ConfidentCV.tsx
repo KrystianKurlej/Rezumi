@@ -1,22 +1,7 @@
 import { Font, Path, Svg } from '@react-pdf/renderer';
 import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import { formatDate, formatRichText, translate } from "@/lib/utils"
-import { PersonalInfo } from '@/lib/slices/personalSlice';
-import { DBExperience, DBEducation, DBCourse } from '@/lib/db';
-import { Skills } from '@/lib/slices/skillsSlice';
-import { Footer } from '@/lib/slices/footerSlice';
-import { Freelance } from '@/lib/slices/freelanceSlice';
-
-export interface CVTemplateProps {
-    lang: string;
-    personal: PersonalInfo;
-    experiences: DBExperience[];
-    educations: DBEducation[];
-    courses: DBCourse[];
-    skills: Skills;
-    freelance: Freelance;
-    footer: Footer;
-}
+import { CVTemplateProps } from './index';
 
 Font.register({
     family: 'Roboto',

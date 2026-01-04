@@ -1,4 +1,37 @@
-import type { CVTemplateProps } from './ClassicCV';
+import { PersonalInfo } from '@/lib/slices/personalSlice';
+import { DBExperience, DBEducation, DBCourse } from '@/lib/db';
+import { Skills } from '@/lib/slices/skillsSlice';
+import { Footer } from '@/lib/slices/footerSlice';
+import { Freelance } from '@/lib/slices/freelanceSlice';
+
+export interface CVTemplateProps {
+    lang: string;
+    personal: PersonalInfo;
+    experiences: DBExperience[];
+    educations: DBEducation[];
+    courses: DBCourse[];
+    skills: Skills;
+    freelance: Freelance;
+    footer: Footer;
+}
+
+export const designs = {
+    "classic": {
+        title: "Classic",
+        description: "A traditional layout with clear sections and headings.",
+        colors: ['#000000', '#555555', '#AAAAAA']
+    },
+    "minimalist": {
+        title: "Minimalist",
+        description: "A clean and simple design focusing on content.",
+        colors: ['#374151', '#6B7280', '#D1D5DB']
+    },
+    "confident": {
+        title: "Confident",
+        description: "A bold design with strong typography and accents.",
+        colors: ['#171717ff', '#2C3E50', '#5581adff']
+    },
+};
 
 const CV_TEMPLATES = {
     classic: () => import('./ClassicCV'),
@@ -16,5 +49,3 @@ export async function loadCVTemplate(templateId: string) {
     const templateModule = await loader();
     return templateModule.default;
 }
-
-export type { CVTemplateProps };

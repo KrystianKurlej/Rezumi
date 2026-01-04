@@ -1,7 +1,7 @@
 import { Font, Path } from '@react-pdf/renderer';
 import { Page, Text, View, Document, StyleSheet, Image, Svg } from '@react-pdf/renderer';
 import { formatDate, formatRichText, translate } from "@/lib/utils"
-import type { CVTemplateProps } from './ClassicCV';
+import { CVTemplateProps } from './index';
 
 Font.register({
     family: 'Roboto',
