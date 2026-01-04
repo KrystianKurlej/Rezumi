@@ -39,6 +39,9 @@ import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, Di
 import { getAllTemplates } from '@/lib/db/templates';
 import { DBTemplates } from '@/lib/db/types';
 import { type Freelance } from '@/lib/slices/freelanceSlice';
+import { getMenuItems } from "@/components/AppSidebar";
+
+const contentData = getMenuItems({slug: "export"});
 
 interface DownloadPDFProps {
     personal: PersonalInfo;
@@ -233,10 +236,10 @@ export default function Export() {
             <ScrollArea className="h-full">
                 <PageHeader iconClass={menuIcons.export}>
                     <PageHeaderTitle>
-                        Send & Save Application
+                        {contentData?.title}
                     </PageHeaderTitle>
                     <PageHeaderDescription>
-                        Create a PDF version of your CV and save it together with job details, so you always know what you sent and where.
+                        {contentData?.description}
                     </PageHeaderDescription>
                 </PageHeader>
                 <div className="p-4 pb-16">

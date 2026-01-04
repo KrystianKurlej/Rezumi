@@ -9,7 +9,6 @@ import {
   Item,
   ItemActions,
   ItemContent,
-  ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
 import { Button } from "@/components/ui/button";
@@ -21,6 +20,9 @@ import { TemplateEditDialog } from "@/components/templates/TemplateEditDialog";
 import { TemplateDeleteDialog } from "@/components/templates/TemplateDeleteDialog";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { selectTemplate, setCurrentDesignId } from "@/lib/slices/templatesSlice";
+import { getMenuItems } from "@/components/AppSidebar";
+
+const contentData = getMenuItems({slug: "templates"});
 
 interface TemplateCardProps {
   id: number | string
@@ -124,10 +126,10 @@ export default function Templates() {
         <ScrollArea className="h-full">
             <PageHeader iconClass={menuIcons.templates}>
                 <PageHeaderTitle>
-                    Templates
+                    {contentData?.title}
                 </PageHeaderTitle>
                 <PageHeaderDescription>
-                    Create different CV versions by choosing the layout and deciding what to show, hide, or rewrite for specific roles.
+                    {contentData?.description}
                 </PageHeaderDescription>
             </PageHeader>
             <div className="p-4 pb-16">

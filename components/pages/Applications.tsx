@@ -21,6 +21,9 @@ import { ApplicationAddNewDialog } from "@/components/applications/application/A
 import { Button } from "@/components/ui/button";
 import { getAllApplications, type DBApplication } from '@/lib/db'
 import { menuIcons } from "@/components/AppSidebar";
+import { getMenuItems } from "@/components/AppSidebar";
+
+const contentData = getMenuItems({slug: "applications"});
 
 export default function Applications() {
     const dispatch = useAppDispatch()
@@ -80,10 +83,10 @@ export default function Applications() {
         <ScrollArea className="h-full">
             <PageHeader iconClass={menuIcons.applications}>
                 <PageHeaderTitle>
-                    Applications
+                    {contentData?.title}
                 </PageHeaderTitle>
                 <PageHeaderDescription>
-                    Save snapshots of your CV for specific job applications and keep track of what you’ve sent.
+                    {contentData?.description}
                 </PageHeaderDescription>
             </PageHeader>
             <div className="p-4 pb-16">

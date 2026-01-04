@@ -16,6 +16,9 @@ import { menuIcons } from "@/components/AppSidebar";
 import { getLanguageName } from "@/lib/utils";
 import { useAppSelector } from "@/lib/hooks";
 import { InputGroupAddon, InputGroupButton } from "../ui/input-group";
+import { getMenuItems } from "@/components/AppSidebar";
+
+const contentData = getMenuItems({slug: "personal"});
 
 export function InputHint({ children, onClick, variant }: { 
     children: React.ReactNode; 
@@ -43,10 +46,10 @@ export default function CvData() {
         <ScrollArea className="h-full">
             <PageHeader iconClass={menuIcons.personal}>
                 <PageHeaderTitle>
-                    CV Data
+                    {contentData?.title}
                 </PageHeaderTitle>
                 <PageHeaderDescription>
-                    Set up your core CV information. Add experience, skills, education, and personal details once and reuse them everywhere.
+                    {contentData?.description}
                 </PageHeaderDescription>
             </PageHeader>
             <div className="p-2 pb-16">

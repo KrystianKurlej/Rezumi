@@ -15,7 +15,6 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { setCurrentPage } from '@/lib/slices/pagesSlice'
 import Logo from './Logo'
 import Footer from './Footer'
-import Link from "next/link"
 
 export const menuIcons = {
   personal: "bi-file-earmark-person",
@@ -26,8 +25,9 @@ export const menuIcons = {
 }
 
 const menuItems = [
-  {
-    title: "CV Data",
+   {
+    title: "Base Information",
+    description: "Set up your core CV information. Add experience, skills, education, and personal details once and reuse them everywhere.",
     slug: "personal",
     icon: menuIcons.personal,
     isActive: true,
@@ -35,13 +35,15 @@ const menuItems = [
   },
   {
     title: "Templates",
+    description: "Create different CV versions by choosing the layout and deciding what to show, hide, or rewrite for specific roles.",
     slug: "templates",
     icon: menuIcons.templates,
     isActive: false,
     isDisabled: false,
   },
   {
-    title: "Send & Save Application",
+    title: "Send & Save",
+    description: "Create a PDF version of your CV and save it together with job details, so you always know what you sent and where.",
     slug: "export",
     icon: menuIcons.export,
     isActive: false,
@@ -49,12 +51,22 @@ const menuItems = [
   },
   {
     title: "Applications",
+    description: "Save snapshots of your CV for specific job applications and keep track of what you’ve sent.",
     slug: "applications",
     icon: menuIcons.applications,
     isActive: false,
     isDisabled: false,
   },
 ]
+
+export function getMenuItems({slug}: {slug: string;}) {
+    if (!slug) {
+        return;
+    }
+
+    const item = menuItems.find(item => item.slug === slug);
+    return item;
+}
 
 export function AppSidebar() {
     const dispatch = useAppDispatch()
