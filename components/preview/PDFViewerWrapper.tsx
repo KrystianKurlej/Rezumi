@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '@/lib/hooks'
-import type { PersonalInfo, DBExperience, DBEducation, DBCourse } from '@/lib/db'
+import type { PersonalInfo, DBExperience, DBEducation, DBCourse, Links } from '@/lib/db'
 import type { Skills } from '@/lib/slices/skillsSlice'
 import type { Footer } from '@/lib/slices/footerSlice'
 import { loadCVTemplate, type CVTemplateProps } from '@/components/cv-templates'
@@ -18,6 +18,7 @@ interface PDFViewerWrapperProps {
     skills: Skills
     freelance: Freelance
     footer: Footer
+    links: Links
 }
 
 interface PDFClient {
@@ -34,7 +35,8 @@ export default function PDFViewerWrapper({
     courses,
     skills,
     freelance,
-    footer
+    footer,
+    links
 }: PDFViewerWrapperProps) {
     const [Client, setClient] = useState<PDFClient | null>(null)
     const currentDesignId = useAppSelector((state) => state.templates.currentDesignId)
@@ -47,7 +49,8 @@ export default function PDFViewerWrapper({
         courses,
         skills,
         freelance,
-        footer
+        footer,
+        links
     })
     
     console.log("🚀 ~ PDFViewerWrapper ~ preparedData:", preparedData)
@@ -83,6 +86,7 @@ export default function PDFViewerWrapper({
                 skills={preparedData.skills}
                 freelance={preparedData.freelance}
                 footer={preparedData.footer}
+                links={preparedData.links}
             />
         </PDFViewer>
     )

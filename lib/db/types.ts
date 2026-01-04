@@ -15,6 +15,7 @@ export interface DBCVData {
     skills: { skillsText: string }
     freelance: { freelanceText: string }
     footer: { footerText: string }
+    links?: Links
 }
 
 export interface PersonalInfo {
@@ -26,6 +27,17 @@ export interface PersonalInfo {
     phone: string
     aboutDescription?: string
     photo?: string
+}
+
+export interface Links {
+    languageId?: string | null
+    linkedin?: string
+    github?: string
+    portfolio?: string
+    twitter?: string
+    facebook?: string
+    instagram?: string
+    website?: string
 }
 
 export interface DBExperience {

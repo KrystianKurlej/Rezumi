@@ -11,6 +11,7 @@ import freelanceReducer from './slices/freelanceSlice'
 import pagesReducer from './slices/pagesSlice'
 import settingsReducer from './slices/settingsSlice'
 import templatesReducer from './slices/templatesSlice'
+import linksReducer from './slices/linksSlice'
 
 export const makeStore = () => {
     return configureStore({
@@ -31,6 +32,7 @@ export const makeStore = () => {
             freelance: freelanceReducer,
             settings: settingsReducer,
             templates: templatesReducer,
+            links: linksReducer,
         },
     })
 }

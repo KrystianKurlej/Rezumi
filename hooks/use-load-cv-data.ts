@@ -5,6 +5,7 @@ import { loadExperiencesFromDB } from '@/lib/slices/experienceSlice'
 import { loadEducationsFromDB } from '@/lib/slices/educationSlice'
 import { loadSkillsFromDB } from '@/lib/slices/skillsSlice'
 import { loadFooterFromDB } from '@/lib/slices/footerSlice'
+import { loadLinksFromDB } from '@/lib/slices/linksSlice'
 
 /**
  * Hook do automatycznego ładowania wszystkich danych CV przy zmianie języka
@@ -20,5 +21,6 @@ export function useLoadCVData() {
         dispatch(loadEducationsFromDB())
         dispatch(loadSkillsFromDB())
         dispatch(loadFooterFromDB())
+        dispatch(loadLinksFromDB())
     }, [selectedLanguage, dispatch])
 }

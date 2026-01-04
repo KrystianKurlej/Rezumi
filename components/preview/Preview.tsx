@@ -23,6 +23,7 @@ export default function Preview() {
     const skills = useAppSelector(state => state.skills)
     const freelance = useAppSelector(state => state.freelance)
     const footer = useAppSelector(state => state.footer)
+    const links = useAppSelector(state => state.links)
 
     return(
         <PDFViewerWrapper
@@ -35,6 +36,7 @@ export default function Preview() {
             skills={skills}
             freelance={freelance}
             footer={footer}
+            links={links}
         />
     )
 }

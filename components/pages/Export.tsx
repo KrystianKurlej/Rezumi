@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type ComponentType } from 'react'
 import { 
   PageHeader, 
   PageHeaderTitle, 
@@ -31,7 +31,8 @@ import { menuIcons } from "@/components/AppSidebar";
 import { pdf } from '@react-pdf/renderer';
 import { Input } from '@/components/ui/input';
 import { addApplication as addApplicationToDB } from '@/lib/db/applications'
-import { DBExperience, DBEducation, DBCourse, type PersonalInfo } from '@/lib/db/types'
+import { DBExperience, DBEducation, DBCourse, type PersonalInfo, type Links } from '@/lib/db/types'
+import type { CVTemplateProps } from '@/components/cv-templates'
 import { type Skills } from '@/lib/slices/skillsSlice'
 import { type Footer } from '@/lib/slices/footerSlice'
 import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, DialogTitle } from '../ui/dialog';
@@ -50,15 +51,16 @@ interface DownloadPDFProps {
     skills: Skills;
     freelance: Freelance;
     footer: Footer;
+    links: Links;
     filename: string;
     lang: string;
     designId?: string; // ID designu do użycia
 }
 
-export const handleDownloadPDF = async ({ personal, experiences, educations, courses, skills, freelance, footer, filename, lang, designId }: DownloadPDFProps) => {
+export const handleDownloadPDF = async ({ personal, experiences, educations, courses, skills, freelance, footer, links, filename, lang, designId }: DownloadPDFProps) => {
     // Dynamicznie ładuj szablon na podstawie designId
     const { loadCVTemplate } = await import('@/components/cv-templates')
-    const CVTemplate = await loadCVTemplate(designId || 'classic')
+    const CVTemplate = await loadCVTemplate(designId || 'classic') as ComponentType<CVTemplateProps>
     
     const blob = await pdf(
         <CVTemplate 
@@ -69,6 +71,7 @@ export const handleDownloadPDF = async ({ personal, experiences, educations, cou
             skills={skills}
             freelance={freelance}
             footer={footer}
+            links={links}
             lang={lang}
         />
     ).toBlob();
@@ -105,12 +108,12 @@ export default function Export() {
     const skills = useAppSelector(state => state.skills)
     const freelance = useAppSelector(state => state.freelance)
     const footer = useAppSelector(state => state.footer)
+    const links = useAppSelector(state => state.links)
     const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
     const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
     const selectedTemplateId = useAppSelector(state => state.templates.selectedTemplate)
     const currentDesignId = useAppSelector(state => state.templates.currentDesignId)
     
-    // Użyj hooka do przygotowania danych zgodnie z ustawieniami szablonu
     const preparedData = usePrepareData({
         lang: selectedLanguage || defaultLanguage || 'en',
         personal,
@@ -119,7 +122,8 @@ export default function Export() {
         courses,
         skills,
         freelance,
-        footer
+        footer,
+        links
     })
     
     const filename = 'CV-' + preparedData.personal.firstName + '_' + preparedData.personal.lastName + '.pdf'
@@ -170,7 +174,8 @@ export default function Export() {
                 courses: preparedData.courses, 
                 skills: preparedData.skills,
                 freelance: preparedData.freelance,
-                footer: preparedData.footer, 
+                footer: preparedData.footer,
+                links: preparedData.links,
                 filename, 
                 lang: preparedData.lang,
                 designId: currentDesignId || 'classic'
@@ -193,7 +198,8 @@ export default function Export() {
                 courses: preparedData.courses, 
                 skills: preparedData.skills,
                 freelance: preparedData.freelance,
-                footer: preparedData.footer, 
+                footer: preparedData.footer,
+                links: preparedData.links,
                 filename, 
                 lang: preparedData.lang,
                 designId: currentDesignId || 'classic'
@@ -219,7 +225,8 @@ export default function Export() {
                     courses: preparedData.courses,
                     skills: preparedData.skills,
                     freelance: preparedData.freelance,
-                    footer: preparedData.footer
+                    footer: preparedData.footer,
+                    links: preparedData.links
                 }
             })
             setLoading(false)

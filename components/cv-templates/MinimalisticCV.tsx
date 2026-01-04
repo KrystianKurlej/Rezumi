@@ -104,6 +104,7 @@ const minimalisticStyles = StyleSheet.create({
 export default function MinimalisticCV({
     lang,
     personal,
+    links,
     experiences,
     educations,
     courses,
@@ -111,6 +112,15 @@ export default function MinimalisticCV({
     freelance,
     footer
 }: CVTemplateProps) {
+    const socialLinks = [
+        { label: 'LinkedIn', value: links.linkedin },
+        { label: 'GitHub', value: links.github },
+        { label: 'Portfolio', value: links.portfolio },
+        { label: 'Website', value: links.website },
+        { label: 'Twitter', value: links.twitter },
+        { label: 'Facebook', value: links.facebook },
+        { label: 'Instagram', value: links.instagram },
+    ].filter((item) => Boolean(item.value))
     return (
         <Document>
             <Page size="A4" style={minimalisticStyles.page}>
@@ -144,6 +154,12 @@ export default function MinimalisticCV({
                                     <Text>{personal.phone}</Text>
                                 </View>
                             )}
+                            {socialLinks.map((link) => (
+                                <View key={link.label} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
+                                    <Text style={{ fontWeight: 'bold', marginRight: 4 }}>{link.label}:</Text>
+                                    <Text>{link.value}</Text>
+                                </View>
+                            ))}
                         </View>
                         {personal.aboutDescription && (
                             <View style={minimalisticStyles.columnSection}>

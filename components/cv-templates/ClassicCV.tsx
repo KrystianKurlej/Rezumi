@@ -92,6 +92,7 @@ const classicStyles = StyleSheet.create({
 export default function ClassicCV({
     lang,
     personal,
+    links,
     experiences,
     educations,
     courses,
@@ -99,6 +100,15 @@ export default function ClassicCV({
     freelance,
     footer
 }: CVTemplateProps) {
+    const socialLinks = [
+        { label: 'LinkedIn', value: links.linkedin },
+        { label: 'GitHub', value: links.github },
+        { label: 'Portfolio', value: links.portfolio },
+        { label: 'Website', value: links.website },
+        { label: 'Twitter', value: links.twitter },
+        { label: 'Facebook', value: links.facebook },
+        { label: 'Instagram', value: links.instagram },
+    ].filter((item) => Boolean(item.value))
     return (
         <Document>
             <Page size="A4" style={classicStyles.page}>
@@ -120,6 +130,9 @@ export default function ClassicCV({
                         <View style={classicStyles.contactInfo}>
                             {personal.email && <Text>{personal.email}</Text>}
                             {personal.phone && <Text>{personal.phone}</Text>}
+                            {socialLinks.map((link) => (
+                                <Text key={link.label}>{link.label}: {link.value}</Text>
+                            ))}
                         </View>
 
                         {personal.aboutDescription && (

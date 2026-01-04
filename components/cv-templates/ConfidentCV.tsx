@@ -188,6 +188,7 @@ const confidentStyles = StyleSheet.create({
 export default function ConfidentCV({
     lang,
     personal,
+    links,
     experiences,
     educations,
     courses,
@@ -195,6 +196,15 @@ export default function ConfidentCV({
     freelance,
     footer
 }: CVTemplateProps) {
+    const socialLinks = [
+        { label: 'LinkedIn', value: links.linkedin },
+        { label: 'GitHub', value: links.github },
+        { label: 'Portfolio', value: links.portfolio },
+        { label: 'Website', value: links.website },
+        { label: 'Twitter', value: links.twitter },
+        { label: 'Facebook', value: links.facebook },
+        { label: 'Instagram', value: links.instagram },
+    ].filter((item) => Boolean(item.value))
     const initials = `${personal.firstName?.[0] || ''}${personal.lastName?.[0] || ''}`;
     
     return (
@@ -239,6 +249,14 @@ export default function ConfidentCV({
                                 </Text>
                             </View>
                         )}
+                        {socialLinks.map((link) => (
+                            <View key={link.label} style={confidentStyles.sidebarItemContact}>
+                                <Text style={{ color: '#60a5fa', fontWeight: 'bold', fontSize: 10 }}>
+                                    {link.label}
+                                </Text>
+                                <Text style={confidentStyles.sidebarItemValue}>{link.value}</Text>
+                            </View>
+                        ))}
                     </View>
 
                     {/* Skills */}

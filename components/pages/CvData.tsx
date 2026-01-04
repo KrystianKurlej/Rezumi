@@ -17,6 +17,7 @@ import { getLanguageName } from "@/lib/utils";
 import { useAppSelector } from "@/lib/hooks";
 import { InputGroupAddon, InputGroupButton } from "../ui/input-group";
 import { getMenuItems } from "@/components/AppSidebar";
+import LinksForm from "../cv-data/links";
 
 const contentData = getMenuItems({slug: "personal"});
 
@@ -59,8 +60,9 @@ export default function CvData() {
                         You&apos;re editing {getLanguageName(selectedLanguage)} version
                     </p>
                 )}
-                <Accordion type="single" collapsible defaultValue="personal-section">
+                <Accordion type="single" collapsible>
                     <PersonalForm />
+                    <LinksForm />
                     <ExperienceForm />
                     <EducationForm />
                     <CoursesForm />

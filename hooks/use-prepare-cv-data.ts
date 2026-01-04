@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '@/lib/hooks'
 import { getAllTemplates } from '@/lib/db/templates'
-import type { PersonalInfo, DBExperience, DBEducation, DBCourse, DBTemplates } from '@/lib/db'
+import type { PersonalInfo, DBExperience, DBEducation, DBCourse, DBTemplates, Links } from '@/lib/db'
 import type { Skills } from '@/lib/slices/skillsSlice'
 import type { Footer } from '@/lib/slices/footerSlice'
 import type { Freelance } from '@/lib/slices/freelanceSlice'
@@ -15,6 +15,7 @@ interface UsePrepareDataProps {
     skills: Skills
     freelance: Freelance
     footer: Footer
+    links: Links
 }
 
 interface PreparedData {
@@ -26,6 +27,7 @@ interface PreparedData {
     skills: Skills
     freelance: Freelance
     footer: Footer
+    links: Links
 }
 
 export function usePrepareData({
@@ -36,7 +38,8 @@ export function usePrepareData({
     courses,
     skills,
     freelance,
-    footer
+    footer,
+    links
 }: UsePrepareDataProps) {
     const currentTemplateId = useAppSelector((state) => state.templates.selectedTemplate)
     const [currentTemplate, setCurrentTemplate] = useState<DBTemplates | null>(null)
@@ -69,6 +72,7 @@ export function usePrepareData({
         let modifiedSkills = { ...skills }
         let modifiedFreelance = { ...freelance }
         let modifiedFooter = { ...footer }
+        let modifiedLinks = { ...links }
 
         if (currentTemplate) {
             if (currentTemplate.personalInformation?.profilePicture?.disabled) {
@@ -195,7 +199,8 @@ export function usePrepareData({
             courses: modifiedCourses,
             skills: modifiedSkills,
             freelance: modifiedFreelance,
-            footer: modifiedFooter
+            footer: modifiedFooter,
+            links: modifiedLinks
         }
     })()
 
