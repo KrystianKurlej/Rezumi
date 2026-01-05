@@ -61,7 +61,8 @@ export default function EducationForm() {
 
     const handleDelete = async (id: number) => {
         try {
-            await deleteEducation(id)
+            const languageId = selectedLanguage || defaultLanguage
+            await deleteEducation(id, languageId)
             
             if (!selectedLanguage || selectedLanguage === defaultLanguage) {
                 await removeEducationFromAllDismissed(id)

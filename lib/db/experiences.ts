@@ -1,6 +1,35 @@
 import { initDB, STORE_NAME } from './base'
 import type { DBExperience, StoredItem } from './types'
 
+const sortExperiencesByStartDate = async (languageId: string | null): Promise<void> => {
+    const experiences = await getAllExperiences(languageId)
+    
+    const sortedExperiences = experiences.sort((a, b) => {
+        const dateA = new Date(a.startDate).getTime()
+        const dateB = new Date(b.startDate).getTime()
+        return dateB - dateA
+    })
+
+    const database = await initDB()
+    const transaction = database.transaction([STORE_NAME], 'readwrite')
+    const store = transaction.objectStore(STORE_NAME)
+
+    for (let i = 0; i < sortedExperiences.length; i++) {
+        const experience = sortedExperiences[i]
+        const updatedExperience = {
+            ...experience,
+            sortOrder: i,
+            updatedAt: Date.now()
+        }
+        store.put(updatedExperience)
+    }
+
+    return new Promise((resolve, reject) => {
+        transaction.oncomplete = () => resolve()
+        transaction.onerror = () => reject('Failed to sort experiences')
+    })
+}
+
 export const addExperience = async (experience: Omit<DBExperience, 'id' | 'createdAt' | 'type'>): Promise<number> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
@@ -10,8 +39,13 @@ export const addExperience = async (experience: Omit<DBExperience, 'id' | 'creat
         const id = timestamp
         const request = store.add({ ...experience, id, type: 'experience', createdAt: timestamp })
 
-        request.onsuccess = () => {
-            resolve(id)
+        request.onsuccess = async () => {
+            try {
+                await sortExperiencesByStartDate(experience.languageId ?? null)
+                resolve(id)
+            } catch (error) {
+                reject('Failed to sort experiences after adding')
+            }
         }
 
         request.onerror = () => {
@@ -33,7 +67,14 @@ export const getAllExperiences = async (languageId?: string | null): Promise<DBE
                 item.type === 'experience' && 
                 (item as DBExperience).languageId === languageId
             )
-            resolve(experiences)
+            
+            const sortedExperiences = experiences.sort((a, b) => {
+                const dateA = new Date(a.startDate).getTime()
+                const dateB = new Date(b.startDate).getTime()
+                return dateB - dateA
+            })
+            
+            resolve(sortedExperiences)
         }
 
         request.onerror = () => {
@@ -62,7 +103,14 @@ export const updateExperience = async (id: number, experience: Omit<DBExperience
                 
                 const putRequest = store.put(updatedExperience)
                 
-                putRequest.onsuccess = () => resolve()
+                putRequest.onsuccess = async () => {
+                    try {
+                        await sortExperiencesByStartDate(experience.languageId ?? null)
+                        resolve()
+                    } catch (error) {
+                        reject('Failed to sort experiences after updating')
+                    }
+                }
                 putRequest.onerror = () => reject('Failed to update experience')
             } else {
                 reject('Experience not found')
@@ -75,15 +123,22 @@ export const updateExperience = async (id: number, experience: Omit<DBExperience
     })
 }
 
-export const deleteExperience = async (id: number): Promise<void> => {
+export const deleteExperience = async (id: number, languageId?: string | null): Promise<void> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
         const store = transaction.objectStore(STORE_NAME)
         const request = store.delete(id)
 
-        request.onsuccess = () => {
-            resolve()
+        request.onsuccess = async () => {
+            try {
+                if (languageId !== undefined) {
+                    await sortExperiencesByStartDate(languageId)
+                }
+                resolve()
+            } catch (error) {
+                reject('Failed to sort experiences after deleting')
+            }
         }
 
         request.onerror = () => {

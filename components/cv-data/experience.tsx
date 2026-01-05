@@ -61,7 +61,8 @@ export default function ExperienceForm() {
 
     const handleDelete = async (id: number) => {
         try {
-            await deleteExperience(id)
+            const languageId = selectedLanguage || defaultLanguage
+            await deleteExperience(id, languageId)
             
             if (!selectedLanguage || selectedLanguage === defaultLanguage) {
                 await removeExperienceFromAllDismissed(id)

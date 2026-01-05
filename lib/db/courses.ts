@@ -1,6 +1,35 @@
 import { initDB, STORE_NAME } from './base'
 import type { DBCourse, StoredItem } from './types'
 
+const sortCoursesByCompletionDate = async (languageId: string | null): Promise<void> => {
+    const courses = await getAllCourses(languageId)
+    
+    const sortedCourses = courses.sort((a, b) => {
+        const dateA = new Date(a.completionDate).getTime()
+        const dateB = new Date(b.completionDate).getTime()
+        return dateB - dateA
+    })
+
+    const database = await initDB()
+    const transaction = database.transaction([STORE_NAME], 'readwrite')
+    const store = transaction.objectStore(STORE_NAME)
+
+    for (let i = 0; i < sortedCourses.length; i++) {
+        const course = sortedCourses[i]
+        const updatedCourse = {
+            ...course,
+            sortOrder: i,
+            updatedAt: Date.now()
+        }
+        store.put(updatedCourse)
+    }
+
+    return new Promise((resolve, reject) => {
+        transaction.oncomplete = () => resolve()
+        transaction.onerror = () => reject('Failed to sort courses')
+    })
+}
+
 export const addCourse = async (course: Omit<DBCourse, 'id' | 'createdAt' | 'type'>): Promise<number> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
@@ -10,8 +39,13 @@ export const addCourse = async (course: Omit<DBCourse, 'id' | 'createdAt' | 'typ
         const id = timestamp
         const request = store.add({ ...course, id, type: 'course', createdAt: timestamp })
 
-        request.onsuccess = () => {
-            resolve(id)
+        request.onsuccess = async () => {
+            try {
+                await sortCoursesByCompletionDate(course.languageId ?? null)
+                resolve(id)
+            } catch (error) {
+                reject('Failed to sort courses after adding')
+            }
         }
 
         request.onerror = () => {
@@ -33,7 +67,14 @@ export const getAllCourses = async (languageId?: string | null): Promise<DBCours
                 item.type === 'course' && 
                 (item as DBCourse).languageId === languageId
             )
-            resolve(courses)
+            
+            const sortedCourses = courses.sort((a, b) => {
+                const dateA = new Date(a.completionDate).getTime()
+                const dateB = new Date(b.completionDate).getTime()
+                return dateB - dateA
+            })
+            
+            resolve(sortedCourses)
         }
 
         request.onerror = () => {
@@ -62,7 +103,14 @@ export const updateCourse = async (id: number, course: Omit<DBCourse, 'id' | 'cr
                 
                 const putRequest = store.put(updatedCourse)
                 
-                putRequest.onsuccess = () => resolve()
+                putRequest.onsuccess = async () => {
+                    try {
+                        await sortCoursesByCompletionDate(course.languageId ?? null)
+                        resolve()
+                    } catch (error) {
+                        reject('Failed to sort courses after updating')
+                    }
+                }
                 putRequest.onerror = () => reject('Failed to update course')
             } else {
                 reject('Course not found')
@@ -75,15 +123,22 @@ export const updateCourse = async (id: number, course: Omit<DBCourse, 'id' | 'cr
     })
 }
 
-export const deleteCourse = async (id: number): Promise<void> => {
+export const deleteCourse = async (id: number, languageId?: string | null): Promise<void> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
         const store = transaction.objectStore(STORE_NAME)
         const request = store.delete(id)
 
-        request.onsuccess = () => {
-            resolve()
+        request.onsuccess = async () => {
+            try {
+                if (languageId !== undefined) {
+                    await sortCoursesByCompletionDate(languageId)
+                }
+                resolve()
+            } catch (error) {
+                reject('Failed to sort courses after deleting')
+            }
         }
 
         request.onerror = () => {

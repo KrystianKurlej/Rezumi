@@ -1,6 +1,35 @@
 import { initDB, STORE_NAME } from './base'
 import type { DBEducation, StoredItem } from './types'
 
+const sortEducationsByStartDate = async (languageId: string | null): Promise<void> => {
+    const educations = await getAllEducations(languageId)
+    
+    const sortedEducations = educations.sort((a, b) => {
+        const dateA = new Date(a.startDate).getTime()
+        const dateB = new Date(b.startDate).getTime()
+        return dateB - dateA
+    })
+
+    const database = await initDB()
+    const transaction = database.transaction([STORE_NAME], 'readwrite')
+    const store = transaction.objectStore(STORE_NAME)
+
+    for (let i = 0; i < sortedEducations.length; i++) {
+        const education = sortedEducations[i]
+        const updatedEducation = {
+            ...education,
+            sortOrder: i,
+            updatedAt: Date.now()
+        }
+        store.put(updatedEducation)
+    }
+
+    return new Promise((resolve, reject) => {
+        transaction.oncomplete = () => resolve()
+        transaction.onerror = () => reject('Failed to sort educations')
+    })
+}
+
 export const addEducation = async (education: Omit<DBEducation, 'id' | 'createdAt' | 'type'>): Promise<number> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
@@ -10,8 +39,13 @@ export const addEducation = async (education: Omit<DBEducation, 'id' | 'createdA
         const id = timestamp
         const request = store.add({ ...education, id, type: 'education', createdAt: timestamp })
 
-        request.onsuccess = () => {
-            resolve(id)
+        request.onsuccess = async () => {
+            try {
+                await sortEducationsByStartDate(education.languageId ?? null)
+                resolve(id)
+            } catch (error) {
+                reject('Failed to sort educations after adding')
+            }
         }
 
         request.onerror = () => {
@@ -33,7 +67,14 @@ export const getAllEducations = async (languageId?: string | null): Promise<DBEd
                 item.type === 'education' && 
                 (item as DBEducation).languageId === languageId
             )
-            resolve(educations)
+            
+            const sortedEducations = educations.sort((a, b) => {
+                const dateA = new Date(a.startDate).getTime()
+                const dateB = new Date(b.startDate).getTime()
+                return dateB - dateA
+            })
+            
+            resolve(sortedEducations)
         }
 
         request.onerror = () => {
@@ -62,7 +103,14 @@ export const updateEducation = async (id: number, education: Omit<DBEducation, '
                 
                 const putRequest = store.put(updatedEducation)
                 
-                putRequest.onsuccess = () => resolve()
+                putRequest.onsuccess = async () => {
+                    try {
+                        await sortEducationsByStartDate(education.languageId ?? null)
+                        resolve()
+                    } catch (error) {
+                        reject('Failed to sort educations after updating')
+                    }
+                }
                 putRequest.onerror = () => reject('Failed to update education')
             } else {
                 reject('Education not found')
@@ -75,15 +123,22 @@ export const updateEducation = async (id: number, education: Omit<DBEducation, '
     })
 }
 
-export const deleteEducation = async (id: number): Promise<void> => {
+export const deleteEducation = async (id: number, languageId?: string | null): Promise<void> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
         const transaction = database.transaction([STORE_NAME], 'readwrite')
         const store = transaction.objectStore(STORE_NAME)
         const request = store.delete(id)
 
-        request.onsuccess = () => {
-            resolve()
+        request.onsuccess = async () => {
+            try {
+                if (languageId !== undefined) {
+                    await sortEducationsByStartDate(languageId)
+                }
+                resolve()
+            } catch (error) {
+                reject('Failed to sort educations after deleting')
+            }
         }
 
         request.onerror = () => {
