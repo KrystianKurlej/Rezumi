@@ -2,6 +2,7 @@ import { Font } from '@react-pdf/renderer';
 import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import { formatDate, formatRichText, translate } from "@/lib/utils"
 import { CVTemplateProps } from './index';
+import { se } from 'date-fns/locale';
 
 Font.register({
     family: 'Roboto',
@@ -88,6 +89,26 @@ const classicStyles = StyleSheet.create({
         color: 'gray',
     },
 });
+
+function formatRichTextSegments(text: string) {
+  const segments = formatRichText(text);
+
+  return segments.map((segment, index) => (
+    <Text
+        key={index}
+        style={{
+            fontWeight: segment.bold || segment.heading ? 'bold' : 'normal',
+            fontStyle: segment.italic ? 'italic' : 'normal',
+            fontSize: segment.heading ? 12 : 10,
+            marginTop: segment.heading ? 8 : 0,
+            marginBottom: segment.heading ? 4 : 0,
+        }}
+    >
+        {segment.listItem ? '- ' : ''}
+        {segment.text}
+    </Text>
+  ));
+}
 
 export default function ClassicCV({
     lang,
@@ -224,18 +245,7 @@ export default function ClassicCV({
                             {translate(lang, 'skills')}
                         </Text>
                         <View style={{ marginTop: 8 }}>
-                            {formatRichText(skills.skillsText).map((segment, index) => (
-                                <Text
-                                    key={index}
-                                    style={{
-                                        marginBottom: 1,
-                                        fontWeight: segment.bold ? 'bold' : 'normal',
-                                        fontStyle: segment.italic ? 'italic' : 'normal',
-                                    }}
-                                >
-                                    {segment.text}
-                                </Text>
-                            ))}
+                            {formatRichTextSegments(skills.skillsText)}
                         </View>
                     </View>
                 )}
@@ -246,18 +256,7 @@ export default function ClassicCV({
                             {translate(lang, 'freelance')}
                         </Text>
                         <View style={{ marginTop: 8 }}>
-                            {formatRichText(freelance.freelanceText).map((segment, index) => (
-                                <Text
-                                    key={index}
-                                    style={{
-                                        marginBottom: 1,
-                                        fontWeight: segment.bold ? 'bold' : 'normal',
-                                        fontStyle: segment.italic ? 'italic' : 'normal',
-                                    }}
-                                >
-                                    {segment.text}
-                                </Text>
-                            ))}
+                            {formatRichTextSegments(freelance.freelanceText)}
                         </View>
                     </View>
                 )}

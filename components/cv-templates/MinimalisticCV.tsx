@@ -101,6 +101,26 @@ const minimalisticStyles = StyleSheet.create({
     },
 });
 
+function formatRichTextSegments(text: string) {
+  const segments = formatRichText(text);
+
+  return segments.map((segment, index) => (
+    <Text
+        key={index}
+        style={{
+            fontWeight: segment.bold || segment.heading ? 'bold' : 'normal',
+            fontStyle: segment.italic ? 'italic' : 'normal',
+            fontSize: segment.heading ? 12 : 10,
+            marginTop: segment.heading ? 8 : 0,
+            marginBottom: segment.heading ? 4 : 0,
+        }}
+    >
+        {segment.listItem ? '- ' : ''}
+        {segment.text}
+    </Text>
+  ));
+}
+
 export default function MinimalisticCV({
     lang,
     personal,
@@ -171,18 +191,7 @@ export default function MinimalisticCV({
                                 <Text style={minimalisticStyles.sectionTitle}>
                                     {translate(lang, 'skills')}
                                 </Text>
-                                {formatRichText(skills.skillsText).map((segment, index) => (
-                                    <Text
-                                        key={index}
-                                        style={{
-                                            marginBottom: 1,
-                                            fontWeight: segment.bold ? 'bold' : 'normal',
-                                            fontStyle: segment.italic ? 'italic' : 'normal',
-                                        }}
-                                    >
-                                        {segment.text}
-                                    </Text>
-                                ))}
+                                {formatRichTextSegments(skills.skillsText)}
                             </View>
                         )}
                     </View>
@@ -240,18 +249,7 @@ export default function MinimalisticCV({
                                 <Text style={minimalisticStyles.sectionTitle}>
                                     {translate(lang, 'freelance')}
                                 </Text>
-                                {formatRichText(freelance.freelanceText).map((segment, index) => (
-                                    <Text
-                                        key={index}
-                                        style={{
-                                            marginBottom: 1,
-                                            fontWeight: segment.bold ? 'bold' : 'normal',
-                                            fontStyle: segment.italic ? 'italic' : 'normal',
-                                        }}
-                                    >
-                                        {segment.text}
-                                    </Text>
-                                ))}
+                                {formatRichTextSegments(freelance.freelanceText)}
                             </View>
                         )}
                     </View>

@@ -33,6 +33,8 @@ type TextSegment = {
   text: string;
   bold?: boolean;
   italic?: boolean;
+  heading?: boolean;
+  listItem?: boolean;
 }
 
 export function formatRichText(text: string): TextSegment[] {
@@ -42,15 +44,22 @@ export function formatRichText(text: string): TextSegment[] {
   const lines = text.split('\n');
   
   lines.forEach((line, lineIndex) => {
+    // Jeśli linia jest pusta, po prostu dodaj \n i przejdź dalej
+    if (line === '') {
+      if (lineIndex < lines.length - 1) {
+        segments.push({ text: '\n' });
+      }
+      return;
+    }
+    
     let remaining = line;
-    const lineSegments: TextSegment[] = [];
     
     // Przetwarzanie jednej linii
     while (remaining.length > 0) {
       // Szukaj bold **text**
       const boldMatch = remaining.match(/^\*\*(.*?)\*\*/);
       if (boldMatch) {
-        lineSegments.push({ text: boldMatch[1], bold: true });
+        segments.push({ text: boldMatch[1], bold: true });
         remaining = remaining.slice(boldMatch[0].length);
         continue;
       }
@@ -58,7 +67,7 @@ export function formatRichText(text: string): TextSegment[] {
       // Szukaj italic *text*
       const italicMatch = remaining.match(/^\*(.*?)\*/);
       if (italicMatch) {
-        lineSegments.push({ text: italicMatch[1], italic: true });
+        segments.push({ text: italicMatch[1], italic: true });
         remaining = remaining.slice(italicMatch[0].length);
         continue;
       }
@@ -66,8 +75,25 @@ export function formatRichText(text: string): TextSegment[] {
       // Szukaj kombinacji bold + italic ***text***
       const boldItalicMatch = remaining.match(/^\*\*\*(.*?)\*\*\*/);
       if (boldItalicMatch) {
-        lineSegments.push({ text: boldItalicMatch[1], bold: true, italic: true });
+        segments.push({ text: boldItalicMatch[1], bold: true, italic: true });
         remaining = remaining.slice(boldItalicMatch[0].length);
+        continue;
+      }
+
+      // Szukaj nagłówków
+      const headerMatch = remaining.match(/^(#{1,6})\s+(.*)/);
+      if (headerMatch) {
+        segments.push({ text: headerMatch[2], heading: true });
+        remaining = remaining.slice(headerMatch[0].length);
+        continue;
+      }
+
+
+      // Szukaj list punktowanych
+      const listItemMatch = remaining.match(/^[-*]\s+(.*)/);
+      if (listItemMatch) {
+        segments.push({ text: listItemMatch[1], listItem: true });
+        remaining = remaining.slice(listItemMatch[0].length);
         continue;
       }
       
@@ -76,22 +102,20 @@ export function formatRichText(text: string): TextSegment[] {
       if (nextSpecial === -1) {
         // Nie ma więcej specjalnych znaków, dodaj resztę jako zwykły tekst
         if (remaining.length > 0) {
-          lineSegments.push({ text: remaining });
+          segments.push({ text: remaining });
         }
         break;
       } else if (nextSpecial > 0) {
         // Dodaj tekst przed specjalnym znakiem
-        lineSegments.push({ text: remaining.slice(0, nextSpecial) });
+        segments.push({ text: remaining.slice(0, nextSpecial) });
         remaining = remaining.slice(nextSpecial);
       } else {
         // nextSpecial === 0, ale nie pasuje do żadnego wzorca
         // Dodaj pierwszy znak jako zwykły tekst
-        lineSegments.push({ text: remaining[0] });
+        segments.push({ text: remaining[0] });
         remaining = remaining.slice(1);
       }
     }
-    
-    segments.push(...lineSegments);
   });
   
   return segments.length > 0 ? segments : [{ text }];
