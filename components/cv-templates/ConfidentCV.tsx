@@ -337,7 +337,7 @@ export default function ConfidentCV({
 
                     {/* Summary */}
                     {personal.aboutDescription && (
-                        <View style={confidentStyles.mainSection}>
+                        <View>
                             <Text style={confidentStyles.summaryText}>
                                 {personal.aboutDescription}
                             </Text>
@@ -464,6 +464,21 @@ export default function ConfidentCV({
                         </View>
                     )}
                 </View>
+                
+                <Text
+                    style={{
+                        position: 'absolute',
+                        bottom: 30,
+                        right: 30,
+                        fontSize: 8,
+                        color: '#9ca3af',
+                        width: 'auto',
+                    }}
+                    render={({ pageNumber, totalPages }) => 
+                        totalPages > 1 ? `${pageNumber}/${totalPages}` : ''
+                    }
+                    fixed
+                />
             </Page>
         </Document>
     )

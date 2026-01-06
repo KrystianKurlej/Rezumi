@@ -300,6 +300,20 @@ export default function ClassicCV({
                         <Text style={classicStyles.footerText}>{footer.footerText}</Text>
                     </View>
                 )}
+                
+                <Text
+                    style={{
+                        position: 'absolute',
+                        bottom: 30,
+                        right: 30,
+                        fontSize: 8,
+                        color: 'gray',
+                    }}
+                    render={({ pageNumber, totalPages }) => 
+                        totalPages > 1 ? `${pageNumber}/${totalPages}` : ''
+                    }
+                    fixed
+                />
             </Page>
         </Document>
     )
