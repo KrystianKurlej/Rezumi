@@ -116,7 +116,7 @@ const confidentStyles = StyleSheet.create({
     
     // Sekcje główne
     mainSection: {
-        marginBottom: 12,
+        marginTop: 24,
     },
     mainSectionTitle: {
         fontSize: 11,
@@ -136,7 +136,8 @@ const confidentStyles = StyleSheet.create({
     // Timeline
     timelineContainer: {
         position: 'relative',
-        padding: 10,
+        paddingLeft: 10,
+        marginTop: 4,
     },
     timelineLine: {
         position: 'absolute',
