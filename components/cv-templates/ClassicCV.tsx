@@ -143,7 +143,7 @@ export default function ClassicCV({
     return (
         <Document>
             <Page size="A4" style={classicStyles.page}>
-                <View style={classicStyles.headerSection}>
+                <View style={classicStyles.headerSection} wrap={false}>
                     {personal.photo && (
                         <Image
                             src={personal.photo}
@@ -175,7 +175,7 @@ export default function ClassicCV({
                 </View>
 
                 {experiences.length > 0 && (
-                    <View style={classicStyles.section}>
+                    <View style={classicStyles.section} wrap={false}>
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'experience')}
                         </Text>
@@ -200,7 +200,7 @@ export default function ClassicCV({
                 )}
 
                 {educations.length > 0 && (
-                    <View style={classicStyles.section}>
+                    <View style={classicStyles.section} wrap={false}>
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'education')}
                         </Text>
@@ -226,7 +226,7 @@ export default function ClassicCV({
                 )}
 
                 {courses.length > 0 && (
-                    <View style={classicStyles.section}>
+                    <View style={classicStyles.section} wrap={false}>
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'courses_certifications')}
                         </Text>
@@ -250,13 +250,13 @@ export default function ClassicCV({
                 )}
 
                 {skills.length > 0 && skillsHasDescription && (
-                    <View style={classicStyles.section}>
+                    <View style={classicStyles.section} wrap={false}>
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'skills')}
                         </Text>
                         <View style={{ marginTop: 8, flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
                             {skills.map((skill) => (
-                                <div key={skill.id} >
+                                <div key={skill.id}>
                                     <Text style={{ marginRight: 8, marginBottom: 4, fontWeight: 'bold' }}>
                                         {skill.skillName}
                                     </Text>
@@ -270,7 +270,7 @@ export default function ClassicCV({
                 )}
 
                 {skills.length > 0 && !skillsHasDescription && (
-                    <View style={classicStyles.section}>
+                    <View style={classicStyles.section} wrap={false}>
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'skills')}
                         </Text>
@@ -285,7 +285,7 @@ export default function ClassicCV({
                 )}
 
                 {freelance.freelanceText && (
-                    <View style={classicStyles.section}>
+                    <View style={classicStyles.section} wrap={false}>
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'freelance')}
                         </Text>
@@ -296,7 +296,7 @@ export default function ClassicCV({
                 )}
 
                 {footer.footerText && (
-                    <View style={classicStyles.footer}>
+                    <View style={classicStyles.footer} wrap={false}>
                         <Text style={classicStyles.footerText}>{footer.footerText}</Text>
                     </View>
                 )}

@@ -280,10 +280,7 @@ export default function ConfidentCV({
                             </View>
                         )}
                         {socialLinks.map((link) => (
-                            <View key={link.label} style={confidentStyles.sidebarItemContact}>
-                                <Text style={{ color: '#60a5fa', fontWeight: 'bold', fontSize: 10 }}>
-                                    {link.label}
-                                </Text>
+                            <View key={link.label} style={confidentStyles.sidebarItemContact} wrap={false}>
                                 <Text style={confidentStyles.sidebarItemValue}>{link.value}</Text>
                             </View>
                         ))}
@@ -291,7 +288,7 @@ export default function ConfidentCV({
 
                     {/* Skills */}
                     {skills.length > 0 && !skillsHasDescription && (
-                        <View style={confidentStyles.sidebarSection}>
+                        <View style={confidentStyles.sidebarSection} wrap={false}>
                             <Text style={confidentStyles.sidebarSectionTitle}>
                                 {translate(lang, 'skills')}
                             </Text>
@@ -305,7 +302,7 @@ export default function ConfidentCV({
                         </View>
                     )}
                     {skills.length > 0 && skillsHasDescription && (
-                        <View style={confidentStyles.sidebarSection}>
+                        <View style={confidentStyles.sidebarSection} wrap={false}>
                             <Text style={confidentStyles.sidebarSectionTitle}>
                                 {translate(lang, 'skills')}
                             </Text>
@@ -328,7 +325,7 @@ export default function ConfidentCV({
                 {/* Main Content - Prawa Kolumna */}
                 <View style={confidentStyles.mainContent}>
                     {/* Header */}
-                    <View>
+                    <View wrap={false}>
                         <Text style={confidentStyles.jobTitle}>
                             {personal.role || translate(lang, 'cv')}
                         </Text>
@@ -348,7 +345,7 @@ export default function ConfidentCV({
 
                     {/* Experience */}
                     {experiences.length > 0 && (
-                        <View style={confidentStyles.mainSection}>
+                        <View style={confidentStyles.mainSection} wrap={false}>
                             <Text style={confidentStyles.mainSectionTitle}>
                                 {translate(lang, 'experience')}
                             </Text>
@@ -380,7 +377,7 @@ export default function ConfidentCV({
 
                     {/* Education */}
                     {educations.length > 0 && (
-                        <View style={confidentStyles.mainSection}>
+                        <View style={confidentStyles.mainSection} wrap={false}>
                             <Text style={confidentStyles.mainSectionTitle}>
                                 {translate(lang, 'education')}
                             </Text>
@@ -412,7 +409,7 @@ export default function ConfidentCV({
 
                     {/* Courses */}
                     {courses.length > 0 && (
-                        <View style={confidentStyles.mainSection}>
+                        <View style={confidentStyles.mainSection} wrap={false}>
                             <Text style={confidentStyles.mainSectionTitle}>
                                 {translate(lang, 'courses_certifications')}
                             </Text>
@@ -444,7 +441,7 @@ export default function ConfidentCV({
 
                     {/* Freelance */}
                     {freelance.freelanceText && (
-                        <View style={confidentStyles.mainSection}>
+                        <View style={confidentStyles.mainSection} wrap={false}>
                             <Text style={confidentStyles.mainSectionTitle}>
                                 {translate(lang, 'freelance')}
                             </Text>
@@ -461,7 +458,7 @@ export default function ConfidentCV({
 
                     {/* Footer */}
                     {footer.footerText && (
-                        <View style={confidentStyles.footer}>
+                        <View style={confidentStyles.footer} wrap={false}>
                             <Text style={confidentStyles.footerText}>{footer.footerText}</Text>
                         </View>
                     )}

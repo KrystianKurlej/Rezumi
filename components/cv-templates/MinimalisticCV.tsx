@@ -185,19 +185,19 @@ export default function MinimalisticCV({
                                 </View>
                             )}
                             {socialLinks.map((link) => (
-                                <View key={link.label} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
+                                <View key={link.label} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }} wrap={false}>
                                     <Text style={{ fontWeight: 'bold', marginRight: 4 }}>{link.label}:</Text>
                                     <Text>{link.value}</Text>
                                 </View>
                             ))}
                         </View>
                         {personal.aboutDescription && (
-                            <View style={minimalisticStyles.columnSection}>
+                            <View style={minimalisticStyles.columnSection} wrap={false}>
                                 <Text style={{ marginBottom: 4 }}>{personal.aboutDescription}</Text>
                             </View>
                         )}
                         {skills.length > 0 && !skillsHasDescription && (
-                            <View style={minimalisticStyles.columnSection}>
+                            <View style={minimalisticStyles.columnSection} wrap={false}>
                                 <Text style={minimalisticStyles.sectionTitle}>
                                     {translate(lang, 'skills')}
                                 </Text>
@@ -209,7 +209,7 @@ export default function MinimalisticCV({
                             </View>
                         )}
                         {skills.length > 0 && skillsHasDescription && (
-                            <View style={minimalisticStyles.columnSection}>
+                            <View style={minimalisticStyles.columnSection} wrap={false}>
                                 <Text style={minimalisticStyles.sectionTitle}>
                                     {translate(lang, 'skills')}
                                 </Text>
@@ -228,7 +228,7 @@ export default function MinimalisticCV({
                     </View>
                     <View style={minimalisticStyles.columnRight}>
                         {experiences.length > 0 && (
-                            <View style={minimalisticStyles.columnSection}>
+                            <View style={minimalisticStyles.columnSection} wrap={false}>
                                 <Text style={minimalisticStyles.sectionTitle}>
                                     {translate(lang, 'experience')}
                                 </Text>
@@ -244,7 +244,7 @@ export default function MinimalisticCV({
                             </View>
                         )}
                         {educations.length > 0 && (
-                            <View style={minimalisticStyles.columnSection}>
+                            <View style={minimalisticStyles.columnSection} wrap={false}>
                                 <Text style={minimalisticStyles.sectionTitle}>
                                     {translate(lang, 'education')}
                                 </Text>
@@ -260,7 +260,7 @@ export default function MinimalisticCV({
                             </View>
                         )}
                         {courses.length > 0 && (
-                            <View style={minimalisticStyles.columnSection}>
+                            <View style={minimalisticStyles.columnSection} wrap={false}>
                                 <Text style={minimalisticStyles.sectionTitle}>
                                     {translate(lang, 'courses_certifications')}
                                 </Text>
@@ -276,7 +276,7 @@ export default function MinimalisticCV({
                             </View>
                         )}
                         {freelance.freelanceText && (
-                            <View style={minimalisticStyles.columnSection}>
+                            <View style={minimalisticStyles.columnSection} wrap={false}>
                                 <Text style={minimalisticStyles.sectionTitle}>
                                     {translate(lang, 'freelance')}
                                 </Text>
@@ -287,7 +287,7 @@ export default function MinimalisticCV({
                 </View>
 
                 {footer.footerText && (
-                    <View style={minimalisticStyles.footer}>
+                    <View style={minimalisticStyles.footer} wrap={false}>
                         <Text style={minimalisticStyles.footerText}>{footer.footerText}</Text>
                     </View>
                 )}
