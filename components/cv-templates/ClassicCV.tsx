@@ -130,6 +130,16 @@ export default function ClassicCV({
         { label: 'Facebook', value: links.facebook },
         { label: 'Instagram', value: links.instagram },
     ].filter((item) => Boolean(item.value))
+
+    let skillsHasDescription = false;
+
+    for (const skill of skills) {
+        if (skill.skillName && skill.skillName.trim() !== '') {
+            skillsHasDescription = true;
+            break;
+        }
+    }
+
     return (
         <Document>
             <Page size="A4" style={classicStyles.page}>
@@ -239,14 +249,34 @@ export default function ClassicCV({
                     </View>
                 )}
 
-                {skills.length > 0 && (
+                {skills.length > 0 && skillsHasDescription && (
                     <View style={classicStyles.section}>
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'skills')}
                         </Text>
                         <View style={{ marginTop: 8, flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
                             {skills.map((skill) => (
-                                <Text key={skill.id} style={{ marginRight: 8, marginBottom: 4 }}>
+                                <div key={skill.id} >
+                                <Text style={{ marginRight: 8, marginBottom: 4, fontWeight: 'bold' }}>
+                                    {skill.skillName}
+                                </Text>
+                                <Text style={{ marginRight: 8, marginBottom: 4 }}>
+                                    {skill.description}
+                                </Text>
+                                </div>
+                            ))}
+                        </View>
+                    </View>
+                )}
+
+                {skills.length > 0 && !skillsHasDescription && (
+                    <View style={classicStyles.section}>
+                        <Text style={classicStyles.sectionTitle}>
+                            {translate(lang, 'skills')}
+                        </Text>
+                        <View style={{ marginTop: 8, flexDirection: 'row', flexWrap: 'wrap' }}>
+                            {skills.map((skill) => (
+                                <Text key={skill.id} style={{ marginRight: 6, marginBottom: 4 }}>
                                     • {skill.skillName}
                                 </Text>
                             ))}
