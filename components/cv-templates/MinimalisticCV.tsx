@@ -141,6 +141,16 @@ export default function MinimalisticCV({
         { label: 'Facebook', value: links.facebook },
         { label: 'Instagram', value: links.instagram },
     ].filter((item) => Boolean(item.value))
+
+    let skillsHasDescription = false;
+
+    for (const skill of skills) {
+        if (skill.skillName && skill.skillName.trim() !== '') {
+            skillsHasDescription = true;
+            break;
+        }
+    }
+
     return (
         <Document>
             <Page size="A4" style={minimalisticStyles.page}>
@@ -186,7 +196,7 @@ export default function MinimalisticCV({
                                 <Text style={{ marginBottom: 4 }}>{personal.aboutDescription}</Text>
                             </View>
                         )}
-                        {skills.length > 0 && (
+                        {skills.length > 0 && !skillsHasDescription && (
                             <View style={minimalisticStyles.columnSection}>
                                 <Text style={minimalisticStyles.sectionTitle}>
                                     {translate(lang, 'skills')}
@@ -195,6 +205,23 @@ export default function MinimalisticCV({
                                     <Text key={skill.id} style={{ marginBottom: 2 }}>
                                         • {skill.skillName}
                                     </Text>
+                                ))}
+                            </View>
+                        )}
+                        {skills.length > 0 && skillsHasDescription && (
+                            <View style={minimalisticStyles.columnSection}>
+                                <Text style={minimalisticStyles.sectionTitle}>
+                                    {translate(lang, 'skills')}
+                                </Text>
+                                {skills.map((skill) => (
+                                    <div key={skill.id} >
+                                        <Text style={{ marginRight: 8, marginBottom: 4, fontWeight: 'bold' }}>
+                                            {skill.skillName}
+                                        </Text>
+                                        <Text style={{ marginRight: 8, marginBottom: 4 }}>
+                                            {skill.description}
+                                        </Text>
+                                    </div>
                                 ))}
                             </View>
                         )}

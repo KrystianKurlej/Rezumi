@@ -257,12 +257,12 @@ export default function ClassicCV({
                         <View style={{ marginTop: 8, flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
                             {skills.map((skill) => (
                                 <div key={skill.id} >
-                                <Text style={{ marginRight: 8, marginBottom: 4, fontWeight: 'bold' }}>
-                                    {skill.skillName}
-                                </Text>
-                                <Text style={{ marginRight: 8, marginBottom: 4 }}>
-                                    {skill.description}
-                                </Text>
+                                    <Text style={{ marginRight: 8, marginBottom: 4, fontWeight: 'bold' }}>
+                                        {skill.skillName}
+                                    </Text>
+                                    <Text style={{ marginRight: 8, marginBottom: 4 }}>
+                                        {skill.description}
+                                    </Text>
                                 </div>
                             ))}
                         </View>

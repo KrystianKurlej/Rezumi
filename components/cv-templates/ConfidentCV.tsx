@@ -225,7 +225,17 @@ export default function ConfidentCV({
         { label: 'Facebook', value: links.facebook },
         { label: 'Instagram', value: links.instagram },
     ].filter((item) => Boolean(item.value))
+    
     const initials = `${personal.firstName?.[0] || ''}${personal.lastName?.[0] || ''}`;
+
+    let skillsHasDescription = false;
+
+    for (const skill of skills) {
+        if (skill.skillName && skill.skillName.trim() !== '') {
+            skillsHasDescription = true;
+            break;
+        }
+    }
     
     return (
         <Document>
@@ -280,7 +290,7 @@ export default function ConfidentCV({
                     </View>
 
                     {/* Skills */}
-                    {skills.length > 0 && (
+                    {skills.length > 0 && !skillsHasDescription && (
                         <View style={confidentStyles.sidebarSection}>
                             <Text style={confidentStyles.sidebarSectionTitle}>
                                 {translate(lang, 'skills')}
@@ -290,6 +300,25 @@ export default function ConfidentCV({
                                     <Text key={skill.id} style={{ marginBottom: 4 }}>
                                         • {skill.skillName}
                                     </Text>
+                                ))}
+                            </View>
+                        </View>
+                    )}
+                    {skills.length > 0 && skillsHasDescription && (
+                        <View style={confidentStyles.sidebarSection}>
+                            <Text style={confidentStyles.sidebarSectionTitle}>
+                                {translate(lang, 'skills')}
+                            </Text>
+                            <View>
+                                {skills.map((skill) => (
+                                    <div key={skill.id} >
+                                        <Text style={{ marginRight: 8, marginBottom: 4, fontWeight: 'bold' }}>
+                                            {skill.skillName}
+                                        </Text>
+                                        <Text style={{ marginRight: 8, marginBottom: 4 }}>
+                                            {skill.description}
+                                        </Text>
+                                    </div>
                                 ))}
                             </View>
                         </View>
