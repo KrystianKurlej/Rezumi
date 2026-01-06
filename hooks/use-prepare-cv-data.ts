@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '@/lib/hooks'
 import { getAllTemplates } from '@/lib/db/templates'
-import type { PersonalInfo, DBExperience, DBEducation, DBCourse, DBTemplates, Links } from '@/lib/db'
-import type { Skills } from '@/lib/slices/skillsSlice'
+import type { PersonalInfo, DBExperience, DBEducation, DBCourse, DBSkill, DBTemplates, Links } from '@/lib/db'
 import type { Footer } from '@/lib/slices/footerSlice'
 import type { Freelance } from '@/lib/slices/freelanceSlice'
 
@@ -12,7 +11,7 @@ interface UsePrepareDataProps {
     experiences: DBExperience[]
     educations: DBEducation[]
     courses: DBCourse[]
-    skills: Skills
+    skills: DBSkill[]
     freelance: Freelance
     footer: Footer
     links: Links
@@ -24,7 +23,7 @@ interface PreparedData {
     experiences: DBExperience[]
     educations: DBEducation[]
     courses: DBCourse[]
-    skills: Skills
+    skills: DBSkill[]
     freelance: Freelance
     footer: Footer
     links: Links
@@ -69,7 +68,7 @@ export function usePrepareData({
         let modifiedExperiences = [...experiences]
         let modifiedEducations = [...educations]
         let modifiedCourses = [...courses]
-        let modifiedSkills = { ...skills }
+        let modifiedSkills = Array.isArray(skills) ? [...skills] : []
         let modifiedFreelance = { ...freelance }
         let modifiedFooter = { ...footer }
         let modifiedLinks = { ...links }
@@ -161,13 +160,7 @@ export function usePrepareData({
             }
 
             if (currentTemplate.skills?.disabled) {
-                modifiedSkills = {
-                    skillsText: ''
-                }
-            } else if (currentTemplate.skills?.customValue) {
-                modifiedSkills = {
-                    skillsText: currentTemplate.skills.customValue
-                }
+                modifiedSkills = []
             }
 
             if (currentTemplate.freelance?.disabled) {

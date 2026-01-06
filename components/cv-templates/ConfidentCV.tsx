@@ -280,13 +280,17 @@ export default function ConfidentCV({
                     </View>
 
                     {/* Skills */}
-                    {skills.skillsText && (
+                    {skills.length > 0 && (
                         <View style={confidentStyles.sidebarSection}>
                             <Text style={confidentStyles.sidebarSectionTitle}>
                                 {translate(lang, 'skills')}
                             </Text>
                             <View>
-                                {formatRichTextSegments(skills.skillsText)}
+                                {skills.map((skill) => (
+                                    <Text key={skill.id} style={{ marginBottom: 4 }}>
+                                        • {skill.skillName}
+                                    </Text>
+                                ))}
                             </View>
                         </View>
                     )}

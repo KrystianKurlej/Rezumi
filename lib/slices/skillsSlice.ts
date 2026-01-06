@@ -1,29 +1,46 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getSkills } from '@/lib/db';
+import { getAllSkills, addSkill, updateSkill, deleteSkill } from '@/lib/db';
 import type { AppThunk } from '@/lib/store';
+import type { DBSkill } from '@/lib/db/types';
 
-export interface Skills {
-    languageId?: string | null
-    skillsText: string
+export interface SkillsState {
+    skills: DBSkill[]
 }
 
-const initialState: Skills = {
-    languageId: null,
-    skillsText: '',
+const initialState: SkillsState = {
+    skills: []
 };
 
 const skillsSlice = createSlice({
     name: 'skills',
     initialState,
     reducers: {
-        setSkills(state, action: PayloadAction<Skills>) {
-            return action.payload;
+        setSkills(state, action: PayloadAction<DBSkill[]>) {
+            state.skills = action.payload;
+        },
+        addSkillToState(state, action: PayloadAction<DBSkill>) {
+            state.skills = [action.payload, ...state.skills];
+        },
+        updateSkillInState(state, action: PayloadAction<DBSkill>) {
+            const index = state.skills.findIndex(s => s.id === action.payload.id);
+            if (index !== -1) {
+                state.skills[index] = action.payload;
+            }
+        },
+        removeSkillFromState(state, action: PayloadAction<number>) {
+            state.skills = state.skills.filter(s => s.id !== action.payload);
         },
         resetSkills: () => initialState,
     },
 });
 
-export const { setSkills, resetSkills } = skillsSlice.actions;
+export const { 
+    setSkills, 
+    addSkillToState, 
+    updateSkillInState, 
+    removeSkillFromState, 
+    resetSkills 
+} = skillsSlice.actions;
 
 export const loadSkillsFromDB = (): AppThunk => async (dispatch, getState) => {
     try {
@@ -33,17 +50,73 @@ export const loadSkillsFromDB = (): AppThunk => async (dispatch, getState) => {
         
         const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null;
         
-        const savedSkills = await getSkills(languageId);
-        if (savedSkills) {
-            dispatch(setSkills({
-                languageId: savedSkills.languageId || null,
-                skillsText: savedSkills.skillsText || ''
-            }));
-        } else {
-            dispatch(setSkills({ languageId, skillsText: '' }));
-        }
+        const skills = await getAllSkills(languageId);
+        dispatch(setSkills(skills));
     } catch (error) {
         console.error('Failed to load skills from DB:', error);
+    }
+};
+
+export const addSkillToDB = (skillName: string): AppThunk => async (dispatch, getState) => {
+    try {
+        const state = getState();
+        const selectedLanguage = state.preview.selectedLanguage;
+        const defaultLanguage = state.settings.defaultLanguage;
+        
+        const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null;
+        
+        const id = await addSkill({
+            languageId,
+            skillName,
+            description: ''
+        });
+        
+        dispatch(addSkillToState({
+            id,
+            type: 'skill',
+            languageId,
+            skillName,
+            description: '',
+            createdAt: Date.now()
+        }));
+    } catch (error) {
+        console.error('Failed to add skill:', error);
+    }
+};
+
+export const updateSkillInDB = (id: number, skillName: string, description?: string): AppThunk => async (dispatch, getState) => {
+    try {
+        const state = getState();
+        const selectedLanguage = state.preview.selectedLanguage;
+        const defaultLanguage = state.settings.defaultLanguage;
+        
+        const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null;
+        
+        await updateSkill(id, {
+            languageId,
+            skillName,
+            description
+        });
+        
+        const skill = state.skills.skills.find(s => s.id === id);
+        if (skill) {
+            dispatch(updateSkillInState({
+                ...skill,
+                skillName,
+                description
+            }));
+        }
+    } catch (error) {
+        console.error('Failed to update skill:', error);
+    }
+};
+
+export const deleteSkillFromDB = (id: number): AppThunk => async (dispatch) => {
+    try {
+        await deleteSkill(id);
+        dispatch(removeSkillFromState(id));
+    } catch (error) {
+        console.error('Failed to delete skill:', error);
     }
 };
 

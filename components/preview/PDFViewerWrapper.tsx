@@ -52,8 +52,6 @@ export default function PDFViewerWrapper({
         footer,
         links
     })
-    
-    console.log("🚀 ~ PDFViewerWrapper ~ preparedData:", preparedData)
 
     useEffect(() => {
         const loadPDF = async () => {

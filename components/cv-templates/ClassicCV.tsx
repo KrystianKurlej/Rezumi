@@ -239,13 +239,17 @@ export default function ClassicCV({
                     </View>
                 )}
 
-                {skills.skillsText && (
+                {skills.length > 0 && (
                     <View style={classicStyles.section}>
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'skills')}
                         </Text>
-                        <View style={{ marginTop: 8 }}>
-                            {formatRichTextSegments(skills.skillsText)}
+                        <View style={{ marginTop: 8, flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
+                            {skills.map((skill) => (
+                                <Text key={skill.id} style={{ marginRight: 8, marginBottom: 4 }}>
+                                    • {skill.skillName}
+                                </Text>
+                            ))}
                         </View>
                     </View>
                 )}

@@ -186,12 +186,16 @@ export default function MinimalisticCV({
                                 <Text style={{ marginBottom: 4 }}>{personal.aboutDescription}</Text>
                             </View>
                         )}
-                        {skills.skillsText && (
+                        {skills.length > 0 && (
                             <View style={minimalisticStyles.columnSection}>
                                 <Text style={minimalisticStyles.sectionTitle}>
                                     {translate(lang, 'skills')}
                                 </Text>
-                                {formatRichTextSegments(skills.skillsText)}
+                                {skills.map((skill) => (
+                                    <Text key={skill.id} style={{ marginBottom: 2 }}>
+                                        • {skill.skillName}
+                                    </Text>
+                                ))}
                             </View>
                         )}
                     </View>

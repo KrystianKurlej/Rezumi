@@ -12,7 +12,7 @@ export interface DBCVData {
     experiences: DBExperience[]
     educations: DBEducation[]
     courses: DBCourse[]
-    skills: { skillsText: string }
+    skills: DBSkill[]
     freelance: { freelanceText: string }
     footer: { footerText: string }
     links?: Links
@@ -77,6 +77,15 @@ export interface DBCourse {
     certificateUrl: string
     description: string
     isOngoing: boolean
+    createdAt: number
+}
+
+export interface DBSkill {
+    id?: number
+    type: 'skill'
+    languageId?: string | null
+    skillName: string
+    description?: string
     createdAt: number
 }
 

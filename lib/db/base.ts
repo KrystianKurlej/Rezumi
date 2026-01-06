@@ -1,7 +1,7 @@
 import type { StoredItem } from './types'
 
 export const DB_NAME = 'rezumiDB'
-export const DB_VERSION = 4
+export const DB_VERSION = 5
 export const STORE_NAME = 'rezumiStore'
 
 let db: IDBDatabase | null = null
@@ -26,13 +26,13 @@ export const initDB = (): Promise<IDBDatabase> => {
 
         request.onupgradeneeded = (event) => {
             const database = (event.target as IDBOpenDBRequest).result
+            const oldVersion = event.oldVersion
             
-            if (database.objectStoreNames.contains(STORE_NAME)) {
-                database.deleteObjectStore(STORE_NAME)
+            // Dla nowej instalacji
+            if (!database.objectStoreNames.contains(STORE_NAME)) {
+                const store = database.createObjectStore(STORE_NAME, { keyPath: 'id' })
+                store.createIndex('updatedAt', 'updatedAt', { unique: false })
             }
-            
-            const store = database.createObjectStore(STORE_NAME, { keyPath: 'id' })
-            store.createIndex('updatedAt', 'updatedAt', { unique: false })
         }
     })
 }

@@ -20,7 +20,7 @@ export default function Preview() {
     const experiences = useAppSelector(state => state.experiences.list)
     const educations = useAppSelector(state => state.educations.list)
     const courses = useAppSelector(state => state.courses.list)
-    const skills = useAppSelector(state => state.skills)
+    const skills = useAppSelector(state => state.skills.skills)
     const freelance = useAppSelector(state => state.freelance)
     const footer = useAppSelector(state => state.footer)
     const links = useAppSelector(state => state.links)
