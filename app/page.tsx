@@ -34,7 +34,7 @@ export default function Home() {
       personal,
       experiences: experiences.length,
       educations: educations.length,
-      skills: skills?.skillsText?.length || 0,
+      skills: skills?.skills?.length || 0,
       footer: footer?.footerText?.length || 0
     })
   }, [selectedLanguage, personal, experiences, educations, skills, footer])

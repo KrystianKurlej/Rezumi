@@ -150,4 +150,4 @@ export interface DBTemplates {
     createdAt: number
 }
 
-export type StoredItem = DBExperience | DBEducation | DBCourse | DBApplication | { id: string; type?: string }
+export type StoredItem = DBExperience | DBEducation | DBCourse | DBSkill | DBApplication | { id: string; type?: string }

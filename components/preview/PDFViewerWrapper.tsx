@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '@/lib/hooks'
-import type { PersonalInfo, DBExperience, DBEducation, DBCourse, Links } from '@/lib/db'
-import type { Skills } from '@/lib/slices/skillsSlice'
+import type { PersonalInfo, DBExperience, DBEducation, DBCourse, Links, DBSkill } from '@/lib/db'
 import type { Footer } from '@/lib/slices/footerSlice'
 import { loadCVTemplate, type CVTemplateProps } from '@/components/cv-templates'
 import { Freelance } from '@/lib/slices/freelanceSlice'
@@ -15,7 +14,7 @@ interface PDFViewerWrapperProps {
     experiences: DBExperience[]
     educations: DBEducation[]
     courses: DBCourse[]
-    skills: Skills
+    skills: DBSkill[]
     freelance: Freelance
     footer: Footer
     links: Links
