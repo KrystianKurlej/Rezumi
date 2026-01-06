@@ -323,18 +323,6 @@ export default function ConfidentCV({
                             </View>
                         </View>
                     )}
-
-                    {/* Freelance */}
-                    {freelance.freelanceText && (
-                        <View style={confidentStyles.sidebarSection}>
-                            <Text style={confidentStyles.sidebarSectionTitle}>
-                                {translate(lang, 'freelance')}
-                            </Text>
-                            <View>
-                                {formatRichTextSegments(freelance.freelanceText)}
-                            </View>
-                        </View>
-                    )}
                 </View>
 
                 {/* Main Content - Prawa Kolumna */}
@@ -450,6 +438,23 @@ export default function ConfidentCV({
                                         </View>
                                     </View>
                                 ))}
+                            </View>
+                        </View>
+                    )}
+
+                    {/* Freelance */}
+                    {freelance.freelanceText && (
+                        <View style={confidentStyles.mainSection}>
+                            <Text style={confidentStyles.mainSectionTitle}>
+                                {translate(lang, 'freelance')}
+                            </Text>
+                            <View style={confidentStyles.timelineContainer}>
+                                <View style={confidentStyles.timelineLine} />
+                                <View style={confidentStyles.timelineItem}>
+                                    <View style={confidentStyles.timelineContent}>
+                                        {formatRichTextSegments(freelance.freelanceText)}
+                                    </View>
+                                </View>
                             </View>
                         </View>
                     )}
