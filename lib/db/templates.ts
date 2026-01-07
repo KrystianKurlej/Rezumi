@@ -41,6 +41,9 @@ export const createTemplate = async (template: { name: string; description: stri
                 disabled: false,
                 customValue: '',
             },
+            links: {
+                disabled: [],
+            },
             freelance: {
                 disabled: false,
                 customValue: '',
@@ -90,6 +93,9 @@ export const updateTemplate = async (templateId: number, updatedData: {
     skills?: {
         disabled?: boolean;
         customValue?: string;
+    };
+    links?: {
+        disabled?: string[];
     };
     freelance?: {
         disabled?: boolean;
@@ -147,6 +153,10 @@ export const updateTemplate = async (templateId: number, updatedData: {
                     ...existingTemplate.skills,
                     ...updatedData.skills
                 } : existingTemplate.skills,
+                links: updatedData.links ? {
+                    ...existingTemplate.links,
+                    ...updatedData.links
+                } : existingTemplate.links,
                 freelance: updatedData.freelance ? {
                     ...existingTemplate.freelance,
                     ...updatedData.freelance

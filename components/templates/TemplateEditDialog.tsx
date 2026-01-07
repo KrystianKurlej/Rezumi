@@ -5,16 +5,6 @@ import { updateTemplate } from '@/lib/db/templates'
 import { DBTemplates } from '@/lib/db/types'
 import { Button } from "@/components/ui/button"
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-  DialogDescription
-} from "@/components/ui/dialog"
-import {
   Field,
   FieldGroup,
   FieldLabel,
@@ -105,6 +95,9 @@ export function TemplateEditDialog({
         disabled: false,
         customValue: ''
       },
+      links: {
+        disabled: []
+      },
       freelance: {
         disabled: false,
         customValue: ''
@@ -135,6 +128,7 @@ export function TemplateEditDialog({
         education: editingTemplate.education,
         courses: editingTemplate.courses,
         skills: editingTemplate.skills,
+        links: editingTemplate.links,
         freelance: editingTemplate.freelance,
         footer: editingTemplate.footer
       }
@@ -287,6 +281,39 @@ export function TemplateEditDialog({
                               }}
                             />
                           )}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="links">
+                      <AccordionTrigger>Links & Socials</AccordionTrigger>
+                      <AccordionContent>
+                        <div className='border p-3 rounded mb-2'>
+                          <div className="text-gray-600 mb-2">Select which social media links to show</div>
+                          <div className="flex flex-col gap-2">
+                            {['linkedin', 'github', 'portfolio', 'website', 'twitter', 'facebook', 'instagram'].map((link) => (
+                              <div key={link} className="flex items-center space-x-2">
+                                <Switch
+                                  id={`link-${link}`}
+                                  checked={!editingTemplate?.links?.disabled?.includes(link)}
+                                  onCheckedChange={(checked) => {
+                                    setEditingTemplate(prev => {
+                                      if (!prev) return null
+                                      const currentDisabled = prev.links?.disabled || []
+                                      return {
+                                        ...prev,
+                                        links: {
+                                          disabled: checked
+                                            ? currentDisabled.filter(l => l !== link)
+                                            : [...currentDisabled, link]
+                                        }
+                                      }
+                                    })
+                                  }}
+                                />
+                                <Label htmlFor={`link-${link}`} className="capitalize">{link}</Label>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </AccordionContent>
                     </AccordionItem>

@@ -182,6 +182,17 @@ export function usePrepareData({
                     footerText: currentTemplate.footer.customValue
                 }
             }
+
+            if (currentTemplate.links?.disabled && currentTemplate.links.disabled.length > 0) {
+                const disabledLinks = currentTemplate.links.disabled
+                if (disabledLinks.includes('linkedin')) modifiedLinks.linkedin = ''
+                if (disabledLinks.includes('github')) modifiedLinks.github = ''
+                if (disabledLinks.includes('portfolio')) modifiedLinks.portfolio = ''
+                if (disabledLinks.includes('twitter')) modifiedLinks.twitter = ''
+                if (disabledLinks.includes('facebook')) modifiedLinks.facebook = ''
+                if (disabledLinks.includes('instagram')) modifiedLinks.instagram = ''
+                if (disabledLinks.includes('website')) modifiedLinks.website = ''
+            }
         }
 
         return {

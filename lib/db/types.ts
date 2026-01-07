@@ -140,6 +140,9 @@ export interface DBTemplates {
         disabled: boolean
         customValue?: string
     }
+    links: {
+        disabled?: string[]
+    }
     freelance: {
         disabled: boolean
         customValue?: string
