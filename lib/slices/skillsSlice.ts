@@ -61,7 +61,7 @@ export const loadSkillsFromDB = (): AppThunk => async (dispatch, getState) => {
     }
 };
 
-export const addSkillToDB = (skillName: string): AppThunk => async (dispatch, getState) => {
+export const addSkillToDB = (skillName: string, description?: string): AppThunk => async (dispatch, getState) => {
     try {
         const state = getState();
         const selectedLanguage = state.preview.selectedLanguage;
@@ -77,7 +77,7 @@ export const addSkillToDB = (skillName: string): AppThunk => async (dispatch, ge
         const id = await addSkill({
             languageId,
             skillName,
-            description: '',
+            description: description || '',
             order: maxOrder + 1
         });
         
@@ -86,7 +86,7 @@ export const addSkillToDB = (skillName: string): AppThunk => async (dispatch, ge
             type: 'skill',
             languageId,
             skillName,
-            description: '',
+            description: description || '',
             order: maxOrder + 1,
             createdAt: Date.now()
         }));

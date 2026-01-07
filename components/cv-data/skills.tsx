@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { loadSkillsFromDB, addSkillToDB, deleteSkillFromDB, updateSkillInDB, updateSkillsOrderInDB } from '@/lib/slices/skillsSlice'
+import { loadSkillsFromDB, updateSkillInDB, updateSkillsOrderInDB } from '@/lib/slices/skillsSlice'
+import { deleteSkill, getAllSkills, getDismissedSkillHints, dismissSkillHint, removeSkillFromAllDismissed, type DBSkill } from '@/lib/db'
 import {
   AccordionContent,
   AccordionItem,
@@ -13,7 +14,6 @@ import {
   FieldGroup,
 } from "@/components/ui/field"
 import { Button } from '@/components/ui/button'
-import { Input } from '../ui/input'
 import { Item, ItemTitle, ItemActions } from '../ui/item'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Textarea } from '../ui/textarea'
@@ -34,6 +34,8 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import SkillHint from './skills/SkillHint'
+import { SkillAddDialog } from './skills/SkillAddDialog'
 
 interface SortableSkillItemProps {
     skill: { id?: number; skillName: string; description?: string };
@@ -133,8 +135,13 @@ export default function SkillsForm() {
     const dispatch = useAppDispatch()
     const skills = useAppSelector(state => state.skills.skills)
     const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
-    const [newSkillName, setNewSkillName] = useState<string>('')
+    const defaultLanguage = useAppSelector(state => state.settings.defaultLanguage)
     const [editingSkill, setEditingSkill] = useState<{ id: number; description: string } | null>(null)
+    const [dialogOpen, setDialogOpen] = useState(false)
+    const [defaultSkills, setDefaultSkills] = useState<DBSkill[]>([])
+    const [dismissedHints, setDismissedHints] = useState<number[]>([])
+    const [dismissedLoading, setDismissedLoading] = useState(true)
+    const [skillToEdit, setSkillToEdit] = useState<DBSkill | null>(null)
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -143,9 +150,38 @@ export default function SkillsForm() {
         })
     );
 
-    useEffect(() => {
+    const loadSkills = useCallback(async () => {
         dispatch(loadSkillsFromDB())
-    }, [selectedLanguage, dispatch])
+    }, [dispatch])
+
+    useEffect(() => {
+        const loadData = async () => {
+            setDismissedLoading(true)
+            if (selectedLanguage && selectedLanguage !== defaultLanguage) {
+                try {
+                    const dismissed = await getDismissedSkillHints(selectedLanguage)
+                    setDismissedHints(dismissed)
+                    
+                    const defaultSkillsList = await getAllSkills(null)
+                    setDefaultSkills(defaultSkillsList)
+                } catch (error) {
+                    console.error('Error loading default skills:', error)
+                } finally {
+                    setDismissedLoading(false)
+                }
+            } else {
+                setDefaultSkills([])
+                setDismissedHints([])
+                setDismissedLoading(false)
+            }
+        }
+        
+        loadData()
+    }, [selectedLanguage, defaultLanguage])
+
+    useEffect(() => {
+        loadSkills()
+    }, [selectedLanguage, loadSkills])
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
@@ -159,22 +195,58 @@ export default function SkillsForm() {
         }
     };
 
-    const handleAddSkill = async () => {
-        if (newSkillName.trim()) {
-            await dispatch(addSkillToDB(newSkillName.trim()))
-            setNewSkillName('')
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteSkill(id)
+            
+            if (!selectedLanguage || selectedLanguage === defaultLanguage) {
+                await removeSkillFromAllDismissed(id)
+            }
+            
+            await loadSkills()
+        } catch (error) {
+            console.error('Error deleting skill:', error)
         }
     }
 
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            e.preventDefault()
-            handleAddSkill()
+    const handleCopyAndEdit = (skill: DBSkill) => {
+        setSkillToEdit(skill)
+        setDialogOpen(true)
+    }
+
+    const handleDismiss = async (skillId: number) => {
+        if (!selectedLanguage) return
+        
+        try {
+            await dismissSkillHint(selectedLanguage, skillId)
+            setDismissedHints(prev => [...prev, skillId])
+        } catch (error) {
+            console.error('Error dismissing hint:', error)
         }
+    }
+
+    const handleDialogClose = (open: boolean) => {
+        setDialogOpen(open)
+        if (!open) {
+            setSkillToEdit(null)
+        }
+    }
+
+    const handleAdd = async () => {
+        if (skillToEdit?.id && selectedLanguage) {
+            try {
+                await dismissSkillHint(selectedLanguage, skillToEdit.id)
+                setDismissedHints(prev => [...prev, skillToEdit.id!])
+            } catch (error) {
+                console.error('Error dismissing hint:', error)
+            }
+        }
+        
+        await loadSkills()
     }
 
     const handleDeleteSkill = async (id: number) => {
-        await dispatch(deleteSkillFromDB(id))
+        await handleDelete(id)
     }
 
     const handleEditSkill = (skill: { id?: number; skillName: string; description?: string }) => {
@@ -193,6 +265,10 @@ export default function SkillsForm() {
         }
     }
 
+    const hintsToShow = !dismissedLoading 
+        ? defaultSkills.filter(skill => skill.id && !dismissedHints.includes(skill.id))
+        : []
+
     return (
         <AccordionItem value="skills-section">
             <AccordionTrigger>
@@ -200,25 +276,14 @@ export default function SkillsForm() {
             </AccordionTrigger>
             <AccordionContent>
                 <FieldGroup>
-                    <Field>
-                        <div className='flex gap-1'>
-                            <Input
-                                id="newSkill"
-                                placeholder="Type a new skill and press Enter"
-                                type='text'
-                                value={newSkillName}
-                                onChange={(e) => setNewSkillName(e.target.value)}
-                                onKeyUp={handleKeyPress}
-                            />
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={handleAddSkill}
-                            >
-                                <i className="bi bi-plus-lg"></i>
-                            </Button>
-                        </div>
-                    </Field>
+                    {hintsToShow.map((skill) => (
+                        <SkillHint
+                            key={`hint-${skill.id}`}
+                            skill={skill}
+                            onCopyAndEdit={() => handleCopyAndEdit(skill)}
+                            onDismiss={() => handleDismiss(skill.id!)}
+                        />
+                    ))}
                     
                     {skills.length > 0 && (
                         <Field>
@@ -252,6 +317,19 @@ export default function SkillsForm() {
                             </DndContext>
                         </Field>
                     )}
+                    
+                    <SkillAddDialog
+                        open={dialogOpen}
+                        onOpenChange={handleDialogClose}
+                        onAdd={handleAdd}
+                        initialData={skillToEdit}
+                        trigger={
+                            <Button variant="outline" className="w-full">
+                                <i className="bi bi-plus-lg"></i>
+                                {skills.length > 0 ? 'Add more Skills' : 'Add Skill'}
+                            </Button>
+                        }
+                    />
                 </FieldGroup>
             </AccordionContent>
         </AccordionItem>
