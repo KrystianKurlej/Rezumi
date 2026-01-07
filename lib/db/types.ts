@@ -86,6 +86,7 @@ export interface DBSkill {
     languageId?: string | null
     skillName: string
     description?: string
+    order: number
     createdAt: number
 }
 

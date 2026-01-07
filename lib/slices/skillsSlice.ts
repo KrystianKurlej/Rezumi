@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getAllSkills, addSkill, updateSkill, deleteSkill } from '@/lib/db';
+import { getAllSkills, addSkill, updateSkill, deleteSkill, updateSkillsOrder } from '@/lib/db';
 import type { AppThunk } from '@/lib/store';
 import type { DBSkill } from '@/lib/db/types';
 
@@ -30,6 +30,9 @@ const skillsSlice = createSlice({
         removeSkillFromState(state, action: PayloadAction<number>) {
             state.skills = state.skills.filter(s => s.id !== action.payload);
         },
+        reorderSkills(state, action: PayloadAction<DBSkill[]>) {
+            state.skills = action.payload;
+        },
         resetSkills: () => initialState,
     },
 });
@@ -38,7 +41,8 @@ export const {
     setSkills, 
     addSkillToState, 
     updateSkillInState, 
-    removeSkillFromState, 
+    removeSkillFromState,
+    reorderSkills,
     resetSkills 
 } = skillsSlice.actions;
 
@@ -65,10 +69,16 @@ export const addSkillToDB = (skillName: string): AppThunk => async (dispatch, ge
         
         const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null;
         
+        // Pobierz maksymalny order
+        const maxOrder = state.skills.skills.length > 0 
+            ? Math.max(...state.skills.skills.map(s => s.order ?? 0)) 
+            : -1;
+        
         const id = await addSkill({
             languageId,
             skillName,
-            description: ''
+            description: '',
+            order: maxOrder + 1
         });
         
         dispatch(addSkillToState({
@@ -77,6 +87,7 @@ export const addSkillToDB = (skillName: string): AppThunk => async (dispatch, ge
             languageId,
             skillName,
             description: '',
+            order: maxOrder + 1,
             createdAt: Date.now()
         }));
     } catch (error) {
@@ -117,6 +128,20 @@ export const deleteSkillFromDB = (id: number): AppThunk => async (dispatch) => {
         dispatch(removeSkillFromState(id));
     } catch (error) {
         console.error('Failed to delete skill:', error);
+    }
+};
+
+export const updateSkillsOrderInDB = (skills: DBSkill[]): AppThunk => async (dispatch) => {
+    try {
+        const skillsWithOrder = skills.map((skill, index) => ({
+            id: skill.id!,
+            order: index
+        }));
+        
+        await updateSkillsOrder(skillsWithOrder);
+        dispatch(reorderSkills(skills.map((skill, index) => ({ ...skill, order: index }))));
+    } catch (error) {
+        console.error('Failed to update skills order:', error);
     }
 };
 

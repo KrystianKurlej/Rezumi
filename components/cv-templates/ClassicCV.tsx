@@ -2,7 +2,6 @@ import { Font } from '@react-pdf/renderer';
 import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import { formatDate, formatRichText, translate } from "@/lib/utils"
 import { CVTemplateProps } from './index';
-import { se } from 'date-fns/locale';
 
 Font.register({
     family: 'Roboto',
@@ -254,9 +253,9 @@ export default function ClassicCV({
                         <Text style={classicStyles.sectionTitle}>
                             {translate(lang, 'skills')}
                         </Text>
-                        <View style={{ marginTop: 8, flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
+                        <View style={{ marginTop: 8 }}>
                             {skills.map((skill) => (
-                                <View key={skill.id} style={{ marginRight: 2, marginBottom: 2, borderLeft: '1px solid #e0e0e0', paddingLeft: 4, flexDirection: 'row', flexWrap: 'nowrap', gap: 2 }}>
+                                <View key={skill.id} style={{ marginBottom: 4, borderLeft: '1px solid #e0e0e0', paddingLeft: 4, flexDirection: 'row', flexWrap: 'nowrap', gap: 2 }}>
                                     <Text style={{ fontWeight: 'bold' }}>
                                         {skill.skillName}:
                                     </Text>

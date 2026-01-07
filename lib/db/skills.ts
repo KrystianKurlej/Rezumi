@@ -34,7 +34,12 @@ export const getAllSkills = async (languageId?: string | null): Promise<DBSkill[
                 (item as DBSkill).languageId === languageId
             )
             
-            const sortedSkills = skills.sort((a, b) => b.createdAt - a.createdAt)
+            // Sortuj po order, jeśli nie ma order to używaj createdAt
+            const sortedSkills = skills.sort((a, b) => {
+                const orderA = a.order !== undefined ? a.order : a.createdAt;
+                const orderB = b.order !== undefined ? b.order : b.createdAt;
+                return orderA - orderB;
+            })
             
             resolve(sortedSkills)
         }
@@ -96,5 +101,45 @@ export const deleteSkill = async (id: number): Promise<void> => {
         request.onerror = () => {
             reject('Failed to delete skill')
         }
+    })
+}
+
+export const updateSkillsOrder = async (skills: { id: number; order: number }[]): Promise<void> => {
+    const database = await initDB()
+    return new Promise((resolve, reject) => {
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
+        const store = transaction.objectStore(STORE_NAME)
+        let completedUpdates = 0
+        
+        skills.forEach(({ id, order }) => {
+            const getRequest = store.get(id)
+            
+            getRequest.onsuccess = () => {
+                const existingSkill = getRequest.result
+                if (existingSkill) {
+                    const updatedSkill = {
+                        ...existingSkill,
+                        order,
+                        updatedAt: Date.now()
+                    }
+                    const putRequest = store.put(updatedSkill)
+                    
+                    putRequest.onsuccess = () => {
+                        completedUpdates++
+                        if (completedUpdates === skills.length) {
+                            resolve()
+                        }
+                    }
+                    
+                    putRequest.onerror = () => {
+                        reject('Failed to update skill order')
+                    }
+                }
+            }
+            
+            getRequest.onerror = () => {
+                reject('Failed to retrieve skill')
+            }
+        })
     })
 }
