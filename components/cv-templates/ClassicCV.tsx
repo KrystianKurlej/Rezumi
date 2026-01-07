@@ -256,14 +256,14 @@ export default function ClassicCV({
                         </Text>
                         <View style={{ marginTop: 8, flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
                             {skills.map((skill) => (
-                                <div key={skill.id}>
-                                    <Text style={{ marginRight: 8, marginBottom: 4, fontWeight: 'bold' }}>
-                                        {skill.skillName}
+                                <View key={skill.id} style={{ marginRight: 2, marginBottom: 2, borderLeft: '1px solid #e0e0e0', paddingLeft: 4, flexDirection: 'row', flexWrap: 'nowrap', gap: 2 }}>
+                                    <Text style={{ fontWeight: 'bold' }}>
+                                        {skill.skillName}:
                                     </Text>
-                                    <Text style={{ marginRight: 8, marginBottom: 4 }}>
+                                    <Text>
                                         {skill.description}
                                     </Text>
-                                </div>
+                                </View>
                             ))}
                         </View>
                     </View>
