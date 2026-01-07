@@ -103,13 +103,15 @@ export const updateSkillInDB = (id: number, skillName: string, description?: str
         
         const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null;
         
+        const skill = state.skills.skills.find(s => s.id === id);
+        
         await updateSkill(id, {
             languageId,
             skillName,
-            description
+            description,
+            order: skill?.order ?? 0
         });
         
-        const skill = state.skills.skills.find(s => s.id === id);
         if (skill) {
             dispatch(updateSkillInState({
                 ...skill,
