@@ -8,6 +8,8 @@ import { loadCVTemplate, type CVTemplateProps } from '@/components/cv-templates'
 import { Freelance } from '@/lib/slices/freelanceSlice'
 import { usePrepareData } from '@/hooks/use-prepare-cv-data'
 import { useCheckDBData } from '@/hooks/use-check-db-data'
+import { Button } from '../ui/button'
+import { useSeedDatabase } from '@/hooks/use-seed-database'
 
 interface PDFViewerWrapperProps {
     lang: string
@@ -41,6 +43,8 @@ export default function PDFViewerWrapper({
     const [Client, setClient] = useState<PDFClient | null>(null)
     const currentDesignId = useAppSelector((state) => state.templates.currentDesignId)
     const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
+    const { isDataEmpty, isChecking } = useCheckDBData(selectedLanguage || null)
+    const { seed, isSeeding } = useSeedDatabase()
     
     const preparedData = usePrepareData({
         lang,
@@ -53,8 +57,6 @@ export default function PDFViewerWrapper({
         footer,
         links
     })
-
-    const { isDataEmpty, isChecking } = useCheckDBData(selectedLanguage || null)
 
     useEffect(() => {
         const loadPDF = async () => {
@@ -80,8 +82,18 @@ export default function PDFViewerWrapper({
         return (
             <div className='w-full h-full flex flex-col items-center justify-center text-white text-center p-4'>
                 <i className="bi bi-file-earmark-text text-6xl"></i>
-                <h1 className="text-4xl font-medium mt-2">Your CV preview will appear here</h1>
-                <p className='mt-4'>Start by filling in your CV data.<br />As you add content, your resume will update in real time.</p>
+                <h1 className="text-4xl font-medium mt-4">Your CV preview will appear here</h1>
+                <p className='mt-2'>Start by filling in your CV data.<br />As you add content, your resume will update in real time.</p>
+                <p className='my-4 opacity-50'>or</p>
+                <Button
+                    variant='outline'
+                    style={{ backgroundColor: '#282828' }}
+                    className='hover:text-white hover:!bg-secondary/10'
+                    onClick={seed}
+                    disabled={isSeeding}
+                >
+                    Start with sample CV data
+                </Button>
             </div>
         )
     } else {
