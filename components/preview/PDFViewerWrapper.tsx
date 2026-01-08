@@ -7,6 +7,7 @@ import type { Footer } from '@/lib/slices/footerSlice'
 import { loadCVTemplate, type CVTemplateProps } from '@/components/cv-templates'
 import { Freelance } from '@/lib/slices/freelanceSlice'
 import { usePrepareData } from '@/hooks/use-prepare-cv-data'
+import { useCheckDBData } from '@/hooks/use-check-db-data'
 
 interface PDFViewerWrapperProps {
     lang: string
@@ -39,6 +40,7 @@ export default function PDFViewerWrapper({
 }: PDFViewerWrapperProps) {
     const [Client, setClient] = useState<PDFClient | null>(null)
     const currentDesignId = useAppSelector((state) => state.templates.currentDesignId)
+    const selectedLanguage = useAppSelector(state => state.preview.selectedLanguage)
     
     const preparedData = usePrepareData({
         lang,
@@ -51,6 +53,8 @@ export default function PDFViewerWrapper({
         footer,
         links
     })
+
+    const { isDataEmpty, isChecking } = useCheckDBData(selectedLanguage || null)
 
     useEffect(() => {
         const loadPDF = async () => {
@@ -66,25 +70,35 @@ export default function PDFViewerWrapper({
         loadPDF()
     }, [currentDesignId])
 
-    if (!Client) {
+    if (!Client || isChecking) {
         return <div className="flex-1"></div>
     }
 
     const { PDFViewer, CVTemplate } = Client
 
-    return (
-        <PDFViewer key={currentDesignId} className='w-full h-full' showToolbar={false}>
-            <CVTemplate
-                lang={preparedData.lang}
-                personal={preparedData.personal}
-                experiences={preparedData.experiences}
-                educations={preparedData.educations}
-                courses={preparedData.courses}
-                skills={preparedData.skills}
-                freelance={preparedData.freelance}
-                footer={preparedData.footer}
-                links={preparedData.links}
-            />
-        </PDFViewer>
-    )
+    if (isDataEmpty) {
+        return (
+            <div className='w-full h-full flex flex-col items-center justify-center text-white text-center p-4'>
+                <i className="bi bi-file-earmark-text text-6xl"></i>
+                <h1 className="text-4xl font-medium mt-2">Your CV preview will appear here</h1>
+                <p className='mt-4'>Start by filling in your CV data.<br />As you add content, your resume will update in real time.</p>
+            </div>
+        )
+    } else {
+        return (
+            <PDFViewer key={currentDesignId} className='w-full h-full' showToolbar={false}>
+                <CVTemplate
+                    lang={preparedData.lang}
+                    personal={preparedData.personal}
+                    experiences={preparedData.experiences}
+                    educations={preparedData.educations}
+                    courses={preparedData.courses}
+                    skills={preparedData.skills}
+                    freelance={preparedData.freelance}
+                    footer={preparedData.footer}
+                    links={preparedData.links}
+                />
+            </PDFViewer>
+        )
+    }
 }
