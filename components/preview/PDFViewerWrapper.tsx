@@ -88,7 +88,7 @@ export default function PDFViewerWrapper({
                 <Button
                     variant='outline'
                     style={{ backgroundColor: '#282828' }}
-                    className='hover:text-white hover:!bg-secondary/10'
+                    className='hover:text-white hover:!bg-secondary/10 !border-white'
                     onClick={seed}
                     disabled={isSeeding}
                 >

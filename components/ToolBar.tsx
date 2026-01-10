@@ -23,7 +23,7 @@ export default function ToolBar() {
     });
 
     return (
-        <div className="bg-sidebar p-1 text-sm border-t flex items-center justify-between text-gray-600">
+        <div className="bg-sidebar p-1 text-sm border-t flex items-center justify-between text-primary">
             <div>
                 <Tooltip>
                     <TooltipTrigger asChild>

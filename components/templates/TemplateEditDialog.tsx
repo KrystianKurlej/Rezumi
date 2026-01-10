@@ -198,7 +198,7 @@ export function TemplateEditDialog({
                       <AccordionTrigger>Personal Information</AccordionTrigger>
                       <AccordionContent>
                         <div className='border p-3 rounded mb-1'>
-                          <div className="text-gray-600 mb-1">Profile picture</div>
+                          <div className="text-primary mb-1">Profile picture</div>
                           <div className="flex items-center space-x-2 py-1">
                             <Switch
                               id="profile-picture-show"
@@ -219,7 +219,7 @@ export function TemplateEditDialog({
                           </div>
                         </div>
                         <div className='border p-3 rounded'>
-                          <div className="text-gray-600 mb-1">About</div>
+                          <div className="text-primary mb-1">About</div>
                           <div className="flex items-center space-x-2 py-1">
                             <Switch
                               id="about-show"
@@ -288,7 +288,7 @@ export function TemplateEditDialog({
                       <AccordionTrigger>Links & Socials</AccordionTrigger>
                       <AccordionContent>
                         <div className='border p-3 rounded mb-2'>
-                          <div className="text-gray-600 mb-2">Select which social media links to show</div>
+                          <div className="text-primary mb-2">Select which social media links to show</div>
                           <div className="flex flex-col gap-2">
                             {['linkedin', 'github', 'portfolio', 'website', 'twitter', 'facebook', 'instagram'].map((link) => (
                               <div key={link} className="flex items-center space-x-2">
@@ -351,7 +351,7 @@ export function TemplateEditDialog({
                       <AccordionTrigger>Skills</AccordionTrigger>
                       <AccordionContent>
                         <div className='border p-3 rounded'>
-                          <div className="text-gray-600 mb-1">Skills</div>
+                          <div className="text-primary mb-1">Skills</div>
                           <div className="flex items-center space-x-2 py-1">
                             <Switch
                               id="skills-show"
@@ -415,7 +415,7 @@ export function TemplateEditDialog({
                       <AccordionTrigger>Freelance</AccordionTrigger>
                       <AccordionContent>
                         <div className='border p-3 rounded'>
-                          <div className="text-gray-600 mb-1">Freelance</div>
+                          <div className="text-primary mb-1">Freelance</div>
                           <div className="flex items-center space-x-2 py-1">
                             <Switch
                               id="freelance-show"
@@ -479,7 +479,7 @@ export function TemplateEditDialog({
                       <AccordionTrigger>Footer</AccordionTrigger>
                       <AccordionContent>
                         <div className='border p-3 rounded'>
-                          <div className="text-gray-600 mb-1">Footer</div>
+                          <div className="text-primary mb-1">Footer</div>
                           <div className="flex items-center space-x-2 py-1">
                             <Switch
                               id="footer-show"

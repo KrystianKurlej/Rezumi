@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
                 <main className="p-4">
                     <header className="text-center pt-20 pb-24">
                         <h1 className="text-4xl font-medium">Privacy Policy</h1>
-                        <p className="mt-4 text-sm text-gray-600 max-w-lg mx-auto">Effective date: January 2, 2026</p>
+                        <p className="mt-4 text-sm text-primary max-w-lg mx-auto">Effective date: January 2, 2026</p>
                     </header>
 
                     <section className="space-y-6">

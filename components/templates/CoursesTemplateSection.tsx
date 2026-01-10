@@ -25,7 +25,7 @@ export function CoursesTemplateSection({
         
         return (
           <div key={courseId} className='border p-3 rounded'>
-            <div className="text-gray-600 mb-1 text-sm">
+            <div className="text-primary mb-1 text-sm">
               {course.courseName} - {course.platform}
             </div>
             

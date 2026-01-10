@@ -52,14 +52,14 @@ export default function Home() {
                 <Preview key={previewKey} />
                 <ToolBar />
               </div>
-              <div className="border-l h-full flex-1 max-w-lg bg-white">
+              <div className="border-l h-full flex-1 max-w-lg bg-white dark:bg-gray-950">
                 {currentPage === 'personal' && <CvData />}
                 {currentPage === 'templates' && <Templates />}
                 {currentPage === 'export' && <Export />}
               </div>
             </div>
           ) : (
-            <div className="border-l h-full flex-1 bg-white">
+            <div className="border-l h-full flex-1 bg-white dark:bg-gray-950">
               {currentPage === 'applications' && <Applications />}
               {currentPage === 'settings' && <Settings />}
             </div>

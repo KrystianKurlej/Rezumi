@@ -270,7 +270,7 @@ export default function ApplicationsTable() {
             if (salary) {
                 return <div>{formatCurrency(salary)}</div>;
             } else {
-                return <div className="text-gray-600">N/A</div>;
+                return <div className="text-primary">N/A</div>;
             }
         },
     },

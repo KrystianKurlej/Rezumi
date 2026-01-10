@@ -13,7 +13,7 @@ export function PageHeader({ children, iconClass }: { children: React.ReactNode,
 
 export function PageHeaderTitle({ children }: { children: React.ReactNode }) {
     return (
-        <h1 className="text-xl text-gray-800 font-semibold">
+        <h1 className="text-xl font-semibold mt-2">
             {children}
         </h1>
     )
@@ -21,7 +21,7 @@ export function PageHeaderTitle({ children }: { children: React.ReactNode }) {
 
 export function PageHeaderDescription({ children }: { children: React.ReactNode }) {
     return (
-        <p className="text-gray-600 text-sm text-balance">
+        <p className="text-primary text-sm text-balance">
             {children}
         </p>
     )

@@ -25,7 +25,7 @@ export function EducationTemplateSection({
         
         return (
           <div key={eduId} className='border p-3 rounded'>
-            <div className="text-gray-600 mb-1 text-sm">
+            <div className="text-primary mb-1 text-sm">
               {edu.degree} - {edu.institution}
             </div>
             
