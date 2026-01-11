@@ -2,6 +2,8 @@
 
 import { useState, ReactNode } from 'react'
 import { updateApplication as updateApplicationInDB } from '@/lib/db'
+import { useAppDispatch } from '@/lib/hooks'
+import { setCurrentPage } from '@/lib/slices/pagesSlice'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -18,6 +20,7 @@ import {
   FieldGroup,
   FieldLabel,
   FieldSet,
+  FieldDescription
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -52,6 +55,7 @@ export function ApplicationEditDialog({
   onUpdate,
   trigger 
 }: ApplicationEditDialogProps) {
+  const dispatch = useAppDispatch()
   const [editingApplication, setEditingApplication] = useState<Application | null>(null)
   const [dateOpen, setDateOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -199,6 +203,9 @@ export function ApplicationEditDialog({
                   <SelectItem value="notForMe">Not For Me</SelectItem>
                 </SelectContent>
               </Select>
+              <FieldDescription>
+                Applications without status updates will be automatically marked as <em>Ghosted</em> after a configurable period (see <span className="underline cursor-pointer" onClick={() => dispatch(setCurrentPage('settings'))}>Settings</span>).
+              </FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="editDateApplied">
