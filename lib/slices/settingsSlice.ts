@@ -7,12 +7,14 @@ export interface SettingsState {
     defaultLanguage: string | null;
     availableLanguages: string[];
     defaultCurrency: string;
+    ghostedDelay: number | null;
 }
 
 const initialState: SettingsState = {
     defaultLanguage: null,
     availableLanguages: [],
     defaultCurrency: 'USD',
+    ghostedDelay: null,
 };
 
 const settingsSlice = createSlice({
@@ -38,6 +40,9 @@ const settingsSlice = createSlice({
         setDefaultCurrency(state, action: PayloadAction<string>) {
             state.defaultCurrency = action.payload;
         },
+        setGhostedDelay(state, action: PayloadAction<number | null>) {
+            state.ghostedDelay = action.payload;
+        },
         resetSettings: () => initialState,
     },
 });
@@ -48,6 +53,7 @@ export const {
     addLanguage,
     removeLanguage,
     setDefaultCurrency,
+    setGhostedDelay,
     resetSettings,
 } = settingsSlice.actions;
 

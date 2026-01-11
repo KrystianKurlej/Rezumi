@@ -11,6 +11,7 @@ export interface Application {
     salary: number | null
     dateApplied: string
     status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
+    statusChangedManually?: boolean
     cvData?: DBCVData
 }
 

@@ -20,17 +20,44 @@ export const addApplication = async (application: Omit<DBApplication, 'id' | 'cr
     })
 }
 
-export const getAllApplications = async (): Promise<DBApplication[]> => {
+export const getAllApplications = async (ghostedDelay?: number | null): Promise<DBApplication[]> => {
     const database = await initDB()
     return new Promise((resolve, reject) => {
-        const transaction = database.transaction([STORE_NAME], 'readonly')
+        const transaction = database.transaction([STORE_NAME], 'readwrite')
         const store = transaction.objectStore(STORE_NAME)
         const request = store.getAll()
 
-        request.onsuccess = () => {
+        request.onsuccess = async () => {
             const allResults = request.result as StoredItem[]
             const applications = allResults.filter((item): item is DBApplication => item.type === 'application')
-            resolve(applications)
+            
+            if (ghostedDelay && ghostedDelay > 0) {
+                const now = Date.now()
+                const updatedApplications: DBApplication[] = []
+                
+                for (const app of applications) {
+                    if (!app.statusChangedManually && app.status !== 'ghosted' && app.dateApplied) {
+                        const dateApplied = new Date(app.dateApplied).getTime()
+                        const daysSinceApplied = (now - dateApplied) / (1000 * 60 * 60 * 24)
+                        
+                        if (daysSinceApplied > ghostedDelay) {
+                            const updatedApp = { ...app, status: 'ghosted' as const }
+                            if (app.id) {
+                                const updateTransaction = database.transaction([STORE_NAME], 'readwrite')
+                                const updateStore = updateTransaction.objectStore(STORE_NAME)
+                                updateStore.put(updatedApp)
+                            }
+                            updatedApplications.push(updatedApp)
+                            continue
+                        }
+                    }
+                    updatedApplications.push(app)
+                }
+                
+                resolve(updatedApplications)
+            } else {
+                resolve(applications)
+            }
         }
 
         request.onerror = () => {

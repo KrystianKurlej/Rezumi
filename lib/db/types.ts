@@ -100,6 +100,7 @@ export interface DBApplication {
     salary: number | null
     dateApplied: string
     status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
+    statusChangedManually?: boolean
     createdAt: number
     cvData?: DBCVData
 }
@@ -108,6 +109,7 @@ export interface Settings {
     defaultLanguage: string | null
     availableLanguages: string[]
     defaultCurrency: string
+    ghostedDelay: number | null
 }
 
 export interface DBTemplates {

@@ -30,7 +30,8 @@ import {
     addLanguage, 
     removeLanguage, 
     setDefaultLanguage, 
-    setDefaultCurrency 
+    setDefaultCurrency,
+    setGhostedDelay
 } from "@/lib/slices/settingsSlice";
 import {
   InputGroup,
@@ -57,6 +58,8 @@ export default function Settings() {
     const [selectedDefaultLanguage, setSelectedDefaultLanguage] = useState<string | undefined>(undefined);
     const [defaultLanguageChanged, setDefaultLanguageChanged] = useState<boolean>(false);
     const [isLanguagesSelected, setIsLanguagesSelected] = useState<boolean>(false);
+    const [selectedGhostedDelay, setSelectedGhostedDelay] = useState<string | undefined>(undefined);
+    const [ghostedDelayChanged, setGhostedDelayChanged] = useState<boolean>(false);
     const [isImportErrorOpen, setIsImportErrorOpen] = useState<boolean>(false);
     const [isImportSuccessOpen, setIsImportSuccessOpen] = useState<boolean>(false);
 
@@ -74,11 +77,16 @@ export default function Settings() {
                 if (savedSettings.defaultLanguage) {
                     setSelectedDefaultLanguage(savedSettings.defaultLanguage);
                 }
+                
+                if (savedSettings.ghostedDelay) {
+                    setSelectedGhostedDelay(savedSettings.ghostedDelay.toString());
+                }
             } else {
                 const defaultSettings = {
                     defaultLanguage: null,
                     availableLanguages: [],
-                    defaultCurrency: "USD"
+                    defaultCurrency: "USD",
+                    ghostedDelay: null
                 };
                 await updateSettings(defaultSettings);
                 dispatch(setSettings(defaultSettings));
@@ -148,6 +156,23 @@ export default function Settings() {
         await updateSettings(newSettings);
         setSelectedCurrency(undefined);
     }
+
+    const handleSetGhostedDelay = async () => {
+        if (!selectedGhostedDelay) return;
+
+        const delayValue = parseInt(selectedGhostedDelay);
+        dispatch(setGhostedDelay(delayValue));
+
+        const newSettings = {
+            ...settings,
+            ghostedDelay: delayValue,
+        };
+
+        await updateSettings(newSettings);
+        setSelectedGhostedDelay(undefined);
+        setGhostedDelayChanged(false);
+    }
+
 
     const handleExportData = async () => {
         const data = await exportDB();
@@ -282,6 +307,36 @@ export default function Settings() {
                                 })}
                             </div>
                         )}
+                    </div>
+                </SettingsSection>
+                <Separator className="my-6" />
+                <SettingsSection
+                    title="Ghosted Status"
+                    description="Set the delay after which an application status should automatically change to ghosted."
+                >
+                    <div className="flex gap-2">
+                        <Select onValueChange={(value) => {setSelectedGhostedDelay(value); setGhostedDelayChanged(true);}} value={selectedGhostedDelay || settings.ghostedDelay?.toString()}>
+                            <SelectTrigger className="w-64">
+                                <SelectValue placeholder={settings.ghostedDelay ? `${settings.ghostedDelay} days` : "Select delay duration"} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem value="7">7 days</SelectItem>
+                                    <SelectItem value="14">14 days</SelectItem>
+                                    <SelectItem value="21">21 days</SelectItem>
+                                    <SelectItem value="30">30 days</SelectItem>
+                                    <SelectItem value="60">60 days</SelectItem>
+                                    <SelectItem value="90">90 days</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <Button 
+                            variant="outline" 
+                            disabled={!ghostedDelayChanged}
+                            onClick={() => {handleSetGhostedDelay();}}
+                        >
+                            Set ghosted delay
+                        </Button>
                     </div>
                 </SettingsSection>
                 <Separator className="my-6" />

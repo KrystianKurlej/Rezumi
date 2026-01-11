@@ -41,7 +41,8 @@ export default function Intro({ onComplete }: IntroProps) {
         const newSettings = {
             defaultLanguage: selectedLanguage,
             availableLanguages: [selectedLanguage],
-            defaultCurrency: selectedCurrency
+            defaultCurrency: selectedCurrency,
+            ghostedDelay: null
         };
 
         await updateSettings(newSettings);

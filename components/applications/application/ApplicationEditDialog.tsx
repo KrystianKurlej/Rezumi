@@ -85,6 +85,8 @@ export function ApplicationEditDialog({
       
       setLoading(true)
       
+      const statusChanged = editingApplication.status !== application.status
+      
       const updatedData = {
         companyName: editingApplication.companyName ?? application.companyName,
         position: editingApplication.position ?? application.position,
@@ -92,7 +94,8 @@ export function ApplicationEditDialog({
         notes: editingApplication.notes ?? application.notes,
         salary: editingApplication.salary ?? application.salary,
         dateApplied: editingApplication.dateApplied ?? application.dateApplied,
-        status: editingApplication.status ?? application.status
+        status: editingApplication.status ?? application.status,
+        statusChangedManually: statusChanged ? true : application.statusChangedManually
       }
       
       await updateApplicationInDB(parseInt(application.id), updatedData)

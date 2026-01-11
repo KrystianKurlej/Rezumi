@@ -120,6 +120,7 @@ function formatApplicationStatus(status: Application["status"]) {
 export default function ApplicationsTable() {
   const dispatch = useAppDispatch()
   const { list: data, isLoading: loading, sorting } = useAppSelector(state => state.applications)
+  const settings = useAppSelector((state) => state.settings)
 
   const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(null)
   
@@ -133,7 +134,7 @@ export default function ApplicationsTable() {
   const handleAddApplication = async () => {
     try {
       dispatch(setLoading(true))
-      const applications = await getAllApplications()
+      const applications = await getAllApplications(settings.ghostedDelay)
       const formattedData = applications.map((app: DBApplication) => ({
         id: app.id?.toString() || '',
         companyName: app.companyName,
@@ -143,6 +144,7 @@ export default function ApplicationsTable() {
         salary: app.salary,
         dateApplied: app.dateApplied,
         status: app.status,
+        statusChangedManually: app.statusChangedManually,
         cvData: app.cvData,
       }))
       dispatch(setApplications(formattedData))

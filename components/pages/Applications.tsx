@@ -28,6 +28,7 @@ const contentData = getMenuItems({slug: "applications"});
 export default function Applications() {
     const dispatch = useAppDispatch()
     const { hasApplications, isLoading: loading } = useAppSelector(state => state.applications)
+    const settings = useAppSelector((state) => state.settings)
 
     useEffect(() => {
         checkApplications()
@@ -37,7 +38,7 @@ export default function Applications() {
     const checkApplications = async () => {
         try {
             dispatch(setLoading(true))
-            const applications = await getAllApplications()
+            const applications = await getAllApplications(settings.ghostedDelay)
             const formattedData = applications.map((app: DBApplication) => ({
                 id: app.id?.toString() || '',
                 companyName: app.companyName,
@@ -47,6 +48,7 @@ export default function Applications() {
                 salary: app.salary,
                 dateApplied: app.dateApplied,
                 status: app.status,
+                statusChangedManually: app.statusChangedManually,
                 cvData: app.cvData,
             }))
             dispatch(setApplications(formattedData))
