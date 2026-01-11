@@ -6,6 +6,8 @@ import { loadEducationsFromDB } from '@/lib/slices/educationSlice'
 import { loadSkillsFromDB } from '@/lib/slices/skillsSlice'
 import { loadFooterFromDB } from '@/lib/slices/footerSlice'
 import { loadLinksFromDB } from '@/lib/slices/linksSlice'
+import { loadFreelanceFromDB } from '@/lib/slices/freelanceSlice'
+import { loadCoursesFromDB } from '@/lib/slices/coursesSlice'
 
 /**
  * Hook do automatycznego ładowania wszystkich danych CV przy zmianie języka
@@ -19,7 +21,9 @@ export function useLoadCVData() {
         dispatch(loadPersonalInfoFromDB())
         dispatch(loadExperiencesFromDB())
         dispatch(loadEducationsFromDB())
+        dispatch(loadCoursesFromDB())
         dispatch(loadSkillsFromDB())
+        dispatch(loadFreelanceFromDB())
         dispatch(loadFooterFromDB())
         dispatch(loadLinksFromDB())
     }, [selectedLanguage, dispatch])
