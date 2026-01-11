@@ -9,6 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "../ui/button"
+import Link from "next/link"
 
 export default function PrivacyPolicy() {
     return (
@@ -26,7 +27,7 @@ export default function PrivacyPolicy() {
                         <h2 className="text-lg font-medium mb-2">1. General Information</h2>
                         <p>Rezumi is a tool for creating and managing CV versions. We respect user privacy and ensure data is processed in a minimal, necessary scope.</p>
                         <p className="font-medium mt-2">Rezumi administrator:</p>
-                        <p>Krystian Kurlej<br/>Contact: [email to be added]</p>
+                        <p>Krystian Kurlej<br/>Contact: <Link className="underline" href="mailto:contact.rezumi@gmail.com">contact.rezumi@gmail.com</Link>.</p>
                     </article>
                     <article>
                     <h2 className="text-lg font-medium mb-2">2. Scope of Processed Data</h2>
@@ -66,7 +67,7 @@ export default function PrivacyPolicy() {
                     </article>
                     <article>
                         <h2 className="text-lg font-medium mb-2">9. Contact</h2>
-                        <p>For privacy-related inquiries or questions about your data, please contact us at: [email to be added]</p>
+                        <p>For privacy-related inquiries or questions about your data, please contact us at: <Link className="underline" href="mailto:contact.rezumi@gmail.com">contact.rezumi@gmail.com</Link>.</p>
                     </article>
                 </div>
                 <DialogFooter>
