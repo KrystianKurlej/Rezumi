@@ -31,13 +31,15 @@ import {
     removeLanguage, 
     setDefaultLanguage, 
     setDefaultCurrency,
-    setGhostedDelay
+    setGhostedDelay,
+    setTheme
 } from "@/lib/slices/settingsSlice";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group"
+import { useTheme } from "next-themes"
 
 function SettingsSection({ title, description, children, className }: { title: string; description: string; children: React.ReactNode; className?: string }) {
     return (
@@ -52,6 +54,7 @@ function SettingsSection({ title, description, children, className }: { title: s
 export default function Settings() {
     const dispatch = useAppDispatch();
     const settings = useAppSelector((state) => state.settings);
+    const { setTheme: setNextTheme } = useTheme();
     
     const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>(undefined);
     const [selectedCurrency, setSelectedCurrency] = useState<string | undefined>(undefined);
@@ -60,6 +63,8 @@ export default function Settings() {
     const [isLanguagesSelected, setIsLanguagesSelected] = useState<boolean>(false);
     const [selectedGhostedDelay, setSelectedGhostedDelay] = useState<string | undefined>(undefined);
     const [ghostedDelayChanged, setGhostedDelayChanged] = useState<boolean>(false);
+    const [selectedTheme, setSelectedTheme] = useState<string | undefined>(undefined);
+    const [themeChanged, setThemeChanged] = useState<boolean>(false);
     const [isImportErrorOpen, setIsImportErrorOpen] = useState<boolean>(false);
     const [isImportSuccessOpen, setIsImportSuccessOpen] = useState<boolean>(false);
 
@@ -81,12 +86,18 @@ export default function Settings() {
                 if (savedSettings.ghostedDelay) {
                     setSelectedGhostedDelay(savedSettings.ghostedDelay.toString());
                 }
+                
+                // Aplikuj theme z ustawień, ale nie ustawiaj selectedTheme aby nie aktywować przycisku
+                if (savedSettings.theme) {
+                    setNextTheme(savedSettings.theme);
+                }
             } else {
                 const defaultSettings = {
                     defaultLanguage: null,
                     availableLanguages: [],
                     defaultCurrency: "USD",
-                    ghostedDelay: null
+                    ghostedDelay: null,
+                    theme: 'system' as const
                 };
                 await updateSettings(defaultSettings);
                 dispatch(setSettings(defaultSettings));
@@ -94,7 +105,7 @@ export default function Settings() {
         };
 
         loadSettings();
-    }, [dispatch]);
+    }, [dispatch, setNextTheme]);
 
     const handleAddLanguage = async () => {
         if (!selectedLanguage) return;
@@ -171,6 +182,22 @@ export default function Settings() {
         await updateSettings(newSettings);
         setSelectedGhostedDelay(undefined);
         setGhostedDelayChanged(false);
+    }
+
+    const handleSetTheme = async () => {
+        if (!selectedTheme) return;
+
+        const themeValue = selectedTheme as 'light' | 'dark' | 'system';
+        dispatch(setTheme(themeValue));
+        setNextTheme(themeValue);
+
+        const newSettings = {
+            ...settings,
+            theme: themeValue,
+        };
+
+        await updateSettings(newSettings);
+        setThemeChanged(false);
     }
 
 
@@ -311,6 +338,62 @@ export default function Settings() {
                 </SettingsSection>
                 <Separator className="my-6" />
                 <SettingsSection
+                    title="Default Currency"
+                    description="Set your preferred default currency for your CV. This will be used for formatting your salary values."
+                >
+                    <div className="flex gap-2">
+                        <Select onValueChange={(value) => setSelectedCurrency(value)} value={selectedCurrency || settings.defaultCurrency}>
+                            <SelectTrigger className="w-64" >
+                                <SelectValue placeholder={settings.defaultCurrency ? `${currencies.find(c => c.code === settings.defaultCurrency)?.name || settings.defaultCurrency} (${currencies.find(c => c.code === settings.defaultCurrency)?.symbol || ''})` : "Select a default currency"} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {currencies.map((currency) => (
+                                        <SelectItem key={currency.code} value={currency.code}>
+                                            {currency.name} ({currency.symbol})
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <Button 
+                            variant="outline"
+                            onClick={() => {handleSetDefaultCurrency();}}
+                            disabled={!selectedCurrency}
+                        >
+                            Set as default currency
+                        </Button>
+                    </div>
+                </SettingsSection>
+                <Separator className="my-6" />
+                <SettingsSection
+                    title="Theme"
+                    description="Set the application theme to light, dark, or follow the system settings."
+                >
+                    <div className="flex gap-2">
+                        <Select onValueChange={(value) => {setSelectedTheme(value); setThemeChanged(true);}} value={selectedTheme || settings.theme}>
+                            <SelectTrigger className="w-64">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem value="system">Use system settings</SelectItem>
+                                    <SelectItem value="light">Light</SelectItem>
+                                    <SelectItem value="dark">Dark</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <Button 
+                            variant="outline" 
+                            disabled={!themeChanged}
+                            onClick={() => {handleSetTheme();}}
+                        >
+                            Set theme
+                        </Button>
+                    </div>
+                </SettingsSection>
+                <Separator className="my-6" />
+                <SettingsSection
                     title="Ghosted Status"
                     description="Set the delay after which an application status should automatically change to ghosted."
                 >
@@ -336,35 +419,6 @@ export default function Settings() {
                             onClick={() => {handleSetGhostedDelay();}}
                         >
                             Set ghosted delay
-                        </Button>
-                    </div>
-                </SettingsSection>
-                <Separator className="my-6" />
-                <SettingsSection
-                    title="Default Currency"
-                    description="Set your preferred default currency for your CV. This will be used for formatting your salary values."
-                >
-                    <div className="flex gap-2">
-                        <Select onValueChange={(value) => setSelectedCurrency(value)} value={selectedCurrency || settings.defaultCurrency}>
-                            <SelectTrigger className="w-64" >
-                                <SelectValue placeholder={settings.defaultCurrency ? `${currencies.find(c => c.code === settings.defaultCurrency)?.name || settings.defaultCurrency} (${currencies.find(c => c.code === settings.defaultCurrency)?.symbol || ''})` : "Select a default currency"} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {currencies.map((currency) => (
-                                        <SelectItem key={currency.code} value={currency.code}>
-                                            {currency.name} ({currency.symbol})
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                        <Button 
-                            variant="outline"
-                            onClick={() => {handleSetDefaultCurrency();}}
-                            disabled={!selectedCurrency}
-                        >
-                            Set as default currency
                         </Button>
                     </div>
                 </SettingsSection>

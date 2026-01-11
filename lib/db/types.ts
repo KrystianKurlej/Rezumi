@@ -110,6 +110,7 @@ export interface Settings {
     availableLanguages: string[]
     defaultCurrency: string
     ghostedDelay: number | null
+    theme: 'light' | 'dark' | 'system'
 }
 
 export interface DBTemplates {

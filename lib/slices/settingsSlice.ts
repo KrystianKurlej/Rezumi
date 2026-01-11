@@ -8,6 +8,7 @@ export interface SettingsState {
     availableLanguages: string[];
     defaultCurrency: string;
     ghostedDelay: number | null;
+    theme: 'light' | 'dark' | 'system';
 }
 
 const initialState: SettingsState = {
@@ -15,6 +16,7 @@ const initialState: SettingsState = {
     availableLanguages: [],
     defaultCurrency: 'USD',
     ghostedDelay: null,
+    theme: 'system',
 };
 
 const settingsSlice = createSlice({
@@ -43,6 +45,9 @@ const settingsSlice = createSlice({
         setGhostedDelay(state, action: PayloadAction<number | null>) {
             state.ghostedDelay = action.payload;
         },
+        setTheme(state, action: PayloadAction<'light' | 'dark' | 'system'>) {
+            state.theme = action.payload;
+        },
         resetSettings: () => initialState,
     },
 });
@@ -54,6 +59,7 @@ export const {
     removeLanguage,
     setDefaultCurrency,
     setGhostedDelay,
+    setTheme,
     resetSettings,
 } = settingsSlice.actions;
 

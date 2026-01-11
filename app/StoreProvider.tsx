@@ -11,6 +11,31 @@ import { loadSkillsFromDB } from "@/lib/slices/skillsSlice"
 import { loadFooterFromDB } from "@/lib/slices/footerSlice"
 import { getSettings } from "@/lib/db"
 import Intro from "@/components/pages/Intro"
+import { useTheme } from "next-themes"
+
+function StoreContent({ 
+    children, 
+    showIntro,
+    onIntroComplete 
+}: { 
+    children: React.ReactNode
+    showIntro: boolean
+    onIntroComplete: () => void
+}) {
+    const { setTheme } = useTheme()
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const settings = await getSettings()
+            if (settings?.theme) {
+                setTheme(settings.theme)
+            }
+        }
+        loadTheme()
+    }, [setTheme])
+
+    return <>{showIntro ? <Intro onComplete={onIntroComplete} /> : children}</>
+}
 
 export default function StoreProvider({
     children,
@@ -49,7 +74,9 @@ export default function StoreProvider({
 
     return (
         <Provider store={store}>
-            {showIntro ? <Intro onComplete={() => setShowIntro(false)} /> : children}
+            <StoreContent showIntro={showIntro} onIntroComplete={() => setShowIntro(false)}>
+                {children}
+            </StoreContent>
         </Provider>
     )
 }

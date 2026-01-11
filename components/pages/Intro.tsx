@@ -42,7 +42,8 @@ export default function Intro({ onComplete }: IntroProps) {
             defaultLanguage: selectedLanguage,
             availableLanguages: [selectedLanguage],
             defaultCurrency: selectedCurrency,
-            ghostedDelay: null
+            ghostedDelay: null,
+            theme: 'system' as const
         };
 
         await updateSettings(newSettings);
