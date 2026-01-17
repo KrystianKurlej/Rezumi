@@ -36,85 +36,85 @@ import { handleDownloadPDF } from "../pages/Export"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group"
 
 function formatApplicationStatus(status: Application["status"]) {
-    switch (status) {
-        case 'notApplied':
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#ef4444', borderRadius: '50%' }}></div>
-                    <span>Not Applied</span>
-                </div>
-            )
-        case 'submitted':
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#3b82f6', borderRadius: '50%' }}></div>
-                    <span>Submitted</span>
-                </div>
-            )
-        case 'rejected':
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#dc2626', borderRadius: '50%' }}></div>
-                    <span>Rejected</span>
-                </div>
-            )
-        case 'offerExtendedInProgress':
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span>Offer In Progress</span>
-                </div>
-            )
-        case 'sentFollowUp':
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#f59e0b', borderRadius: '50%' }}></div>
-                    <span>Follow Up Sent</span>
-                </div>
-            )
-        case 'ghosted':
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#6b7280', borderRadius: '50%' }}></div>
-                    <span>Ghosted</span>
-                </div>
-            )
-        case 'jobRemoved':
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#9ca3af', borderRadius: '50%' }}></div>
-                    <span>Job Removed</span>
-                </div>
-            )
-        case 'offerExtendedNotAccepted':
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#f97316', borderRadius: '50%' }}></div>
-                    <span>Offer Not Accepted</span>
-                </div>
-            )
-        case 'rescinded':
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#b91c1c', borderRadius: '50%' }}></div>
-                    <span>Rescinded</span>
-                </div>
-            )
-        case 'notForMe':
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#8b5cf6', borderRadius: '50%' }}></div>
-                    <span>Not For Me</span>
-                </div>
-            )
-        default:
-            return(
-                <div className="flex items-center gap-2">
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#d1d5db', borderRadius: '50%' }}></div>
-                    <span>Unknown</span>
-                </div>
-            )
-    }
+  switch (status) {
+    case 'notApplied':
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#ef4444', borderRadius: '50%' }}></div>
+          <span>Not Applied</span>
+        </div>
+      )
+    case 'submitted':
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#3b82f6', borderRadius: '50%' }}></div>
+          <span>Submitted</span>
+        </div>
+      )
+    case 'rejected':
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#dc2626', borderRadius: '50%' }}></div>
+          <span>Rejected</span>
+        </div>
+      )
+    case 'offerExtendedInProgress':
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
+          <span>Offer In Progress</span>
+        </div>
+      )
+    case 'sentFollowUp':
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#f59e0b', borderRadius: '50%' }}></div>
+          <span>Follow Up Sent</span>
+        </div>
+      )
+    case 'ghosted':
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#6b7280', borderRadius: '50%' }}></div>
+          <span>Ghosted</span>
+        </div>
+      )
+    case 'jobRemoved':
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#9ca3af', borderRadius: '50%' }}></div>
+          <span>Job Removed</span>
+        </div>
+      )
+    case 'offerExtendedNotAccepted':
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#f97316', borderRadius: '50%' }}></div>
+          <span>Offer Not Accepted</span>
+        </div>
+      )
+    case 'rescinded':
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#b91c1c', borderRadius: '50%' }}></div>
+          <span>Rescinded</span>
+        </div>
+      )
+    case 'notForMe':
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#8b5cf6', borderRadius: '50%' }}></div>
+          <span>Not For Me</span>
+        </div>
+      )
+    default:
+      return (
+        <div className="flex items-center gap-2">
+          <div style={{ width: '8px', height: '8px', backgroundColor: '#d1d5db', borderRadius: '50%' }}></div>
+          <span>Unknown</span>
+        </div>
+      )
+  }
 }
 
 export default function ApplicationsTable() {
@@ -123,7 +123,7 @@ export default function ApplicationsTable() {
   const settings = useAppSelector((state) => state.settings)
 
   const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(null)
-  
+
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -205,173 +205,173 @@ export default function ApplicationsTable() {
 
   const columns: ColumnDef<Application>[] = [
     {
-        accessorKey: "companyName",
-        header: ({ column }) => (
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              className="h-auto p-0 font-semibold hover:bg-transparent"
-            >
-              Company Name
-              {column.getIsSorted() === "asc" ? (
-                <i className="ml-2 bi bi-arrow-up text-xs"></i>
-              ) : column.getIsSorted() === "desc" ? (
-                <i className="ml-2 bi bi-arrow-down text-xs"></i>
-              ) : (
-                <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
-              )}
-            </Button>
-        ),
-        cell: ({ row }) => (
-            <div>{row.getValue("companyName")}</div>
-        ),
+      accessorKey: "companyName",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto p-0 font-semibold hover:bg-transparent"
+        >
+          Company Name
+          {column.getIsSorted() === "asc" ? (
+            <i className="ml-2 bi bi-arrow-up text-xs"></i>
+          ) : column.getIsSorted() === "desc" ? (
+            <i className="ml-2 bi bi-arrow-down text-xs"></i>
+          ) : (
+            <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
+          )}
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div>{row.getValue("companyName")}</div>
+      ),
     },
     {
-        accessorKey: "position",
-        header: ({ column }) => (
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              className="h-auto p-0 font-semibold hover:bg-transparent"
-            >
-              Position
-              {column.getIsSorted() === "asc" ? (
-                <i className="ml-2 bi bi-arrow-up text-xs"></i>
-              ) : column.getIsSorted() === "desc" ? (
-                <i className="ml-2 bi bi-arrow-down text-xs"></i>
-              ) : (
-                <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
-              )}
-            </Button>
-        ),
-        cell: ({ row }) => (
-            <div>{row.getValue("position")}</div>
-        ),
+      accessorKey: "position",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto p-0 font-semibold hover:bg-transparent"
+        >
+          Position
+          {column.getIsSorted() === "asc" ? (
+            <i className="ml-2 bi bi-arrow-up text-xs"></i>
+          ) : column.getIsSorted() === "desc" ? (
+            <i className="ml-2 bi bi-arrow-down text-xs"></i>
+          ) : (
+            <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
+          )}
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div>{row.getValue("position")}</div>
+      ),
     },
     {
-        accessorKey: "salary",
-        header: ({ column }) => (
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              className="h-auto p-0 font-semibold hover:bg-transparent"
-            >
-              Salary
-              {column.getIsSorted() === "asc" ? (
-                <i className="ml-2 bi bi-arrow-up text-xs"></i>
-              ) : column.getIsSorted() === "desc" ? (
-                <i className="ml-2 bi bi-arrow-down text-xs"></i>
-              ) : (
-                <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
-              )}
-            </Button>
-        ),
-        cell: ({ row }) => {
-            const salary = row.getValue("salary") as number | null;
-            
-            if (salary) {
-                return <div>{formatCurrency(salary)}</div>;
-            } else {
-                return <div className="text-primary">N/A</div>;
+      accessorKey: "salary",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto p-0 font-semibold hover:bg-transparent"
+        >
+          Salary
+          {column.getIsSorted() === "asc" ? (
+            <i className="ml-2 bi bi-arrow-up text-xs"></i>
+          ) : column.getIsSorted() === "desc" ? (
+            <i className="ml-2 bi bi-arrow-down text-xs"></i>
+          ) : (
+            <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
+          )}
+        </Button>
+      ),
+      cell: ({ row }) => {
+        const salary = row.getValue("salary") as number | null;
+
+        if (salary) {
+          return <div>{formatCurrency(salary)}</div>;
+        } else {
+          return <div className="text-primary">N/A</div>;
+        }
+      },
+    },
+    {
+      accessorKey: "status",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto p-0 font-semibold hover:bg-transparent"
+        >
+          Status
+          {column.getIsSorted() === "asc" ? (
+            <i className="ml-2 bi bi-arrow-up text-xs"></i>
+          ) : column.getIsSorted() === "desc" ? (
+            <i className="ml-2 bi bi-arrow-down text-xs"></i>
+          ) : (
+            <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
+          )}
+        </Button>
+      ),
+      cell: ({ row }) => (
+        formatApplicationStatus(row.getValue("status"))
+      ),
+    },
+    {
+      accessorKey: "dateApplied",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto p-0 font-semibold hover:bg-transparent"
+        >
+          Date Applied
+          {column.getIsSorted() === "asc" ? (
+            <i className="ml-2 bi bi-arrow-up text-xs"></i>
+          ) : column.getIsSorted() === "desc" ? (
+            <i className="ml-2 bi bi-arrow-down text-xs"></i>
+          ) : (
+            <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
+          )}
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div>{formatDate(row.getValue("dateApplied"), 'long')}</div>
+      ),
+    },
+    {
+      accessorKey: "actions",
+      header: '',
+      cell: ({ row }) => (
+        <div className="flex space-x-2">
+          <ApplicationEditDialog
+            application={row.original}
+            open={editDialogOpen === row.original.id}
+            onOpenChange={(open) => setEditDialogOpen(open ? row.original.id : null)}
+            onUpdate={handleUpdateApplication}
+            trigger={
+              <Button variant="outline" size="icon-sm">
+                <i className="bi bi-pencil-square"></i>
+              </Button>
             }
-        },
-    },
-    {
-        accessorKey: "status",
-        header: ({ column }) => (
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              className="h-auto p-0 font-semibold hover:bg-transparent"
-            >
-              Status
-              {column.getIsSorted() === "asc" ? (
-                <i className="ml-2 bi bi-arrow-up text-xs"></i>
-              ) : column.getIsSorted() === "desc" ? (
-                <i className="ml-2 bi bi-arrow-down text-xs"></i>
-              ) : (
-                <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
-              )}
+          />
+          <ApplicationDeleteDialog
+            application={row.original}
+            onDelete={() => handleDeleteApplication(row.original.id)}
+            trigger={
+              <Button variant="outline" size="icon-sm">
+                <i className="bi bi-trash"></i>
+              </Button>
+            }
+          />
+          {row.original.cvData && (
+            <Button variant="outline" size="sm" onClick={() => handleDownloadCV(row.original)}>
+              Download CV
+              <i className="bi bi-file-earmark-arrow-down"></i>
             </Button>
-        ),
-        cell: ({ row }) => (
-            formatApplicationStatus(row.getValue("status"))
-        ),
-    },
-    {
-        accessorKey: "dateApplied",
-        header: ({ column }) => (
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              className="h-auto p-0 font-semibold hover:bg-transparent"
-            >
-              Date Applied
-              {column.getIsSorted() === "asc" ? (
-                <i className="ml-2 bi bi-arrow-up text-xs"></i>
-              ) : column.getIsSorted() === "desc" ? (
-                <i className="ml-2 bi bi-arrow-down text-xs"></i>
-              ) : (
-                <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
-              )}
+          )}
+          {row.original.url && (
+            <Button variant="outline" size="sm" asChild>
+              <Link href={row.original.url} target="_blank" rel="noopener noreferrer">
+                Link
+                <i className="bi bi-arrow-up-right"></i>
+              </Link>
             </Button>
-        ),
-        cell: ({ row }) => (
-            <div>{formatDate(row.getValue("dateApplied"), 'long')}</div>
-        ),
-    },
-    {
-        accessorKey: "actions",
-        header: '',
-        cell: ({ row }) => (
-            <div className="flex space-x-2">
-                <ApplicationEditDialog
-                  application={row.original}
-                  open={editDialogOpen === row.original.id}
-                  onOpenChange={(open) => setEditDialogOpen(open ? row.original.id : null)}
-                  onUpdate={handleUpdateApplication}
-                  trigger={
-                    <Button variant="outline" size="icon-sm">
-                      <i className="bi bi-pencil-square"></i>
-                    </Button>
-                  }
-                />
-                <ApplicationDeleteDialog
-                  application={row.original}
-                  onDelete={() => handleDeleteApplication(row.original.id)}
-                  trigger={
-                    <Button variant="outline" size="icon-sm">
-                      <i className="bi bi-trash"></i>
-                    </Button>
-                  }
-                />
-                {row.original.cvData && (
-                    <Button variant="outline" size="sm" onClick={() => handleDownloadCV(row.original)}>
-                        Download CV
-                        <i className="bi bi-file-earmark-arrow-down"></i>
-                    </Button>
-                )}
-                {row.original.url && (
-                    <Button variant="outline" size="sm" asChild>
-                        <Link href={row.original.url} target="_blank" rel="noopener noreferrer">
-                            Link
-                            <i className="bi bi-arrow-up-right"></i>
-                        </Link>
-                    </Button>
-                )}
-                {row.original.notes && (
-                    <ApplicationNotesDialog
-                      application={row.original}
-                      trigger={
-                        <Button variant="outline" size="sm">
-                            Notes
-                            <i className="bi bi-sticky"></i>
-                        </Button>
-                      }
-                    />
-                )}
-            </div>
-        ),
+          )}
+          {row.original.notes && (
+            <ApplicationNotesDialog
+              application={row.original}
+              trigger={
+                <Button variant="outline" size="sm">
+                  Notes
+                  <i className="bi bi-sticky"></i>
+                </Button>
+              }
+            />
+          )}
+        </div>
+      ),
     }
   ]
 
@@ -408,84 +408,85 @@ export default function ApplicationsTable() {
         </div>
       ) : (
         <>
-            <div className="flex items-center space-x-2 pb-4">
-                <div className="flex-1 space-x-2">
-                  <InputGroup className="max-w-sm">
-                    <InputGroupInput
-                      placeholder="Search company..."
-                      value={table.getColumn("companyName")?.getFilterValue() as string ?? ""}
-                      onChange={(event) =>
-                        table.getColumn("companyName")?.setFilterValue(event.target.value)
-                      }
-                      className="max-w-sm"
-                    />
-                    <InputGroupAddon>
-                      <i className="bi bi-search"></i>
-                    </InputGroupAddon>
-                  </InputGroup>
-                </div>
-                <div className="space-x-2">
-                    <ApplicationAddNewDialog
-                        onAdd={handleAddApplication}
-                        trigger={
-                        <Button>
-                            <i className="bi bi-plus-lg"></i>
-                            Add New Application
-                        </Button>
-                        }
-                    />
-                </div>
+          <div className="flex items-center space-x-2 pb-4">
+            <div className="flex-1 space-x-2">
+              <InputGroup className="max-w-sm">
+                <InputGroupInput
+                  placeholder="Search company..."
+                  value={table.getColumn("companyName")?.getFilterValue() as string ?? ""}
+                  onChange={(event) =>
+                    table.getColumn("companyName")?.setFilterValue(event.target.value)
+                  }
+                  className="max-w-sm"
+                />
+                <InputGroupAddon>
+                  <i className="bi bi-search"></i>
+                </InputGroupAddon>
+              </InputGroup>
             </div>
-            <div className="overflow-hidden rounded-md border">
-                <Table>
-                    <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => {
-                            return (
-                                <TableHead key={header.id}>
-                                {header.isPlaceholder
-                                    ? null
-                                    : flexRender(
-                                        header.column.columnDef.header,
-                                        header.getContext()
-                                    )}
-                                </TableHead>
-                            )
-                            })}
-                        </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                        table.getRowModel().rows.map((row) => (
-                            <TableRow
-                            key={row.id}
-                            data-state={row.getIsSelected() && "selected"}
-                            >
-                            {row.getVisibleCells().map((cell) => (
-                                <TableCell key={cell.id}>
-                                {flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext()
-                                )}
-                                </TableCell>
-                            ))}
-                            </TableRow>
-                        ))
-                        ) : (
-                        <TableRow>
-                            <TableCell
-                            colSpan={columns.length}
-                            className="h-24 text-center"
-                            >
-                            No results.
-                            </TableCell>
-                        </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+            <div className="space-x-2">
+              <ApplicationAddNewDialog
+                onAdd={handleAddApplication}
+                trigger={
+                  <Button>
+                    <i className="bi bi-plus-lg"></i>
+                    Add New Application
+                  </Button>
+                }
+              />
             </div>
+          </div>
+          <div className="overflow-hidden rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                        </TableHead>
+                      )
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <p className="text-sm text-gray-500 mt-2">Showing {table.getRowModel().rows.length} of {data.length} applications</p>
         </>
       )}
     </div>
