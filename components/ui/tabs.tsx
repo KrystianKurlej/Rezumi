@@ -44,17 +44,17 @@ function TabsTrigger({
       className={cn(
         [
           // Base styles
-          "inline-flex h-8 items-center justify-center gap-2 border-b-2 border-transparent",
-          "py-1",
+          "inline-flex h-8 items-center justify-center gap-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground",
+          "py-1 transition-colors duration-200",
           "text-sm font-medium whitespace-nowrap",
-          "text-foreground cursor-pointer",
+          "cursor-pointer",
           
           // Focus states
           "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring",
           "focus-visible:ring-[3px] focus-visible:outline-1",
           
           // Active states
-          "data-[state=active]:border-b-accent",
+          "data-[state=active]:border-b-accent data-[state=active]:text-foreground",
           
           // Disabled states
           "disabled:pointer-events-none disabled:opacity-50",
