@@ -40,80 +40,67 @@ function formatApplicationStatus(status: Application["status"]) {
   switch (status) {
     case 'notApplied':
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#ef4444', borderRadius: '50%' }}></div>
+        <div className="bg-slate-100 dark:bg-slate-300 text-slate-800 dark:text-slate-950 w-fit pl-2 pr-2.5 font-medium rounded-full">
           <span>Not Applied</span>
         </div>
       )
     case 'submitted':
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#3b82f6', borderRadius: '50%' }}></div>
+        <div className="bg-amber-100 dark:bg-amber-300 text-amber-800 dark:text-amber-950 w-fit pl-2 pr-2.5 font-medium rounded-full">
           <span>Submitted</span>
         </div>
       )
     case 'rejected':
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#dc2626', borderRadius: '50%' }}></div>
+        <div className="bg-red-100 dark:bg-red-300 text-red-800 dark:text-red-950 w-fit pl-2 pr-2.5 font-medium rounded-full">
           <span>Rejected</span>
         </div>
       )
     case 'offerExtendedInProgress':
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
+        <div className="bg-emerald-100 dark:bg-emerald-300 text-emerald-800 dark:text-emerald-950 w-fit pl-2 pr-2.5 font-medium rounded-full">
           <span>Offer In Progress</span>
         </div>
       )
     case 'sentFollowUp':
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#f59e0b', borderRadius: '50%' }}></div>
+        <div className="bg-purple-100 dark:bg-purple-300 text-purple-800 dark:text-purple-950 w-fit pl-2 pr-2.5 font-medium rounded-full">
           <span>Follow Up Sent</span>
         </div>
       )
     case 'ghosted':
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#6b7280', borderRadius: '50%' }}></div>
+        <div className="bg-zinc-100 dark:bg-zinc-300 text-zinc-800 dark:text-zinc-950 w-fit pl-2 pr-2.5 font-medium rounded-full">
           <span>Ghosted</span>
         </div>
       )
     case 'jobRemoved':
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#9ca3af', borderRadius: '50%' }}></div>
+        <div className="bg-pink-100 dark:bg-pink-300 text-pink-800 dark:text-pink-950 w-fit pl-2 pr-2.5 font-medium rounded-full">
           <span>Job Removed</span>
         </div>
       )
     case 'offerExtendedNotAccepted':
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#f97316', borderRadius: '50%' }}></div>
+        <div className="bg-orange-100 dark:bg-orange-300 text-orange-800 dark:text-orange-950 w-fit pl-2 pr-2.5 font-medium rounded-full">
           <span>Offer Not Accepted</span>
         </div>
       )
     case 'rescinded':
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#b91c1c', borderRadius: '50%' }}></div>
+        <div className="bg-rose-100 dark:bg-rose-300 text-rose-800 dark:text-rose-950 w-fit pl-2 pr-2.5 font-medium rounded-full">
           <span>Rescinded</span>
         </div>
       )
     case 'notForMe':
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#8b5cf6', borderRadius: '50%' }}></div>
+        <div className="bg-indigo-100 dark:bg-indigo-300 text-indigo-800 dark:text-indigo-950 w-fit pl-2 pr-2.5 font-medium rounded-full">
           <span>Not For Me</span>
         </div>
       )
     default:
       return (
-        <div className="flex items-center gap-2">
-          <div style={{ width: '8px', height: '8px', backgroundColor: '#d1d5db', borderRadius: '50%' }}></div>
-          <span>Unknown</span>
-        </div>
+        <span className="text-muted-foreground">Unknown</span>
       )
   }
 }
