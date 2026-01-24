@@ -241,5 +241,32 @@
         "es": "Completado",
         "sv": "Slutförd",
         "tr": "Tamamlandı"
+    },
+    "contact": {
+        "pl": "Kontakt",
+        "en": "Contact",
+        "af": "Kontak",
+        "zh": "联系",
+        "cs": "Kontakt",
+        "da": "Kontakt",
+        "nl": "Contact",
+        "tl": "Makipag-ugnayan",
+        "fi": "Ota yhteyttä",
+        "fr": "Contact",
+        "de": "Kontakt",
+        "el": "Επικοινωνία",
+        "hi": "संपर्क करें",
+        "hu": "Kapcsolat",
+        "id": "Kontak",
+        "it": "Contatto",
+        "ja": "連絡先",
+        "ko": "연락처",
+        "no": "Kontakt",
+        "uk": "Контакт",
+        "pt": "Contato",
+        "ru": "Контакт",
+        "es": "Contacto",
+        "sv": "Kontakt",
+        "tr": "İletişim"
     }
 }

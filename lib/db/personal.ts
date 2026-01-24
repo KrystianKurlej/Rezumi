@@ -8,7 +8,13 @@ export const updatePersonalInfo = async (personalInfo: PersonalInfo): Promise<vo
         const store = transaction.objectStore(STORE_NAME)
         
         const key = personalInfo.languageId ? `personalInfo_${personalInfo.languageId}` : 'personalInfo'
-        const request = store.put({ id: key, ...personalInfo, updatedAt: Date.now() })
+        
+        // If saving to non-default language, remove photo field as it's stored only in default language
+        const dataToSave = personalInfo.languageId 
+            ? { id: key, ...personalInfo, photo: undefined, updatedAt: Date.now() }
+            : { id: key, ...personalInfo, updatedAt: Date.now() }
+        
+        const request = store.put(dataToSave)
 
         request.onsuccess = () => {
             resolve()

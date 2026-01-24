@@ -39,6 +39,7 @@ export default function PersonalForm() {
     })
     const [isSaving, setIsSaving] = useState(false)
     const [defaultLanguageData, setDefaultLanguageData] = useState<PersonalInfo | null>(null)
+    const isDefaultLanguage = selectedLanguage === defaultLanguage
 
     useEffect(() => {
         dispatch(loadPersonalInfoFromDB())
@@ -104,11 +105,14 @@ export default function PersonalForm() {
             
             const dataToSave = {
                 ...localPersonal,
-                languageId
+                languageId,
+                photo: languageId ? undefined : localPersonal.photo
             }
             
             await updatePersonalInfoDB(dataToSave)
-            dispatch(setPersonalInfo(dataToSave))
+            
+            const photoToStore = languageId ? personal.photo : localPersonal.photo
+            dispatch(setPersonalInfo({ ...dataToSave, photo: photoToStore }))
         } catch (error) {
             console.error('Error saving personal info:', error)
         } finally {
@@ -256,42 +260,50 @@ export default function PersonalForm() {
                             Profile Photo
                         </FieldLabel>
                         <div className="flex gap-4">
-                            {localPersonal.photo && (
-                                <Avatar className="h-20 w-20">
-                                    <AvatarImage src={localPersonal.photo} alt="Profile" />
-                                </Avatar>
-                            )}
-                            <div>
-                                <input
-                                    id="photo"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handlePhotoChange}
-                                    className="hidden"
-                                />
-                                <FieldDescription className="text-xs pt-1 mb-2">
-                                    Select a profile photo to display on your CV. You&apos;ll get best results with a square image (e.g. 512x512px in jpg format)
-                                </FieldDescription>
-                                <div className="flex gap-2">
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        onClick={() => document.getElementById('photo')?.click()}
-                                    >
-                                        {localPersonal.photo ? 'Change Photo' : 'Upload Photo'} <i className="bi bi-upload"></i>
-                                    </Button>
+                            {isDefaultLanguage ? (
+                                <>
                                     {localPersonal.photo && (
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            onClick={handleRemovePhoto}
-                                        >
-                                            Remove Photo
-                                            <i className="bi bi-trash"></i>
-                                        </Button>
+                                        <Avatar className="h-20 w-20">
+                                            <AvatarImage src={localPersonal.photo} alt="Profile" />
+                                        </Avatar>
                                     )}
-                                </div>
-                            </div>
+                                    <div>
+                                        <input
+                                            id="photo"
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handlePhotoChange}
+                                            className="hidden"
+                                        />
+                                        <FieldDescription className="text-xs pt-1 mb-2">
+                                            Select a profile photo to display on your CV. You&apos;ll get best results with a square image (e.g. 512x512px in jpg format)
+                                        </FieldDescription>
+                                        <div className="flex gap-2">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => document.getElementById('photo')?.click()}
+                                            >
+                                                {localPersonal.photo ? 'Change Photo' : 'Upload Photo'} <i className="bi bi-upload"></i>
+                                            </Button>
+                                            {localPersonal.photo && (
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    onClick={handleRemovePhoto}
+                                                >
+                                                    Remove Photo
+                                                    <i className="bi bi-trash"></i>
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <p className='text-muted-foreground'>
+                                    Profile photo is defined in default language only.
+                                </p>
+                            )}
                         </div>
                     </Field>
                     <Field>

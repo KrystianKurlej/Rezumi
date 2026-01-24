@@ -35,6 +35,10 @@ export const loadPersonalInfoFromDB = (): AppThunk => async (dispatch, getState)
         const defaultLanguage = state.settings.defaultLanguage;
         const languageId = selectedLanguage === defaultLanguage ? null : selectedLanguage || null;
         const savedPersonalInfo = await getPersonalInfo(languageId);
+        
+        // Always load photo from default language
+        const defaultPersonalInfo = await getPersonalInfo(null);
+        const photo = defaultPersonalInfo?.photo || '';
 
         if (savedPersonalInfo) {
             const personalInfo: PersonalInfo = {
@@ -45,7 +49,7 @@ export const loadPersonalInfoFromDB = (): AppThunk => async (dispatch, getState)
                 email: savedPersonalInfo.email || '',
                 phone: savedPersonalInfo.phone || '',
                 aboutDescription: savedPersonalInfo.aboutDescription || '',
-                photo: savedPersonalInfo.photo || '',
+                photo,
             };
             dispatch(setPersonalInfo(personalInfo));
         } else {
@@ -57,7 +61,7 @@ export const loadPersonalInfoFromDB = (): AppThunk => async (dispatch, getState)
                 email: '',
                 phone: '',
                 aboutDescription: '',
-                photo: '',
+                photo,
             }));
         }
 
