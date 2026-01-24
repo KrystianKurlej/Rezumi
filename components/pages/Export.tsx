@@ -271,7 +271,7 @@ export default function Export() {
                                 </Select>
                             </Field>
                         </FieldSet>
-                        <FieldSet className="mt-2 pt-5 border-t">
+                        <FieldSet className="mt-2 pt-5 border-t border-secondary">
                             <div>
                                 <span className="text-lg font-semibold">
                                     Send CV for a specific job
@@ -354,7 +354,7 @@ export default function Export() {
                                 </FieldDescription>
                             </Field>
                         </FieldSet>
-                        <FieldSet className="mt-2 pt-5 border-t">
+                        <FieldSet className="mt-2 pt-5 border-t border-secondary">
                             <div>
                                 <Field>
                                     <span className="text-lg font-semibold">

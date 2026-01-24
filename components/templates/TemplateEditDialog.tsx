@@ -228,19 +228,21 @@ export function TemplateEditDialog({
           <SheetTitle>Edit <em>{template.name}</em></SheetTitle>
           <SheetDescription>Templates let you create CV variations without duplicating your data. You can hide sections or override content for specific roles.</SheetDescription>
         </SheetHeader>
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor={`templateName${template.id}`}>
-              Template Name
-            </FieldLabel>
-            <Input
-              id={`templateName${template.id}`}
-              value={editingTemplate?.name || template.name}
-              onChange={(e) => handleEditChange('name', e.target.value)}
-              placeholder="e.g. Software Engineer CV"
-            />
-          </Field>
-        </FieldGroup>
+        <div className="px-4">
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor={`templateName${template.id}`}>
+                Template Name
+              </FieldLabel>
+              <Input
+                id={`templateName${template.id}`}
+                value={editingTemplate?.name || template.name}
+                onChange={(e) => handleEditChange('name', e.target.value)}
+                placeholder="e.g. Software Engineer CV"
+              />
+            </Field>
+          </FieldGroup>
+        </div>
         <Tabs defaultValue="appearance">
           <TabsList className='mt-2 mb-2'>
             <TabsTrigger value="appearance">
