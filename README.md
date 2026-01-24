@@ -41,3 +41,12 @@ Rezumi addresses this gap by focusing on:
 - preserving full user ownership of their data
 
 The project is designed around transparency, local-first storage, and fast iteration without relying on external services.
+
+Planned Features & Improvements
+--------------------------------
+**Bug Fixes:**
+- Improve application table sorting to consider time of day, not just date (applications submitted on the same day should maintain chronological order)
+- Refine PDF template styling and layout consistency across different designs
+
+**Future Enhancements:**
+- Add device size detection with a placeholder screen for mobile/tablet devices (app is optimized for desktop workflows and requires minimum viewport width)
