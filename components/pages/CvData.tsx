@@ -55,7 +55,7 @@ export default function CvData() {
             </PageHeader>
             <div className="p-2 pb-16">
                 {selectedLanguage && (
-                    <p className="text-xs text-primary px-3 py-2">
+                    <p className="text-xs text-muted-foreground px-3 py-2">
                         <i className="bi bi-info-circle mr-1"></i>
                         You&apos;re editing {getLanguageName(selectedLanguage)} version
                     </p>

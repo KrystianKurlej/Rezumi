@@ -21,10 +21,10 @@ function DesignCard({ id, title, description }: DesignCardProps) {
     return (
         <div
             id={id}
-            className={`relative rounded transition-all overflow-hidden cursor-pointer border bg-background shadow-xs ${selectedDesign === id ? 'border-primary' : 'hover:bg-accent'} `}
+            className={`relative rounded transition-all overflow-hidden cursor-pointer border bg-background shadow-xs ${selectedDesign === id ? 'border-accent' : 'hover:bg-secondary/50'} `}
             onClick={handleSelect}
         >
-            <div className="bg-gray-50 dark:bg-gray-900 relative">
+            <div className="bg-secondary text-secondary-foreground relative">
                 <Image
                     src={`/templates-thumbs/${id}.png`}
                     alt={`${title} thumbnail`}
@@ -35,9 +35,9 @@ function DesignCard({ id, title, description }: DesignCardProps) {
             <div className="p-4">
                 <span className="font-semibold text-sm">{title}</span>
                 {description && (
-                    <p className="text-primary text-sm">{description}</p>
+                    <p className="text-secondary-foreground text-sm">{description}</p>
                 )}
-                {selectedDesign === id && <i className="bi bi-check-circle-fill text-lg absolute top-2 right-2"></i>}
+                {selectedDesign === id && <i className="bi bi-check-circle-fill text-accent text-lg absolute top-2 right-2"></i>}
             </div>
         </div>
     )

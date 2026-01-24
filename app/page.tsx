@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset className="h-screen overflow-hidden">
+      <SidebarInset className="h-screen overflow-hidden text-foreground">
         {pagesWithPreview.includes(currentPage) ? 
           (
             <div className="flex h-full" style={{ backgroundColor: '#282828' }}>
@@ -52,14 +52,14 @@ export default function Home() {
                 <Preview key={previewKey} />
                 <ToolBar />
               </div>
-              <div className="border-l h-full flex-1 max-w-lg bg-white dark:bg-gray-950">
+              <div className="border-l h-full flex-1 max-w-lg bg-background">
                 {currentPage === 'personal' && <CvData />}
                 {currentPage === 'templates' && <Templates />}
                 {currentPage === 'export' && <Export />}
               </div>
             </div>
           ) : (
-            <div className="border-l h-full flex-1 bg-white dark:bg-gray-950">
+            <div className="h-full flex-1 bg-secondary">
               {currentPage === 'applications' && <Applications />}
               {currentPage === 'settings' && <Settings />}
             </div>

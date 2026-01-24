@@ -366,7 +366,7 @@ export default function Export() {
                                 </Field>
                             </div>
                             <Field>
-                                <Button variant="secondary" onClick={handleDownload} disabled={loading}>
+                                <Button variant="outline" onClick={handleDownload} disabled={loading}>
                                     <i className="bi bi-file-earmark-arrow-down"></i>
                                     Download PDF
                                 </Button>

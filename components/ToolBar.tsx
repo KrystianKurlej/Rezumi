@@ -23,12 +23,12 @@ export default function ToolBar() {
     });
 
     return (
-        <div className="bg-sidebar p-1 text-sm border-t flex items-center justify-between text-primary">
+        <div className="bg-background p-1 text-sm border-t flex items-center justify-between">
             <div>
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
-                            variant="secondary"
+                            variant="outline"
                             size="icon-sm"
                             onClick={() => dispatch(reloadPreview())}
                         >

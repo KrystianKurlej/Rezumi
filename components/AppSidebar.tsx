@@ -100,21 +100,19 @@ export function AppSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-                <SidebarGroup className="mt-auto">
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            <SidebarMenuButton
-                                isActive={currentPage === 'settings'}
-                                onClick={() => dispatch(setCurrentPage('settings'))}
-                            >
-                                <i className={`bi ${menuIcons.settings}`}></i>
-                                <span>Settings</span>
-                            </SidebarMenuButton>
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
+                <SidebarGroupContent>
+                    <SidebarMenu>
+                        <SidebarMenuButton
+                            isActive={currentPage === 'settings'}
+                            onClick={() => dispatch(setCurrentPage('settings'))}
+                        >
+                            <i className={`bi ${menuIcons.settings}`}></i>
+                            <span>Settings</span>
+                        </SidebarMenuButton>
+                    </SidebarMenu>
+                </SidebarGroupContent>
                 <Footer />
             </SidebarFooter>
         </Sidebar>

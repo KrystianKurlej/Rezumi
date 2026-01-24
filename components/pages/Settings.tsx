@@ -45,7 +45,7 @@ function SettingsSection({ title, description, children, className }: { title: s
     return (
         <div className={className}>
             <h2 className="font-semibold">{title}</h2>
-            <p className="text-sm text-primary">{description}</p>
+            <p className="text-sm text-secondary-foreground">{description}</p>
             <div className="mt-3">{children}</div>
         </div>
     )
@@ -284,7 +284,7 @@ export default function Settings() {
                         </Button>
                     </div>
                     <div className="mt-4">
-                        <span className="text-sm text-primary">
+                        <span className="text-sm text-secondary-foreground">
                             {settings.availableLanguages.length > 0
                                 ? `Available languages:`
                                 : 'No languages added yet.'

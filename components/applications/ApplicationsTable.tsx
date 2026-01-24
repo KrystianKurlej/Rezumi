@@ -21,6 +21,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -206,21 +207,8 @@ export default function ApplicationsTable() {
   const columns: ColumnDef<Application>[] = [
     {
       accessorKey: "companyName",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-semibold hover:bg-transparent"
-        >
-          Company Name
-          {column.getIsSorted() === "asc" ? (
-            <i className="ml-2 bi bi-arrow-up text-xs"></i>
-          ) : column.getIsSorted() === "desc" ? (
-            <i className="ml-2 bi bi-arrow-down text-xs"></i>
-          ) : (
-            <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
-          )}
-        </Button>
+      header: () => (
+        <div className="font-medium">Company Name</div>
       ),
       cell: ({ row }) => (
         <div>{row.getValue("companyName")}</div>
@@ -228,21 +216,8 @@ export default function ApplicationsTable() {
     },
     {
       accessorKey: "position",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-semibold hover:bg-transparent"
-        >
-          Position
-          {column.getIsSorted() === "asc" ? (
-            <i className="ml-2 bi bi-arrow-up text-xs"></i>
-          ) : column.getIsSorted() === "desc" ? (
-            <i className="ml-2 bi bi-arrow-down text-xs"></i>
-          ) : (
-            <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
-          )}
-        </Button>
+      header: () => (
+        <div className="font-medium">Position</div>
       ),
       cell: ({ row }) => (
         <div>{row.getValue("position")}</div>
@@ -254,7 +229,7 @@ export default function ApplicationsTable() {
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-semibold hover:bg-transparent"
+          className="h-auto p-0 font-medium hover:bg-transparent shadow-none"
         >
           Salary
           {column.getIsSorted() === "asc" ? (
@@ -272,27 +247,14 @@ export default function ApplicationsTable() {
         if (salary) {
           return <div>{formatCurrency(salary)}</div>;
         } else {
-          return <div className="text-primary">N/A</div>;
+          return <div className="text-muted-foreground">N/A</div>;
         }
       },
     },
     {
       accessorKey: "status",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-semibold hover:bg-transparent"
-        >
-          Status
-          {column.getIsSorted() === "asc" ? (
-            <i className="ml-2 bi bi-arrow-up text-xs"></i>
-          ) : column.getIsSorted() === "desc" ? (
-            <i className="ml-2 bi bi-arrow-down text-xs"></i>
-          ) : (
-            <i className="ml-2 bi bi-arrow-down-up text-xs opacity-50"></i>
-          )}
-        </Button>
+      header: () => (
+        <div className="font-medium">Status</div>
       ),
       cell: ({ row }) => (
         formatApplicationStatus(row.getValue("status"))
@@ -304,7 +266,7 @@ export default function ApplicationsTable() {
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-semibold hover:bg-transparent"
+          className="h-auto p-0 font-medium hover:bg-transparent shadow-none"
         >
           Date Applied
           {column.getIsSorted() === "asc" ? (
@@ -436,7 +398,7 @@ export default function ApplicationsTable() {
               />
             </div>
           </div>
-          <div className="overflow-hidden rounded-md border">
+          <div className="overflow-hidden mt-2">
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -484,9 +446,15 @@ export default function ApplicationsTable() {
                   </TableRow>
                 )}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-10">
+                    Showing {table.getRowModel().rows.length} of {data.length} applications
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
             </Table>
           </div>
-          <p className="text-sm text-gray-500 mt-2">Showing {table.getRowModel().rows.length} of {data.length} applications</p>
         </>
       )}
     </div>

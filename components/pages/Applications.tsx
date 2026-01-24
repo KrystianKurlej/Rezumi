@@ -91,7 +91,7 @@ export default function Applications() {
                     {contentData?.description}
                 </PageHeaderDescription>
             </PageHeader>
-            <div className="p-4 pb-16">
+            <div className="px-5 pt-6 pb-16">
                 {!hasApplications ? (
                     <Empty>
                         <EmptyHeader>
