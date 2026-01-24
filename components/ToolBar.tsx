@@ -14,6 +14,7 @@ export default function ToolBar() {
 
     const handleLanguageChange = (language: string) => {
         dispatch(setSelectedLanguage(language));
+        dispatch(reloadPreview());
     };
 
     const sortedLanguages = [...availableLanguages].sort((a, b) => {

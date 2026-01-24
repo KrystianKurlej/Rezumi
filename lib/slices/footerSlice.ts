@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getFooter } from '@/lib/db';
 import type { AppThunk } from '@/lib/store';
+import { reloadPreview } from './previewSlice';
 
 export interface Footer {
     languageId?: string | null
@@ -42,6 +43,7 @@ export const loadFooterFromDB = (): AppThunk => async (dispatch, getState) => {
         } else {
             dispatch(setFooter({ languageId, footerText: '' }));
         }
+        dispatch(reloadPreview());
     } catch (error) {
         console.error('Failed to load footer from DB:', error);
     }

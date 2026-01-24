@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getAllSkills, addSkill, updateSkill, deleteSkill, updateSkillsOrder } from '@/lib/db';
 import type { AppThunk } from '@/lib/store';
 import type { DBSkill } from '@/lib/db/types';
+import { reloadPreview } from './previewSlice';
 
 export interface SkillsState {
     skills: DBSkill[]
@@ -56,6 +57,7 @@ export const loadSkillsFromDB = (): AppThunk => async (dispatch, getState) => {
         
         const skills = await getAllSkills(languageId);
         dispatch(setSkills(skills));
+        dispatch(reloadPreview());
     } catch (error) {
         console.error('Failed to load skills from DB:', error);
     }
@@ -90,6 +92,7 @@ export const addSkillToDB = (skillName: string, description?: string): AppThunk 
             order: maxOrder + 1,
             createdAt: Date.now()
         }));
+        dispatch(reloadPreview());
     } catch (error) {
         console.error('Failed to add skill:', error);
     }
@@ -119,6 +122,7 @@ export const updateSkillInDB = (id: number, skillName: string, description?: str
                 description
             }));
         }
+        dispatch(reloadPreview());
     } catch (error) {
         console.error('Failed to update skill:', error);
     }
@@ -128,6 +132,7 @@ export const deleteSkillFromDB = (id: number): AppThunk => async (dispatch) => {
     try {
         await deleteSkill(id);
         dispatch(removeSkillFromState(id));
+        dispatch(reloadPreview());
     } catch (error) {
         console.error('Failed to delete skill:', error);
     }
@@ -142,6 +147,7 @@ export const updateSkillsOrderInDB = (skills: DBSkill[]): AppThunk => async (dis
         
         await updateSkillsOrder(skillsWithOrder);
         dispatch(reorderSkills(skills.map((skill, index) => ({ ...skill, order: index }))));
+        dispatch(reloadPreview());
     } catch (error) {
         console.error('Failed to update skills order:', error);
     }

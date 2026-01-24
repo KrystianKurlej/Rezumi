@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getAllExperiences } from '../db';
 import type { AppThunk } from '@/lib/store';
 import type { DBExperience } from '../db';
+import { reloadPreview } from './previewSlice';
 
 export interface NewExperience {
     newExperienceTitle: string
@@ -74,6 +75,7 @@ export const loadExperiencesFromDB = (): AppThunk => async (dispatch, getState) 
         
         const experiences = await getAllExperiences(languageId);
         dispatch(setExperiences(experiences));
+        dispatch(reloadPreview());
     } catch (error) {
         console.error('Failed to load experiences from DB:', error);
     }

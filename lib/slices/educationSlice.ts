@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getAllEducations } from '../db';
 import type { AppThunk } from '@/lib/store';
 import type { DBEducation } from '../db';
+import { reloadPreview } from './previewSlice';
 
 export interface NewEducation {
     newEducationDegree: string
@@ -73,6 +74,7 @@ export const loadEducationsFromDB = (): AppThunk => async (dispatch, getState) =
         
         const educations = await getAllEducations(languageId);
         dispatch(setEducations(educations));
+        dispatch(reloadPreview());
     } catch (error) {
         console.error('Failed to load educations from DB:', error);
     }
