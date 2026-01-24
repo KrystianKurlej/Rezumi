@@ -1,9 +1,10 @@
 'use client'
 
 import { DBTemplates, DBEducation } from '@/lib/db/types'
-import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import { Input } from "@/components/ui/input"
 import { Textarea } from '../ui/textarea'
+import { Label } from "@/components/ui/label"
 
 interface EducationTemplateSectionProps {
   educations: DBEducation[]
@@ -17,19 +18,18 @@ export function EducationTemplateSection({
   onUpdate 
 }: EducationTemplateSectionProps) {
   return (
-    <div className="space-y-2 pr-4">
+    <div className="space-y-2">
       {educations.map((edu) => {
         const eduId = edu.id?.toString() || ''
         const isDisabled = editingTemplate?.education?.disabled?.includes(eduId) || false
-        const hasCustomValue = editingTemplate?.education?.customValues?.[eduId] !== undefined && editingTemplate?.education?.customValues?.[eduId] !== ''
+        const customValue = editingTemplate?.education?.customValues?.[eduId]
         
         return (
-          <div key={eduId} className='border p-3 rounded'>
-            <div className="text-primary mb-1 text-sm">
-              {edu.degree} - {edu.institution}
-            </div>
-            
-            <div className="flex items-center space-x-2 py-1">
+          <div key={eduId} className='border border-secondary p-4 rounded-md'>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text font-medium text-foreground">
+                {edu.degree} in {edu.fieldOfStudy}
+              </h4>
               <Switch 
                 id={`edu-show-${eduId}`}
                 checked={!isDisabled}
@@ -49,71 +49,37 @@ export function EducationTemplateSection({
                   })
                 }}
               />
-              <Label htmlFor={`edu-show-${eduId}`}>Show in CV</Label>
             </div>
             
-            {!isDisabled && (
-              <>
-                <div className="flex items-center space-x-2 py-1">
-                  <Switch 
-                    id={`edu-custom-${eduId}`}
-                    checked={hasCustomValue}
-                    onCheckedChange={(checked) => {
-                      onUpdate(prev => {
-                        if (!prev) return null
-                        const customValues = prev.education?.customValues || {}
-                        const newCustomValues = { ...customValues }
-                        
-                        if (checked) {
-                          newCustomValues[eduId] = edu.description || ' '
-                        } else {
-                          delete newCustomValues[eduId]
-                        }
-                        
-                        return {
-                          ...prev,
-                          education: {
-                            ...prev.education,
-                            customValues: newCustomValues
-                          }
-                        }
-                      })
-                    }}
-                  />
-                  <Label htmlFor={`edu-custom-${eduId}`}>Use custom description</Label>
-                </div>
-                
-                {hasCustomValue && (
-                  <Textarea 
-                    className="mt-2" 
-                    placeholder="Custom description for this education"
-                    value={editingTemplate?.education?.customValues?.[eduId] || ''}
-                    onChange={(e) => {
-                      onUpdate(prev => {
-                        if (!prev) return null
-                        return {
-                          ...prev,
-                          education: {
-                            ...prev.education,
-                            customValues: {
-                              ...prev.education?.customValues,
-                              [eduId]: e.target.value
-                            }
-                          }
-                        }
-                      })
-                    }}
-                    rows={4}
-                  />
-                )}
-              </>
-            )}
+            <div className="text-sm text-muted-foreground mb-3">{edu.institution}</div>
+            
+            <Textarea 
+              className="mt-2" 
+              placeholder="Custom description (leave empty to use default)"
+              value={customValue || ''}
+              onChange={(e) => {
+                onUpdate(prev => {
+                  if (!prev) return null
+                  return {
+                    ...prev,
+                    education: {
+                      ...prev.education,
+                      customValues: {
+                        ...prev.education?.customValues,
+                        [eduId]: e.target.value
+                      }
+                    }
+                  }
+                })
+              }}
+              rows={4}
+            />
           </div>
         )
       })}
       
       {educations.length === 0 && (
-        <div className="text-center text-gray-500 py-4">
+        <div className="text-center text-muted-foreground py-4">
           No education entries added yet
         </div>
       )}

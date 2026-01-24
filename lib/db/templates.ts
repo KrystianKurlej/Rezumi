@@ -38,8 +38,8 @@ export const createTemplate = async (template: { name: string; description: stri
                 customValues: {},
             },
             skills: {
-                disabled: false,
-                customValue: '',
+                disabled: [],
+                customValues: {},
             },
             links: {
                 disabled: [],
@@ -91,8 +91,8 @@ export const updateTemplate = async (templateId: number, updatedData: {
         customValues?: { [key: string]: string };
     };
     skills?: {
-        disabled?: boolean;
-        customValue?: string;
+        disabled?: string[];
+        customValues?: { [key: string]: string };
     };
     links?: {
         disabled?: string[];

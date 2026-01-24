@@ -28,8 +28,8 @@ export interface NewTemplate {
         customValues?: { [key: string]: string };
     }
     skills?: {
-        disabled?: boolean;
-        customValue?: string;
+        disabled?: string[];
+        customValues?: { [key: string]: string };
     }
     freelance?: {
         disabled?: boolean;
@@ -68,8 +68,8 @@ const initialState: NewTemplate = {
         customValues: {},
     },
     skills: {
-        disabled: false,
-        customValue: '',
+        disabled: [],
+        customValues: {},
     },
     freelance: {
         disabled: false,

@@ -140,8 +140,8 @@ export interface DBTemplates {
         customValues?: { [key: string]: string }
     }
     skills: {
-        disabled: boolean
-        customValue?: string
+        disabled?: string[]
+        customValues?: { [key: string]: string }
     }
     links: {
         disabled?: string[]

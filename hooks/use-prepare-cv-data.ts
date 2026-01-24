@@ -159,8 +159,26 @@ export function usePrepareData({
                 })
             }
 
-            if (currentTemplate.skills?.disabled) {
-                modifiedSkills = []
+            if (currentTemplate.skills?.disabled && currentTemplate.skills.disabled.length > 0) {
+                modifiedSkills = modifiedSkills.filter(skill =>
+                    !currentTemplate.skills?.disabled?.includes(skill.id?.toString() || '')
+                )
+            }
+
+            if (currentTemplate.skills?.customValues) {
+                modifiedSkills = modifiedSkills.map(skill => {
+                    const skillId = skill.id?.toString() || ''
+                    const customDescription = currentTemplate.skills?.customValues?.[skillId]
+
+                    if (customDescription !== undefined && customDescription !== '') {
+                        return {
+                            ...skill,
+                            description: customDescription
+                        }
+                    }
+
+                    return skill
+                })
             }
 
             if (currentTemplate.freelance?.disabled) {
