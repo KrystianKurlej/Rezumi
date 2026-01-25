@@ -26,6 +26,7 @@ const confidentStyles = StyleSheet.create({
         backgroundColor: '#ffffff',
         fontSize: 10,
         fontFamily: 'Roboto',
+        hyphenate: false,
     },
     
     // Sidebar (lewa kolumna)

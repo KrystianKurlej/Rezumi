@@ -1,13 +1,22 @@
 import { initDB, STORE_NAME } from './base'
 import type { DBExperience, StoredItem } from './types'
 
-const sortExperiencesByStartDate = async (languageId: string | null): Promise<void> => {
+const sortExperiencesByDate = async (languageId: string | null): Promise<void> => {
     const experiences = await getAllExperiences(languageId)
     
     const sortedExperiences = experiences.sort((a, b) => {
-        const dateA = new Date(a.startDate).getTime()
-        const dateB = new Date(b.startDate).getTime()
-        return dateB - dateA
+        if (a.isOngoing && !b.isOngoing) return -1
+        if (!a.isOngoing && b.isOngoing) return 1
+        
+        if (a.isOngoing && b.isOngoing) {
+            const dateA = new Date(a.startDate).getTime()
+            const dateB = new Date(b.startDate).getTime()
+            return dateB - dateA
+        }
+        
+        const endDateA = new Date(a.endDate).getTime()
+        const endDateB = new Date(b.endDate).getTime()
+        return endDateB - endDateA
     })
 
     const database = await initDB()
@@ -41,7 +50,7 @@ export const addExperience = async (experience: Omit<DBExperience, 'id' | 'creat
 
         request.onsuccess = async () => {
             try {
-                await sortExperiencesByStartDate(experience.languageId ?? null)
+                await sortExperiencesByDate(experience.languageId ?? null)
                 resolve(id)
             } catch (error) {
                 reject('Failed to sort experiences after adding')
@@ -69,9 +78,21 @@ export const getAllExperiences = async (languageId?: string | null): Promise<DBE
             )
             
             const sortedExperiences = experiences.sort((a, b) => {
-                const dateA = new Date(a.startDate).getTime()
-                const dateB = new Date(b.startDate).getTime()
-                return dateB - dateA
+                // Doświadczenia trwające na początku
+                if (a.isOngoing && !b.isOngoing) return -1
+                if (!a.isOngoing && b.isOngoing) return 1
+                
+                // Oba trwające - sortuj od najnowszej daty rozpoczęcia
+                if (a.isOngoing && b.isOngoing) {
+                    const dateA = new Date(a.startDate).getTime()
+                    const dateB = new Date(b.startDate).getTime()
+                    return dateB - dateA
+                }
+                
+                // Oba zakończone - sortuj od najnowszej daty zakończenia
+                const endDateA = new Date(a.endDate).getTime()
+                const endDateB = new Date(b.endDate).getTime()
+                return endDateB - endDateA
             })
             
             resolve(sortedExperiences)
@@ -105,7 +126,7 @@ export const updateExperience = async (id: number, experience: Omit<DBExperience
                 
                 putRequest.onsuccess = async () => {
                     try {
-                        await sortExperiencesByStartDate(experience.languageId ?? null)
+                        await sortExperiencesByDate(experience.languageId ?? null)
                         resolve()
                     } catch (error) {
                         reject('Failed to sort experiences after updating')
@@ -133,7 +154,7 @@ export const deleteExperience = async (id: number, languageId?: string | null): 
         request.onsuccess = async () => {
             try {
                 if (languageId !== undefined) {
-                    await sortExperiencesByStartDate(languageId)
+                    await sortExperiencesByDate(languageId)
                 }
                 resolve()
             } catch (error) {

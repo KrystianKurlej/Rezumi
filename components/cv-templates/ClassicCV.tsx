@@ -27,6 +27,7 @@ const classicStyles = StyleSheet.create({
         padding: 40,
         fontSize: 10,
         fontFamily: 'Roboto',
+        hyphenate: false,
     },
     headerSection: {
         flexDirection: 'row',

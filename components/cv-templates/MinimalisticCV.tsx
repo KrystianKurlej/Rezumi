@@ -37,6 +37,7 @@ const minimalisticStyles = StyleSheet.create({
         fontSize: 10,
         fontFamily: 'Roboto',
         fontWeight: 'light',
+        hyphenate: false,
     },
     headerSection: {
         marginBottom: 20,
