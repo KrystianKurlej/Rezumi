@@ -9,7 +9,7 @@ export interface Application {
     url: string
     notes: string
     salary: number | null
-    dateApplied: string
+    dateApplied: string // ISO 8601 timestamp
     status: 'notApplied' | 'submitted' | 'rejected' | 'offerExtendedInProgress' | 'jobRemoved' | 'ghosted' | 'offerExtendedNotAccepted' | 'rescinded' | 'notForMe' | 'sentFollowUp' | null
     statusChangedManually?: boolean
     cvData?: DBCVData

@@ -84,13 +84,18 @@ export function ApplicationAddNewDialog({
 
     setLoading(true)
     try {
+      const now = new Date()
+      const dateApplied = newApplication.newApplicationDateApplied 
+        ? `${newApplication.newApplicationDateApplied}T${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}.${String(now.getMilliseconds()).padStart(3, '0')}Z`
+        : now.toISOString()
+      
       await addApplicationToDB({
         companyName: newApplication.newApplicationCompanyName,
         position: newApplication.newApplicationPosition,
         url: newApplication.newApplicationUrl,
         notes: newApplication.newApplicationNotes,
         salary: newApplication.newApplicationSalary ? parseFloat(newApplication.newApplicationSalary) : null,
-        dateApplied: newApplication.newApplicationDateApplied,
+        dateApplied,
         status: newApplication.newApplicationStatus
       })
       

@@ -48,6 +48,8 @@ Planned Features & Improvements
 - Improve application table sorting to consider time of day, not just date (applications submitted on the same day should maintain chronological order)
 - Refine PDF template styling and layout consistency across different designs
 - Improve Markdown syntax render
+- Update preview with template modifications
 
 **Future Enhancements:**
-- Add device size detection with a placeholder screen for mobile/tablet devices (app is optimized for desktop workflows and requires minimum viewport width)
+- Add device size detection with Responsive Web Design support
+- Add filter options for Applications table

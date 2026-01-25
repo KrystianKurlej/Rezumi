@@ -122,9 +122,15 @@ export function formatRichText(text: string): TextSegment[] {
 }
 
 export function formatDate(dateString: string, variant: 'long' | 'short') {
-  const year = dateString.slice(0, 4)
-  const month = dateString.slice(5, 7)
-  const day = dateString.slice(8, 10)
+  if (!dateString) return '-'
+  
+  const date = new Date(dateString)
+  
+  if (isNaN(date.getTime())) return '-'
+  
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
 
   if (variant === 'long') {
     return `${day}.${month}.${year}`
@@ -133,6 +139,8 @@ export function formatDate(dateString: string, variant: 'long' | 'short') {
   if (variant === 'short') {
     return `${month}.${year}`
   }
+  
+  return '-'
 }
 
 export function translate(lang: string, key: string): string {

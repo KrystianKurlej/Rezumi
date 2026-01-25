@@ -212,7 +212,7 @@ export default function Export() {
                 url: exportData.jobLink,
                 notes: exportData.notes,
                 salary: exportData.salary ? parseFloat(exportData.salary) : null,
-                dateApplied: new Date().toISOString().split('T')[0],
+                dateApplied: new Date().toISOString(),
                 status: 'submitted',
                 cvData: {
                     languageId,
