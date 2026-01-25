@@ -47,7 +47,6 @@ Planned Features & Improvements
 **Bug Fixes:**
 - Refine PDF template styling and layout consistency across different designs
 - Improve Markdown syntax render
-- Update preview with template modifications
 
 **Future Enhancements:**
 - Add device size detection with Responsive Web Design support

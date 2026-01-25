@@ -41,6 +41,7 @@ export function usePrepareData({
     links
 }: UsePrepareDataProps) {
     const currentTemplateId = useAppSelector((state) => state.templates.selectedTemplate)
+    const reloadKey = useAppSelector((state) => state.preview.reloadKey)
     const [currentTemplate, setCurrentTemplate] = useState<DBTemplates | null>(null)
 
     useEffect(() => {
@@ -61,7 +62,7 @@ export function usePrepareData({
         }
 
         loadTemplate()
-    }, [currentTemplateId])
+    }, [currentTemplateId, reloadKey])
 
     const preparedData: PreparedData = (() => {
         let modifiedPersonal = { ...personal }

@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useAppDispatch, useAppSelector } from "@/lib/hooks"
-import { setSelectedDesign } from "@/lib/slices/templatesSlice"
+import { setSelectedDesign, setCurrentDesignId } from "@/lib/slices/templatesSlice"
+import { reloadPreview } from "@/lib/slices/previewSlice"
 import DesignForm from "@/components/templates/Design"
 import { Switch } from "@/components/ui/switch"
 import {
@@ -201,6 +202,8 @@ export function TemplateEditDialog({
       await onUpdate()
       setEditingTemplate(null)
       dispatch(setSelectedDesign('classic'))
+      dispatch(setCurrentDesignId(selectedDesign))
+      dispatch(reloadPreview())
       onOpenChange(false)
     } catch (error) {
       console.error('Error updating template:', error)
