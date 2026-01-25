@@ -45,7 +45,6 @@ The project is designed around transparency, local-first storage, and fast itera
 Planned Features & Improvements
 --------------------------------
 **Bug Fixes:**
-- Improve application table sorting to consider time of day, not just date (applications submitted on the same day should maintain chronological order)
 - Refine PDF template styling and layout consistency across different designs
 - Improve Markdown syntax render
 - Update preview with template modifications
