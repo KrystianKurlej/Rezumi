@@ -14,6 +14,10 @@ const nunitoSans = Nunito_Sans({
 export const metadata: Metadata = {
   title: "Rezumi – Track Your CV Versions & Job Applications",
   description: "Build, manage, and export multiple versions of your CV. Save exact snapshots of what you sent to each company and never wonder again which CV you applied with.",
+  manifest: "/favicon/site.webmanifest",
+  appleWebApp: {
+    title: "Rezumi",
+  },
 };
 
 export default function RootLayout({
