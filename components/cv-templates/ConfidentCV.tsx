@@ -20,13 +20,15 @@ Font.register({
     ],
 });
 
+Font.registerHyphenationCallback(word => [word]);
+
 const confidentStyles = StyleSheet.create({
     page: {
         flexDirection: 'row',
         backgroundColor: '#ffffff',
         fontSize: 10,
         fontFamily: 'Roboto',
-        hyphenate: false,
+        wordBreak: 'keep-all',
     },
     
     // Sidebar (lewa kolumna)

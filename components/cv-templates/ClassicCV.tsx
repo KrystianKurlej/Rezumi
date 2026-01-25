@@ -20,6 +20,8 @@ Font.register({
     ],
 });
 
+Font.registerHyphenationCallback(word => [word]);
+
 const classicStyles = StyleSheet.create({
     page: {
         flexDirection: 'column',
@@ -27,7 +29,7 @@ const classicStyles = StyleSheet.create({
         padding: 40,
         fontSize: 10,
         fontFamily: 'Roboto',
-        hyphenate: false,
+        wordBreak: 'keep-all',
     },
     headerSection: {
         flexDirection: 'row',

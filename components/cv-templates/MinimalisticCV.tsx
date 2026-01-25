@@ -29,6 +29,8 @@ Font.register({
     ],
 });
 
+Font.registerHyphenationCallback(word => [word]);
+
 const minimalisticStyles = StyleSheet.create({
     page: {
         flexDirection: 'column',
@@ -37,7 +39,7 @@ const minimalisticStyles = StyleSheet.create({
         fontSize: 10,
         fontFamily: 'Roboto',
         fontWeight: 'light',
-        hyphenate: false,
+        wordBreak: 'keep-all',
     },
     headerSection: {
         marginBottom: 20,
