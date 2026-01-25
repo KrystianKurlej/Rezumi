@@ -346,10 +346,10 @@ export default function ConfidentCV({
                             <View>
                                 {skills.map((skill) => (
                                     <div key={skill.id} >
-                                        <Text style={{ marginRight: 8, marginBottom: 4, fontWeight: 'bold' }}>
+                                        <Text style={{ marginRight: 8, marginBottom: 2, fontWeight: 'bold' }}>
                                             {skill.skillName}
                                         </Text>
-                                        <Text style={{ marginRight: 8, marginBottom: 4 }}>
+                                        <Text style={{ marginRight: 8, marginBottom: 6 }}>
                                             {skill.description}
                                         </Text>
                                     </div>
