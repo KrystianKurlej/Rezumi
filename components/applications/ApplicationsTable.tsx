@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { useAppDispatch, useAppSelector, useFormatCurrency } from '@/lib/hooks'
 import { setApplications, deleteApplication as deleteAppAction, setLoading, updateApplication as updateAppAction, setSorting, type Application } from '@/lib/slices/applicationsSlice'
@@ -41,15 +41,28 @@ export default function ApplicationsTable() {
   const dispatch = useAppDispatch()
   const { list: data, isLoading: loading, sorting } = useAppSelector(state => state.applications)
   const settings = useAppSelector((state) => state.settings)
+  const [editDialogOpen, setEditDialogOpen] = useState<string | null>(null)
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
+  const [showRejected, setShowRejected] = useState<boolean>(true);
 
-  const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(null)
+  const handleChangeRejectsVisibility = () => {
+    const newShowRejected = !showRejected;
+    setShowRejected(newShowRejected);
 
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    if (newShowRejected) {
+      setColumnFilters((prev) => prev.filter((filter) => filter.id !== 'status'));
+    } else {
+      setColumnFilters((prev) => [
+        ...prev.filter((filter) => filter.id !== 'status'),
+        {
+          id: 'status',
+          value: ['rejected'],
+        },
+      ]);
+    }
+  }
 
   const handleAddApplication = async () => {
     try {
@@ -178,6 +191,13 @@ export default function ApplicationsTable() {
       cell: ({ row }) => (
         formatApplicationStatus(row.getValue("status"))
       ),
+      filterFn: (row, columnId, filterValue) => {
+        const status = row.getValue(columnId);
+        if (Array.isArray(filterValue)) {
+          return !filterValue.includes(status);
+        }
+        return true;
+      },
     },
     {
       accessorKey: "dateApplied",
@@ -306,6 +326,19 @@ export default function ApplicationsTable() {
               </InputGroup>
             </div>
             <div className="space-x-2">
+              <Button variant="outline" onClick={handleChangeRejectsVisibility}>
+                {showRejected ? (
+                  <>
+                  <i className="bi bi-eye-slash-fill"></i>
+                  Hide rejected
+                  </>
+                ) : (
+                  <>
+                  <i className="bi bi-eye-fill"></i>
+                  Show rejected
+                  </>
+                )}
+              </Button>
               <ApplicationAddNewDialog
                 onAdd={handleAddApplication}
                 trigger={
