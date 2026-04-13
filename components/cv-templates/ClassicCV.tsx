@@ -20,19 +20,6 @@ Font.register({
     ],
 });
 
-Font.register({
-    family: 'Playfair Display',
-    fonts: [
-        {
-            src: '/fonts/PlayfairDisplay/PlayfairDisplay-Regular.ttf',
-        },
-        {
-            src: '/fonts/PlayfairDisplay/PlayfairDisplay-Bold.ttf',
-            fontWeight: 'bold',
-        }
-    ],
-});
-
 Font.registerHyphenationCallback(word => [word]);
 
 const classicStyles = StyleSheet.create({
@@ -41,7 +28,7 @@ const classicStyles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 40,
         fontSize: 10,
-        fontFamily: 'Playfair Display',
+        fontFamily: 'Roboto',
         wordBreak: 'keep-all',
     },
     headerSection: {
