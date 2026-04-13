@@ -37,7 +37,7 @@ const minimalisticStyles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 40,
         fontSize: 10,
-        fontFamily: 'Roboto',
+        fontFamily: 'Playfair Display',
         fontWeight: 'light',
         wordBreak: 'keep-all',
     },
