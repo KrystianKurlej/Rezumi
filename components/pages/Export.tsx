@@ -31,7 +31,7 @@ import { menuIcons } from "@/components/AppSidebar";
 import { pdf } from '@react-pdf/renderer';
 import { Input } from '@/components/ui/input';
 import { addApplication as addApplicationToDB } from '@/lib/db/applications'
-import { DBExperience, DBEducation, DBCourse, type PersonalInfo, type Links, type DBSkill } from '@/lib/db/types'
+import { DBExperience, DBAdditionalActivity, DBEducation, DBCourse, type PersonalInfo, type Links, type DBSkill } from '@/lib/db/types'
 import type { CVTemplateProps } from '@/components/cv-templates'
 import { type Footer } from '@/lib/slices/footerSlice'
 import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, DialogTitle } from '../ui/dialog';
@@ -45,6 +45,7 @@ const contentData = getMenuItems({slug: "export"});
 interface DownloadPDFProps {
     personal: PersonalInfo;
     experiences: DBExperience[];
+    additionalActivities: DBAdditionalActivity[];
     educations: DBEducation[];
     courses: DBCourse[];
     skills: DBSkill[];
@@ -56,7 +57,7 @@ interface DownloadPDFProps {
     designId?: string; // ID designu do użycia
 }
 
-export const handleDownloadPDF = async ({ personal, experiences, educations, courses, skills, freelance, footer, links, filename, lang, designId }: DownloadPDFProps) => {
+export const handleDownloadPDF = async ({ personal, experiences, additionalActivities, educations, courses, skills, freelance, footer, links, filename, lang, designId }: DownloadPDFProps) => {
     // Dynamicznie ładuj szablon na podstawie designId
     const { loadCVTemplate } = await import('@/components/cv-templates')
     const CVTemplate = await loadCVTemplate(designId || 'classic') as ComponentType<CVTemplateProps>
@@ -65,6 +66,7 @@ export const handleDownloadPDF = async ({ personal, experiences, educations, cou
         <CVTemplate 
             personal={personal}
             experiences={experiences}
+            additionalActivities={additionalActivities}
             educations={educations}
             courses={courses}
             skills={skills}
@@ -102,6 +104,7 @@ export default function Export() {
 
     const personal = useAppSelector(state => state.personal)
     const experiences = useAppSelector(state => state.experiences.list)
+    const additionalActivities = useAppSelector(state => state.additionalActivities.list)
     const educations = useAppSelector(state => state.educations.list)
     const courses = useAppSelector(state => state.courses.list)
     const skills = useAppSelector(state => state.skills.skills)
@@ -117,6 +120,7 @@ export default function Export() {
         lang: selectedLanguage || defaultLanguage || 'en',
         personal,
         experiences,
+        additionalActivities,
         educations,
         courses,
         skills,
@@ -169,6 +173,7 @@ export default function Export() {
             await handleDownloadPDF({ 
                 personal: preparedData.personal, 
                 experiences: preparedData.experiences, 
+                additionalActivities: preparedData.additionalActivities,
                 educations: preparedData.educations, 
                 courses: preparedData.courses, 
                 skills: preparedData.skills,
@@ -193,6 +198,7 @@ export default function Export() {
             await handleDownloadPDF({ 
                 personal: preparedData.personal, 
                 experiences: preparedData.experiences, 
+                additionalActivities: preparedData.additionalActivities,
                 educations: preparedData.educations, 
                 courses: preparedData.courses, 
                 skills: preparedData.skills,
@@ -220,6 +226,7 @@ export default function Export() {
                     templateId: selectedTemplateId,
                     personal: preparedData.personal,
                     experiences: preparedData.experiences,
+                    additionalActivities: preparedData.additionalActivities,
                     educations: preparedData.educations,
                     courses: preparedData.courses,
                     skills: preparedData.skills,

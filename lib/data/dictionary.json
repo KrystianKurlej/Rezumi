@@ -80,6 +80,10 @@
         "sv": "Utbildning",
         "tr": "Eğitim"
     },
+    "additional_activity": {
+        "pl": "Aktywność dodatkowa",
+        "en": "Additional Activity"
+    },
     "courses_certifications": {
         "pl": "Kursy i certyfikaty",
         "en": "Courses & Certifications",

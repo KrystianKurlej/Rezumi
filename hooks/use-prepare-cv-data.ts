@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '@/lib/hooks'
 import { getAllTemplates } from '@/lib/db/templates'
-import type { PersonalInfo, DBExperience, DBEducation, DBCourse, DBSkill, DBTemplates, Links } from '@/lib/db'
+import type { PersonalInfo, DBExperience, DBAdditionalActivity, DBEducation, DBCourse, DBSkill, DBTemplates, Links } from '@/lib/db'
 import type { Footer } from '@/lib/slices/footerSlice'
 import type { Freelance } from '@/lib/slices/freelanceSlice'
 
@@ -9,6 +9,7 @@ interface UsePrepareDataProps {
     lang: string
     personal: PersonalInfo
     experiences: DBExperience[]
+    additionalActivities: DBAdditionalActivity[]
     educations: DBEducation[]
     courses: DBCourse[]
     skills: DBSkill[]
@@ -21,6 +22,7 @@ interface PreparedData {
     lang: string
     personal: PersonalInfo
     experiences: DBExperience[]
+    additionalActivities: DBAdditionalActivity[]
     educations: DBEducation[]
     courses: DBCourse[]
     skills: DBSkill[]
@@ -33,6 +35,7 @@ export function usePrepareData({
     lang,
     personal,
     experiences,
+    additionalActivities,
     educations,
     courses,
     skills,
@@ -67,6 +70,7 @@ export function usePrepareData({
     const preparedData: PreparedData = (() => {
         let modifiedPersonal = { ...personal }
         let modifiedExperiences = [...experiences]
+        let modifiedAdditionalActivities = [...additionalActivities]
         let modifiedEducations = [...educations]
         let modifiedCourses = [...courses]
         let modifiedSkills = Array.isArray(skills) ? [...skills] : []
@@ -120,6 +124,28 @@ export function usePrepareData({
                 modifiedEducations = modifiedEducations.filter(edu =>
                     !currentTemplate.education?.disabled?.includes(edu.id?.toString() || '')
                 )
+            }
+
+            if (currentTemplate.additionalActivity?.disabled && currentTemplate.additionalActivity.disabled.length > 0) {
+                modifiedAdditionalActivities = modifiedAdditionalActivities.filter(activity =>
+                    !currentTemplate.additionalActivity?.disabled?.includes(activity.id?.toString() || '')
+                )
+            }
+
+            if (currentTemplate.additionalActivity?.customValues) {
+                modifiedAdditionalActivities = modifiedAdditionalActivities.map(activity => {
+                    const activityId = activity.id?.toString() || ''
+                    const customDescription = currentTemplate.additionalActivity?.customValues?.[activityId]
+
+                    if (customDescription !== undefined && customDescription !== '') {
+                        return {
+                            ...activity,
+                            description: customDescription
+                        }
+                    }
+
+                    return activity
+                })
             }
 
             if (currentTemplate.education?.customValues) {
@@ -218,6 +244,7 @@ export function usePrepareData({
             lang,
             personal: modifiedPersonal,
             experiences: modifiedExperiences,
+            additionalActivities: modifiedAdditionalActivities,
             educations: modifiedEducations,
             courses: modifiedCourses,
             skills: modifiedSkills,

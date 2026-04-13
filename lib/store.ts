@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import previewReducer from './slices/previewSlice'
 import personalReducer from './slices/personalSlice'
 import { newExperienceReducer, experiencesReducer } from './slices/experienceSlice'
+import { newAdditionalActivityReducer, additionalActivitiesReducer } from './slices/additionalActivitySlice'
 import { newEducationReducer, educationsReducer } from './slices/educationSlice'
 import { newCourseReducer, coursesReducer } from './slices/coursesSlice'
 import { newApplicationReducer, applicationsReducer } from './slices/applicationsSlice'
@@ -21,6 +22,8 @@ export const makeStore = () => {
             personal: personalReducer,
             newExperience: newExperienceReducer,
             experiences: experiencesReducer,
+            newAdditionalActivity: newAdditionalActivityReducer,
+            additionalActivities: additionalActivitiesReducer,
             newEducation: newEducationReducer,
             educations: educationsReducer,
             newCourse: newCourseReducer,

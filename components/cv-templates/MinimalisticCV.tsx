@@ -129,6 +129,7 @@ export default function MinimalisticCV({
     personal,
     links,
     experiences,
+    additionalActivities,
     educations,
     courses,
     skills,
@@ -318,6 +319,22 @@ export default function MinimalisticCV({
                                     {translate(lang, 'freelance')}
                                 </Text>
                                 {formatRichTextSegments(freelance.freelanceText)}
+                            </View>
+                        )}
+                        {additionalActivities.length > 0 && (
+                            <View style={minimalisticStyles.columnSection} wrap={false}>
+                                <Text style={minimalisticStyles.sectionTitle}>
+                                    {translate(lang, 'additional_activity')}
+                                </Text>
+                                {additionalActivities.map((additionalActivity) => (
+                                    <View key={additionalActivity.id} style={minimalisticStyles.sectionItem}>
+                                        <View style={minimalisticStyles.sectionItemHeader}>
+                                            <Text style={{ fontWeight: 'bold' }}>{additionalActivity.title}</Text>
+                                            <Text>{additionalActivity.company} | {formatDate(additionalActivity.startDate, 'short')} - {additionalActivity.isOngoing ? translate(lang, 'present') : formatDate(additionalActivity.endDate, 'short')}</Text>
+                                        </View>
+                                        <Text style={minimalisticStyles.sectionItemContent}>{additionalActivity.description}</Text>
+                                    </View>
+                                ))}
                             </View>
                         )}
                     </View>

@@ -117,6 +117,7 @@ export default function ClassicCV({
     personal,
     links,
     experiences,
+    additionalActivities,
     educations,
     courses,
     skills,
@@ -294,6 +295,31 @@ export default function ClassicCV({
                         <View style={{ marginTop: 8 }}>
                             {formatRichTextSegments(freelance.freelanceText)}
                         </View>
+                    </View>
+                )}
+
+                {additionalActivities.length > 0 && (
+                    <View style={classicStyles.section} wrap={false}>
+                        <Text style={classicStyles.sectionTitle}>
+                            {translate(lang, 'additional_activity')}
+                        </Text>
+                        {additionalActivities.map((additionalActivity) => (
+                            <View key={additionalActivity.id} style={additionalActivities[additionalActivities.length - 1].id === additionalActivity.id ? classicStyles.sectionItem : classicStyles.sectionLastItem}>
+                                <View style={classicStyles.sectionItemHeader}>
+                                    <View style={{ flex: 1 }}>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 11 }}>
+                                            {additionalActivity.title} · {additionalActivity.company}
+                                        </Text>
+                                    </View>
+                                    <Text>
+                                        {formatDate(additionalActivity.startDate, 'short')} - {additionalActivity.isOngoing ? translate(lang, 'present') : formatDate(additionalActivity.endDate, 'short')}
+                                    </Text>
+                                </View>
+                                {additionalActivity.description && (
+                                    <Text style={classicStyles.sectionItemDescription}>{additionalActivity.description}</Text>
+                                )}
+                            </View>
+                        ))}
                     </View>
                 )}
 

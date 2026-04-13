@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { loadPersonalInfoFromDB } from '@/lib/slices/personalSlice'
 import { loadExperiencesFromDB } from '@/lib/slices/experienceSlice'
+import { loadAdditionalActivitiesFromDB } from '@/lib/slices/additionalActivitySlice'
 import { loadEducationsFromDB } from '@/lib/slices/educationSlice'
 import { loadSkillsFromDB } from '@/lib/slices/skillsSlice'
 import { loadFooterFromDB } from '@/lib/slices/footerSlice'
@@ -20,6 +21,7 @@ export function useLoadCVData() {
         // Załaduj wszystkie dane dla aktualnie wybranego języka
         dispatch(loadPersonalInfoFromDB())
         dispatch(loadExperiencesFromDB())
+        dispatch(loadAdditionalActivitiesFromDB())
         dispatch(loadEducationsFromDB())
         dispatch(loadCoursesFromDB())
         dispatch(loadSkillsFromDB())

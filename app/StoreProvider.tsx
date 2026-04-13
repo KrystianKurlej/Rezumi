@@ -6,6 +6,7 @@ import { makeStore, AppStore } from "@/lib/store"
 import { loadSettingsFromDB } from "@/lib/slices/settingsSlice"
 import { loadPersonalInfoFromDB } from "@/lib/slices/personalSlice"
 import { loadExperiencesFromDB } from "@/lib/slices/experienceSlice"
+import { loadAdditionalActivitiesFromDB } from "@/lib/slices/additionalActivitySlice"
 import { loadEducationsFromDB } from "@/lib/slices/educationSlice"
 import { loadSkillsFromDB } from "@/lib/slices/skillsSlice"
 import { loadFooterFromDB } from "@/lib/slices/footerSlice"
@@ -53,6 +54,7 @@ export default function StoreProvider({
             storeRef.current.dispatch(loadSettingsFromDB())
             storeRef.current.dispatch(loadPersonalInfoFromDB())
             storeRef.current.dispatch(loadExperiencesFromDB())
+            storeRef.current.dispatch(loadAdditionalActivitiesFromDB())
             storeRef.current.dispatch(loadEducationsFromDB())
             storeRef.current.dispatch(loadSkillsFromDB())
             storeRef.current.dispatch(loadFooterFromDB())

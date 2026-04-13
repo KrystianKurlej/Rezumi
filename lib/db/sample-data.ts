@@ -1,7 +1,8 @@
-import type { PersonalInfo, DBExperience, DBEducation, DBCourse, DBSkill, Links } from './types'
+import type { PersonalInfo, DBExperience, DBAdditionalActivity, DBEducation, DBCourse, DBSkill, Links } from './types'
 import type { Footer } from '@/lib/slices/footerSlice'
 import { updatePersonalInfo } from './personal'
 import { addExperience } from './experiences'
+import { addAdditionalActivity } from './additionalActivities'
 import { addEducation } from './educations'
 import { addCourse } from './courses'
 import { addSkill } from './skills'
@@ -58,6 +59,18 @@ const sampleEducations: Omit<DBEducation, 'id' | 'createdAt' | 'type'>[] = [
     }
 ]
 
+const sampleAdditionalActivities: Omit<DBAdditionalActivity, 'id' | 'createdAt' | 'type'>[] = [
+    {
+        languageId: null,
+        company: 'Open Source Community',
+        title: 'Maintainer & Mentor',
+        startDate: '2022-01',
+        endDate: '',
+        isOngoing: true,
+        description: 'Maintaining community packages, reviewing pull requests, and mentoring junior contributors.'
+    }
+]
+
 const sampleCourses: Omit<DBCourse, 'id' | 'createdAt' | 'type'>[] = [
     {
         languageId: null,
@@ -106,6 +119,11 @@ export const seedDatabase = async (): Promise<void> => {
 
         for (const edu of sampleEducations) {
             await addEducation(edu)
+            await new Promise(resolve => setTimeout(resolve, 10))
+        }
+
+        for (const additionalActivity of sampleAdditionalActivities) {
+            await addAdditionalActivity(additionalActivity)
             await new Promise(resolve => setTimeout(resolve, 10))
         }
 

@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/tabs"
 import { Textarea } from '../ui/textarea'
 import { ExperienceTemplateSection } from './ExperienceTemplateSection'
+import { AdditionalActivityTemplateSection } from './AdditionalActivityTemplateSection'
 import { EducationTemplateSection } from './EducationTemplateSection'
 import { CoursesTemplateSection } from './CoursesTemplateSection'
 import { SkillsTemplateSection } from './SkillsTemplateSection'
@@ -124,6 +125,7 @@ export function TemplateEditDialog({
   const dispatch = useAppDispatch()
   const selectedDesign = useAppSelector(state => state.templates.selectedDesign)
   const experiences = useAppSelector(state => state.experiences.list) || []
+  const additionalActivities = useAppSelector(state => state.additionalActivities.list) || []
   const educations = useAppSelector(state => state.educations.list) || []
   const courses = useAppSelector(state => state.courses.list) || []
   const skills = useAppSelector(state => state.skills.skills) || []
@@ -145,6 +147,10 @@ export function TemplateEditDialog({
         }
       },
       experience: {
+        disabled: [],
+        customValues: {}
+      },
+      additionalActivity: {
         disabled: [],
         customValues: {}
       },
@@ -190,6 +196,7 @@ export function TemplateEditDialog({
         designId: selectedDesign,
         personalInformation: editingTemplate.personalInformation,
         experience: editingTemplate.experience,
+        additionalActivity: editingTemplate.additionalActivity,
         education: editingTemplate.education,
         courses: editingTemplate.courses,
         skills: editingTemplate.skills,
@@ -352,6 +359,14 @@ export function TemplateEditDialog({
                 <TemplateEditSection title="Experience">
                   <ExperienceTemplateSection
                     experiences={experiences}
+                    editingTemplate={editingTemplate}
+                    onUpdate={setEditingTemplate}
+                  />
+                </TemplateEditSection>
+
+                <TemplateEditSection title="Additional Activity">
+                  <AdditionalActivityTemplateSection
+                    additionalActivities={additionalActivities}
                     editingTemplate={editingTemplate}
                     onUpdate={setEditingTemplate}
                   />

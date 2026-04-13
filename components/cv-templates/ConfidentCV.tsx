@@ -214,6 +214,7 @@ export default function ConfidentCV({
     personal,
     links,
     experiences,
+    additionalActivities,
     educations,
     courses,
     skills,
@@ -491,6 +492,38 @@ export default function ConfidentCV({
                                         {formatRichTextSegments(freelance.freelanceText)}
                                     </View>
                                 </View>
+                            </View>
+                        </View>
+                    )}
+
+                    {/* Additional Activity */}
+                    {additionalActivities.length > 0 && (
+                        <View style={confidentStyles.mainSection} wrap={false}>
+                            <Text style={confidentStyles.mainSectionTitle}>
+                                {translate(lang, 'additional_activity')}
+                            </Text>
+                            <View style={confidentStyles.timelineContainer}>
+                                <View style={confidentStyles.timelineLine} />
+                                {additionalActivities.map((additionalActivity) => (
+                                    <View key={additionalActivity.id} style={confidentStyles.timelineItem}>
+                                        <View style={confidentStyles.timelineContent}>
+                                            <Text style={confidentStyles.entryTitle}>
+                                                {additionalActivity.title}
+                                            </Text>
+                                            <Text style={confidentStyles.entrySubtitle}>
+                                                {additionalActivity.company}
+                                            </Text>
+                                            <Text style={confidentStyles.entryMeta}>
+                                                {formatDate(additionalActivity.startDate, 'short')} - {additionalActivity.isOngoing ? translate(lang, 'present') : formatDate(additionalActivity.endDate, 'short')}
+                                            </Text>
+                                            {additionalActivity.description && (
+                                                <Text style={confidentStyles.entryDescription}>
+                                                    {additionalActivity.description}
+                                                </Text>
+                                            )}
+                                        </View>
+                                    </View>
+                                ))}
                             </View>
                         </View>
                     )}

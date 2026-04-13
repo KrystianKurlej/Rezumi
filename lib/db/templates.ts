@@ -29,6 +29,10 @@ export const createTemplate = async (template: { name: string; description: stri
                 disabled: [],
                 customValues: {},
             },
+            additionalActivity: {
+                disabled: [],
+                customValues: {},
+            },
             education: {
                 disabled: [],
                 customValues: {},
@@ -79,6 +83,10 @@ export const updateTemplate = async (templateId: number, updatedData: {
         };
     };
     experience?: {
+        disabled?: string[];
+        customValues?: { [key: string]: string };
+    };
+    additionalActivity?: {
         disabled?: string[];
         customValues?: { [key: string]: string };
     };
@@ -141,6 +149,10 @@ export const updateTemplate = async (templateId: number, updatedData: {
                     ...existingTemplate.experience,
                     ...updatedData.experience
                 } : existingTemplate.experience,
+                additionalActivity: updatedData.additionalActivity ? {
+                    ...existingTemplate.additionalActivity,
+                    ...updatedData.additionalActivity
+                } : existingTemplate.additionalActivity,
                 education: updatedData.education ? {
                     ...existingTemplate.education,
                     ...updatedData.education

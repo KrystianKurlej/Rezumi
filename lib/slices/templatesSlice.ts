@@ -19,6 +19,10 @@ export interface NewTemplate {
         disabled?: string[];
         customValues?: { [key: string]: string };
     }
+    additionalActivity?: {
+        disabled?: string[];
+        customValues?: { [key: string]: string };
+    }
     education?: {
         disabled?: string[];
         customValues?: { [key: string]: string };
@@ -56,6 +60,10 @@ const initialState: NewTemplate = {
         }
     },
     experience: {
+        disabled: [],
+        customValues: {},
+    },
+    additionalActivity: {
         disabled: [],
         customValues: {},
     },

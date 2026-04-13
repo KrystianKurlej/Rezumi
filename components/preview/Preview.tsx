@@ -23,6 +23,7 @@ export default function Preview() {
     const currentDesignId = useAppSelector((state) => state.templates.currentDesignId)
     const personal = useAppSelector(state => state.personal)
     const experiences = useAppSelector(state => state.experiences.list)
+    const additionalActivities = useAppSelector(state => state.additionalActivities.list)
     const educations = useAppSelector(state => state.educations.list)
     const courses = useAppSelector(state => state.courses.list)
     const skills = useAppSelector(state => state.skills.skills)
@@ -40,6 +41,7 @@ export default function Preview() {
         lang,
         personal,
         experiences,
+        additionalActivities,
         educations,
         courses,
         skills,
@@ -94,6 +96,7 @@ export default function Preview() {
                 lang={preparedData.lang}
                 personal={preparedData.personal}
                 experiences={preparedData.experiences}
+                additionalActivities={preparedData.additionalActivities}
                 educations={preparedData.educations}
                 courses={preparedData.courses}
                 skills={preparedData.skills}

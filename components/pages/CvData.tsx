@@ -1,5 +1,6 @@
 import PersonalForm from "@/components/cv-data/personal"
 import ExperienceForm from "@/components/cv-data/experience";
+import AdditionalActivityForm from "@/components/cv-data/additional-activity";
 import EducationForm from "@/components/cv-data/education";
 import CoursesForm from "@/components/cv-data/courses";
 import SkillsForm from "@/components/cv-data/skills";
@@ -64,6 +65,7 @@ export default function CvData() {
                     <PersonalForm />
                     <LinksForm />
                     <ExperienceForm />
+                    <AdditionalActivityForm />
                     <EducationForm />
                     <CoursesForm />
                     <SkillsForm />

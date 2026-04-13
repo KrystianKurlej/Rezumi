@@ -109,6 +109,7 @@ export default function ApplicationsTable() {
       await handleDownloadPDF({
         personal: application.cvData.personal,
         experiences: application.cvData.experiences,
+        additionalActivities: application.cvData.additionalActivities || [],
         educations: application.cvData.educations,
         courses: application.cvData.courses || [],
         skills: application.cvData.skills,

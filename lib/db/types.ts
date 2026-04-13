@@ -10,6 +10,7 @@ export interface DBCVData {
         aboutDescription?: string
     }
     experiences: DBExperience[]
+    additionalActivities?: DBAdditionalActivity[]
     educations: DBEducation[]
     courses: DBCourse[]
     skills: DBSkill[]
@@ -43,6 +44,19 @@ export interface Links {
 export interface DBExperience {
     id?: number
     type: 'experience'
+    languageId?: string | null
+    title: string
+    company: string
+    startDate: string
+    endDate: string
+    description: string
+    isOngoing: boolean
+    createdAt: number
+}
+
+export interface DBAdditionalActivity {
+    id?: number
+    type: 'additionalActivity'
     languageId?: string | null
     title: string
     company: string
@@ -131,6 +145,10 @@ export interface DBTemplates {
         disabled?: string[]
         customValues?: { [key: string]: string }
     }
+    additionalActivity?: {
+        disabled?: string[]
+        customValues?: { [key: string]: string }
+    }
     education: {
         disabled?: string[]
         customValues?: { [key: string]: string }
@@ -157,4 +175,4 @@ export interface DBTemplates {
     createdAt: number
 }
 
-export type StoredItem = DBExperience | DBEducation | DBCourse | DBSkill | DBApplication | { id: string; type?: string }
+export type StoredItem = DBExperience | DBAdditionalActivity | DBEducation | DBCourse | DBSkill | DBApplication | { id: string; type?: string }

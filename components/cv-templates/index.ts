@@ -1,5 +1,5 @@
 import { PersonalInfo, Links, DBSkill } from '@/lib/db/types';
-import { DBExperience, DBEducation, DBCourse } from '@/lib/db';
+import { DBExperience, DBAdditionalActivity, DBEducation, DBCourse } from '@/lib/db';
 import { Footer } from '@/lib/slices/footerSlice';
 import { Freelance } from '@/lib/slices/freelanceSlice';
 
@@ -8,6 +8,7 @@ export interface CVTemplateProps {
     personal: PersonalInfo;
     links: Links;
     experiences: DBExperience[];
+    additionalActivities: DBAdditionalActivity[];
     educations: DBEducation[];
     courses: DBCourse[];
     skills: DBSkill[];
