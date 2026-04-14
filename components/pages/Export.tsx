@@ -40,6 +40,7 @@ import { DBTemplates } from '@/lib/db/types';
 import { type Freelance } from '@/lib/slices/freelanceSlice';
 import { getMenuItems } from "@/components/AppSidebar";
 import { normalizeUnicodeNFCDeep } from '@/lib/utils'
+import { analyzeMinimalisticOverflow } from '@/lib/minimalistic-layout'
 
 const contentData = getMenuItems({slug: "export"});
 
@@ -76,7 +77,9 @@ export const handleDownloadPDF = async ({ personal, experiences, additionalActiv
         footer,
     })
     
-    const blob = await pdf(
+    const effectiveDesignId = designId || 'classic'
+
+    const renderDoc = (internal?: CVTemplateProps['__internal']) => (
         <CVTemplate 
             personal={normalized.personal}
             experiences={normalized.experiences}
@@ -88,8 +91,38 @@ export const handleDownloadPDF = async ({ personal, experiences, additionalActiv
             footer={normalized.footer}
             links={normalized.links}
             lang={normalized.lang}
+            __internal={internal}
         />
-    ).toBlob();
+    )
+
+    let blob: Blob
+
+    if (effectiveDesignId === 'minimalist') {
+        let layoutData: unknown = null
+
+        const measuredBlob = await pdf(
+            renderDoc({
+                onRender: (params) => {
+                    layoutData = (params as any)?._INTERNAL__LAYOUT__DATA_ ?? null
+                },
+            })
+        ).toBlob()
+
+        const analysis = analyzeMinimalisticOverflow(layoutData)
+        const overflowFromId = analysis.leftOverflow ? null : analysis.overflowFromSectionId
+
+        blob = overflowFromId
+            ? await pdf(
+                renderDoc({
+                    minimalistic: {
+                        overflowFullWidthFromSectionId: overflowFromId,
+                    },
+                })
+            ).toBlob()
+            : measuredBlob
+    } else {
+        blob = await pdf(renderDoc()).toBlob()
+    }
     
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');

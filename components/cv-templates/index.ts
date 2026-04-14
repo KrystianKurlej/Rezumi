@@ -14,6 +14,14 @@ export interface CVTemplateProps {
     skills: DBSkill[];
     freelance: Freelance;
     footer: Footer;
+    __internal?: {
+        // Internal-only hook used to capture react-pdf layout data via Document.onRender.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onRender?: (props: any) => void;
+        minimalistic?: {
+            overflowFullWidthFromSectionId?: string | null;
+        };
+    };
 }
 
 export const designs = {

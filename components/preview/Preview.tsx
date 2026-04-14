@@ -7,6 +7,7 @@ import { usePrepareData } from '@/hooks/use-prepare-cv-data'
 import { useCheckDBData } from '@/hooks/use-check-db-data'
 import { useSeedDatabase } from '@/hooks/use-seed-database'
 import { Button } from '../ui/button'
+import { analyzeMinimalisticOverflow } from '@/lib/minimalistic-layout'
 
 interface PDFClient {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,6 +17,7 @@ interface PDFClient {
 
 export default function Preview() {
     const [Client, setClient] = useState<PDFClient | null>(null)
+    const [minimalistOverflowFromId, setMinimalistOverflowFromId] = useState<string | null>(null)
     
     const selectedLang = useAppSelector(state => state.preview.selectedLanguage)
     const defaultLang = useAppSelector(state => state.settings.defaultLanguage)
@@ -64,6 +66,67 @@ export default function Preview() {
         loadPDF()
     }, [currentDesignId])
 
+    useEffect(() => {
+        let cancelled = false
+
+        const measureMinimalistOverflow = async () => {
+            const designId = currentDesignId || 'classic'
+
+            if (!Client || designId !== 'minimalist' || isDataEmpty || isChecking) {
+                setMinimalistOverflowFromId(null)
+                return
+            }
+
+            try {
+                // Prosty debounce, żeby nie liczyć layoutu przy każdym klawiszu.
+                await new Promise((resolve) => setTimeout(resolve, 250))
+                if (cancelled) return
+
+                const { pdf } = await import('@react-pdf/renderer')
+
+                let layoutData: unknown = null
+
+                await pdf(
+                    <Client.CVTemplate
+                        lang={preparedData.lang}
+                        personal={preparedData.personal}
+                        experiences={preparedData.experiences}
+                        additionalActivities={preparedData.additionalActivities}
+                        educations={preparedData.educations}
+                        courses={preparedData.courses}
+                        skills={preparedData.skills}
+                        freelance={preparedData.freelance}
+                        footer={preparedData.footer}
+                        links={preparedData.links}
+                        __internal={{
+                            onRender: (params) => {
+                                layoutData = (params as any)?._INTERNAL__LAYOUT__DATA_ ?? null
+                            },
+                        }}
+                    />
+                ).toBlob()
+
+                if (cancelled) return
+
+                const analysis = analyzeMinimalisticOverflow(layoutData)
+
+                // Jeżeli lewa kolumna faktycznie przechodzi na kolejne strony, nie przełączamy na full-width.
+                const overflowFromId = analysis.leftOverflow ? null : analysis.overflowFromSectionId
+
+                setMinimalistOverflowFromId(overflowFromId)
+            } catch (error) {
+                console.error('Failed to measure minimalist layout overflow:', error)
+                setMinimalistOverflowFromId(null)
+            }
+        }
+
+        measureMinimalistOverflow()
+
+        return () => {
+            cancelled = true
+        }
+    }, [Client, currentDesignId, isDataEmpty, isChecking, reloadKey, preparedData])
+
     if (!Client || isChecking) {
         return <div className="flex-1"></div>
     }
@@ -103,6 +166,15 @@ export default function Preview() {
                 freelance={preparedData.freelance}
                 footer={preparedData.footer}
                 links={preparedData.links}
+                __internal={
+                    (currentDesignId || 'classic') === 'minimalist' && minimalistOverflowFromId
+                        ? {
+                            minimalistic: {
+                                overflowFullWidthFromSectionId: minimalistOverflowFromId,
+                            },
+                        }
+                        : undefined
+                }
             />
         </PDFViewer>
     )
