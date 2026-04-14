@@ -39,6 +39,7 @@ import { getAllTemplates } from '@/lib/db/templates';
 import { DBTemplates } from '@/lib/db/types';
 import { type Freelance } from '@/lib/slices/freelanceSlice';
 import { getMenuItems } from "@/components/AppSidebar";
+import { normalizeUnicodeNFCDeep } from '@/lib/utils'
 
 const contentData = getMenuItems({slug: "export"});
 
@@ -61,19 +62,32 @@ export const handleDownloadPDF = async ({ personal, experiences, additionalActiv
     // Dynamicznie ładuj szablon na podstawie designId
     const { loadCVTemplate } = await import('@/components/cv-templates')
     const CVTemplate = await loadCVTemplate(designId || 'classic') as ComponentType<CVTemplateProps>
+
+    const normalized = normalizeUnicodeNFCDeep({
+        lang,
+        personal,
+        links,
+        experiences,
+        additionalActivities,
+        educations,
+        courses,
+        skills,
+        freelance,
+        footer,
+    })
     
     const blob = await pdf(
         <CVTemplate 
-            personal={personal}
-            experiences={experiences}
-            additionalActivities={additionalActivities}
-            educations={educations}
-            courses={courses}
-            skills={skills}
-            freelance={freelance}
-            footer={footer}
-            links={links}
-            lang={lang}
+            personal={normalized.personal}
+            experiences={normalized.experiences}
+            additionalActivities={normalized.additionalActivities}
+            educations={normalized.educations}
+            courses={normalized.courses}
+            skills={normalized.skills}
+            freelance={normalized.freelance}
+            footer={normalized.footer}
+            links={normalized.links}
+            lang={normalized.lang}
         />
     ).toBlob();
     

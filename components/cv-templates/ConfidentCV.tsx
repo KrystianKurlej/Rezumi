@@ -1,5 +1,5 @@
 import { Font, Path, Svg } from '@react-pdf/renderer';
-import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image as PdfImage } from '@react-pdf/renderer';
 import { formatDate, formatRichText, translate } from "@/lib/utils"
 import { CVTemplateProps } from './index';
 
@@ -189,24 +189,72 @@ const confidentStyles = StyleSheet.create({
     },
 });
 
-function formatRichTextSegments(text: string) {
-  const segments = formatRichText(text);
+function formatRichTextSegments(
+        text: string,
+        options?: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        baseStyle?: any
+                baseFontSize?: number
+                headingFontSize?: number
+        }
+) {
+    const blocks = formatRichText(text);
+    const baseFontSize = options?.baseFontSize ?? 10;
+    const headingFontSize = options?.headingFontSize ?? baseFontSize + 2;
 
-  return segments.map((segment, index) => (
-    <Text
-        key={index}
-        style={{
-            fontWeight: segment.bold || segment.heading ? 'bold' : 'normal',
-            fontStyle: segment.italic ? 'italic' : 'normal',
-            fontSize: segment.heading ? 12 : 10,
-            marginTop: segment.heading ? 8 : 0,
-            marginBottom: segment.heading ? 4 : 0,
-        }}
-    >
-        {segment.listItem ? '- ' : ''}
-        {segment.text}
-    </Text>
-  ));
+    const renderInline = (spans: Array<{ text: string; bold?: boolean; italic?: boolean }>) =>
+        spans.map((span, index) => (
+            <Text
+                key={index}
+                style={{
+                    fontWeight: span.bold ? 'bold' : 'normal',
+                    fontStyle: span.italic ? 'italic' : 'normal',
+                }}
+            >
+                {span.text}
+            </Text>
+        ));
+
+    return blocks.map((block, index) => {
+        if (block.type === 'blank') {
+            return <View key={`blank-${index}`} style={{ height: 4 }} />;
+        }
+
+        if (block.type === 'heading') {
+            return (
+                <Text
+                    key={`heading-${index}`}
+                    style={[options?.baseStyle, {
+                        fontSize: headingFontSize,
+                        fontWeight: 'bold',
+                        marginTop: 8,
+                        marginBottom: 4,
+                    }]}
+                >
+                    {renderInline(block.spans)}
+                </Text>
+            );
+        }
+
+        if (block.type === 'listItem') {
+            return (
+                <View
+                    key={`list-${index}`}
+                    style={{ flexDirection: 'row', gap: 4, marginBottom: 2 }}
+                    wrap={false}
+                >
+                    <Text style={[options?.baseStyle, { fontWeight: 'bold' }]}>•</Text>
+                    <Text style={[options?.baseStyle, { flex: 1 }]}>{renderInline(block.spans)}</Text>
+                </View>
+            );
+        }
+
+        return (
+            <Text key={`p-${index}`} style={[options?.baseStyle, { marginBottom: 2 }]}>
+                {renderInline(block.spans)}
+            </Text>
+        );
+    });
 }
 
 export default function ConfidentCV({
@@ -249,7 +297,7 @@ export default function ConfidentCV({
                 <View style={confidentStyles.sidebar}>
                     {/* Logo/Inicjały/Obraz profilowy */}
                     {personal.photo ? (
-                        <Image
+                        <PdfImage
                             src={personal.photo}
                             style={confidentStyles.photoCircle}
                         />
@@ -404,9 +452,13 @@ export default function ConfidentCV({
                                                 {formatDate(experience.startDate, 'short')} - {experience.isOngoing ? translate(lang, 'present') : formatDate(experience.endDate, 'short')}
                                             </Text>
                                             {experience.description && (
-                                                <Text style={confidentStyles.entryDescription}>
-                                                    {experience.description}
-                                                </Text>
+                                                <View>
+                                                    {formatRichTextSegments(experience.description, {
+                                                        baseStyle: confidentStyles.entryDescription,
+                                                        baseFontSize: 9,
+                                                        headingFontSize: 11,
+                                                    })}
+                                                </View>
                                             )}
                                         </View>
                                     </View>
@@ -436,9 +488,13 @@ export default function ConfidentCV({
                                                 {formatDate(education.startDate, 'short')} - {education.isOngoing ? translate(lang, 'present') : formatDate(education.endDate, 'short')}
                                             </Text>
                                             {education.description && (
-                                                <Text style={confidentStyles.entryDescription}>
-                                                    {education.description}
-                                                </Text>
+                                                <View>
+                                                    {formatRichTextSegments(education.description, {
+                                                        baseStyle: confidentStyles.entryDescription,
+                                                        baseFontSize: 9,
+                                                        headingFontSize: 11,
+                                                    })}
+                                                </View>
                                             )}
                                         </View>
                                     </View>
@@ -468,9 +524,13 @@ export default function ConfidentCV({
                                                 {course.isOngoing ? translate(lang, 'in_progress') : `${translate(lang, 'completed')}: ${formatDate(course.completionDate, 'short')}`}
                                             </Text>
                                             {course.description && (
-                                                <Text style={confidentStyles.entryDescription}>
-                                                    {course.description}
-                                                </Text>
+                                                <View>
+                                                    {formatRichTextSegments(course.description, {
+                                                        baseStyle: confidentStyles.entryDescription,
+                                                        baseFontSize: 9,
+                                                        headingFontSize: 11,
+                                                    })}
+                                                </View>
                                             )}
                                         </View>
                                     </View>
@@ -489,7 +549,11 @@ export default function ConfidentCV({
                                 <View style={confidentStyles.timelineLine} />
                                 <View style={confidentStyles.timelineItem}>
                                     <View style={confidentStyles.timelineContent}>
-                                        {formatRichTextSegments(freelance.freelanceText)}
+                                        {formatRichTextSegments(freelance.freelanceText, {
+                                            baseStyle: confidentStyles.entryDescription,
+                                            baseFontSize: 9,
+                                            headingFontSize: 11,
+                                        })}
                                     </View>
                                 </View>
                             </View>
@@ -517,9 +581,13 @@ export default function ConfidentCV({
                                                 {formatDate(additionalActivity.startDate, 'short')} - {additionalActivity.isOngoing ? translate(lang, 'present') : formatDate(additionalActivity.endDate, 'short')}
                                             </Text>
                                             {additionalActivity.description && (
-                                                <Text style={confidentStyles.entryDescription}>
-                                                    {additionalActivity.description}
-                                                </Text>
+                                                <View>
+                                                    {formatRichTextSegments(additionalActivity.description, {
+                                                        baseStyle: confidentStyles.entryDescription,
+                                                        baseFontSize: 9,
+                                                        headingFontSize: 11,
+                                                    })}
+                                                </View>
                                             )}
                                         </View>
                                     </View>
@@ -531,7 +599,11 @@ export default function ConfidentCV({
                     {/* Footer */}
                     {footer.footerText && (
                         <View style={confidentStyles.footer} wrap={false}>
-                            <Text style={confidentStyles.footerText}>{footer.footerText}</Text>
+                            {formatRichTextSegments(footer.footerText, {
+                                baseStyle: confidentStyles.footerText,
+                                baseFontSize: 8,
+                                headingFontSize: 9,
+                            })}
                         </View>
                     )}
                 </View>

@@ -1,0 +1,7 @@
+diff --git a/lib/textkit.js b/lib/textkit.js
+index 49256b8..5a66c74 100644
+--- a/lib/textkit.js
++++ b/lib/textkit.js
+@@ -27,1 +27,1 @@
+-                ? rawString.normalize('NFD')
++                ? rawString.normalize('NFC')

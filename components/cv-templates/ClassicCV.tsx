@@ -1,5 +1,5 @@
 import { Font } from '@react-pdf/renderer';
-import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image as PdfImage } from '@react-pdf/renderer';
 import { formatDate, formatRichText, translate } from "@/lib/utils"
 import { CVTemplateProps } from './index';
 
@@ -92,24 +92,72 @@ const classicStyles = StyleSheet.create({
     },
 });
 
-function formatRichTextSegments(text: string) {
-  const segments = formatRichText(text);
+function formatRichTextSegments(
+        text: string,
+        options?: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        baseStyle?: any
+                baseFontSize?: number
+                headingFontSize?: number
+        }
+) {
+    const blocks = formatRichText(text);
+    const baseFontSize = options?.baseFontSize ?? 10;
+    const headingFontSize = options?.headingFontSize ?? baseFontSize + 2;
 
-  return segments.map((segment, index) => (
-    <Text
-        key={index}
-        style={{
-            fontWeight: segment.bold || segment.heading ? 'bold' : 'normal',
-            fontStyle: segment.italic ? 'italic' : 'normal',
-            fontSize: segment.heading ? 12 : 10,
-            marginTop: segment.heading ? 8 : 0,
-            marginBottom: segment.heading ? 4 : 0,
-        }}
-    >
-        {segment.listItem ? '- ' : ''}
-        {segment.text}
-    </Text>
-  ));
+    const renderInline = (spans: Array<{ text: string; bold?: boolean; italic?: boolean }>) =>
+        spans.map((span, index) => (
+            <Text
+                key={index}
+                style={{
+                    fontWeight: span.bold ? 'bold' : 'normal',
+                    fontStyle: span.italic ? 'italic' : 'normal',
+                }}
+            >
+                {span.text}
+            </Text>
+        ));
+
+    return blocks.map((block, index) => {
+        if (block.type === 'blank') {
+            return <View key={`blank-${index}`} style={{ height: 4 }} />;
+        }
+
+        if (block.type === 'heading') {
+            return (
+                <Text
+                    key={`heading-${index}`}
+                    style={[options?.baseStyle, {
+                        fontSize: headingFontSize,
+                        fontWeight: 'bold',
+                        marginTop: 8,
+                        marginBottom: 4,
+                    }]}
+                >
+                    {renderInline(block.spans)}
+                </Text>
+            );
+        }
+
+        if (block.type === 'listItem') {
+            return (
+                <View
+                    key={`list-${index}`}
+                    style={{ flexDirection: 'row', gap: 4, marginBottom: 2 }}
+                    wrap={false}
+                >
+                    <Text style={[options?.baseStyle, { fontWeight: 'bold' }]}>•</Text>
+                    <Text style={[options?.baseStyle, { flex: 1 }]}>{renderInline(block.spans)}</Text>
+                </View>
+            );
+        }
+
+        return (
+            <Text key={`p-${index}`} style={[options?.baseStyle, { marginBottom: 2 }]}>
+                {renderInline(block.spans)}
+            </Text>
+        );
+    });
 }
 
 export default function ClassicCV({
@@ -148,7 +196,7 @@ export default function ClassicCV({
             <Page size="A4" style={classicStyles.page}>
                 <View style={classicStyles.headerSection} wrap={false}>
                     {personal.photo && (
-                        <Image
+                        <PdfImage
                             src={personal.photo}
                             style={classicStyles.profilePhoto}
                         />
@@ -195,7 +243,9 @@ export default function ClassicCV({
                                     </Text>
                                 </View>
                                 {experience.description && (
-                                    <Text style={classicStyles.sectionItemDescription}>{experience.description}</Text>
+                                    <View style={classicStyles.sectionItemDescription}>
+                                        {formatRichTextSegments(experience.description)}
+                                    </View>
                                 )}
                             </View>
                         ))}
@@ -221,7 +271,9 @@ export default function ClassicCV({
                                     </Text>
                                 </View>
                                 {education.description && (
-                                    <Text style={classicStyles.sectionItemDescription}>{education.description}</Text>
+                                    <View style={classicStyles.sectionItemDescription}>
+                                        {formatRichTextSegments(education.description)}
+                                    </View>
                                 )}
                             </View>
                         ))}
@@ -245,7 +297,9 @@ export default function ClassicCV({
                                     </Text>
                                 </View>
                                 {course.description && (
-                                    <Text style={classicStyles.sectionItemDescription}>{course.description}</Text>
+                                    <View style={classicStyles.sectionItemDescription}>
+                                        {formatRichTextSegments(course.description)}
+                                    </View>
                                 )}
                             </View>
                         ))}
@@ -316,7 +370,9 @@ export default function ClassicCV({
                                     </Text>
                                 </View>
                                 {additionalActivity.description && (
-                                    <Text style={classicStyles.sectionItemDescription}>{additionalActivity.description}</Text>
+                                    <View style={classicStyles.sectionItemDescription}>
+                                        {formatRichTextSegments(additionalActivity.description)}
+                                    </View>
                                 )}
                             </View>
                         ))}
@@ -325,7 +381,11 @@ export default function ClassicCV({
 
                 {footer.footerText && (
                     <View style={classicStyles.footer} wrap={false}>
-                        <Text style={classicStyles.footerText}>{footer.footerText}</Text>
+                        {formatRichTextSegments(footer.footerText, {
+                            baseStyle: classicStyles.footerText,
+                            baseFontSize: 8,
+                            headingFontSize: 9,
+                        })}
                     </View>
                 )}
                 

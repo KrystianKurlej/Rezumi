@@ -29,96 +29,180 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-type TextSegment = {
+export function normalizeUnicodeNFC(text: string): string {
+  return text.normalize('NFC')
+}
+
+export function normalizeUnicodeNFCDeep<T>(value: T): T {
+  if (typeof value === 'string') {
+    return normalizeUnicodeNFC(value) as unknown as T
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => normalizeUnicodeNFCDeep(item)) as unknown as T
+  }
+
+  if (value && typeof value === 'object') {
+    const output: Record<string, unknown> = {}
+    for (const [key, nested] of Object.entries(value as Record<string, unknown>)) {
+      output[key] = normalizeUnicodeNFCDeep(nested)
+    }
+    return output as T
+  }
+
+  return value
+}
+
+export type RichTextSpan = {
   text: string;
   bold?: boolean;
   italic?: boolean;
-  heading?: boolean;
-  listItem?: boolean;
 }
 
-export function formatRichText(text: string): TextSegment[] {
-  if (!text) return [{ text: '' }];
-  
-  const segments: TextSegment[] = [];
+export type RichTextBlock =
+  | { type: 'paragraph'; spans: RichTextSpan[] }
+  | { type: 'heading'; level: number; spans: RichTextSpan[] }
+  | { type: 'listItem'; spans: RichTextSpan[] }
+  | { type: 'blank' };
+
+function mergeAdjacentSpans(spans: RichTextSpan[]): RichTextSpan[] {
+  const output: RichTextSpan[] = [];
+
+  for (const span of spans) {
+    if (!span.text) continue;
+    const last = output[output.length - 1];
+
+    if (last && Boolean(last.bold) === Boolean(span.bold) && Boolean(last.italic) === Boolean(span.italic)) {
+      last.text += span.text;
+      continue;
+    }
+
+    output.push({ ...span });
+  }
+
+  return output;
+}
+
+function applyInlineStyle(spans: RichTextSpan[], style: { bold?: boolean; italic?: boolean }): RichTextSpan[] {
+  return spans.map((span) => ({
+    ...span,
+    bold: span.bold || style.bold,
+    italic: span.italic || style.italic,
+  }));
+}
+
+function findNextInlineMarker(text: string, startIndex: number): { index: number; marker: '***' | '**' | '*' } | null {
+  const markers: Array<'***' | '**' | '*'> = ['***', '**', '*'];
+
+  let bestIndex = -1;
+  let bestMarker: '***' | '**' | '*' | null = null;
+
+  for (const marker of markers) {
+    const idx = text.indexOf(marker, startIndex);
+    if (idx === -1) continue;
+
+    if (bestIndex === -1 || idx < bestIndex || (idx === bestIndex && marker.length > (bestMarker?.length || 0))) {
+      bestIndex = idx;
+      bestMarker = marker;
+    }
+  }
+
+  return bestMarker ? { index: bestIndex, marker: bestMarker } : null;
+}
+
+function parseInlineMarkdown(text: string): RichTextSpan[] {
+  if (!text) return [];
+
+  const spans: RichTextSpan[] = [];
+  let cursor = 0;
+
+  while (cursor < text.length) {
+    const next = findNextInlineMarker(text, cursor);
+    if (!next) {
+      spans.push({ text: text.slice(cursor) });
+      break;
+    }
+
+    if (next.index > cursor) {
+      spans.push({ text: text.slice(cursor, next.index) });
+    }
+
+    const contentStart = next.index + next.marker.length;
+    const endIndex = text.indexOf(next.marker, contentStart);
+
+    if (endIndex === -1) {
+      // Brak zamknięcia: traktuj marker jako zwykły tekst.
+      spans.push({ text: next.marker });
+      cursor = contentStart;
+      continue;
+    }
+
+    const innerText = text.slice(contentStart, endIndex);
+    const innerSpans = parseInlineMarkdown(innerText);
+
+    const style = next.marker === '***'
+      ? { bold: true, italic: true }
+      : next.marker === '**'
+        ? { bold: true }
+        : { italic: true };
+
+    spans.push(...applyInlineStyle(innerSpans.length > 0 ? innerSpans : [{ text: innerText }], style));
+    cursor = endIndex + next.marker.length;
+  }
+
+  return mergeAdjacentSpans(spans);
+}
+
+export function formatRichText(text: string): RichTextBlock[] {
+  if (!text) return [];
+
+  text = normalizeUnicodeNFC(text).replace(/\r\n/g, '\n');
+
+  const blocks: RichTextBlock[] = [];
   const lines = text.split('\n');
-  
-  lines.forEach((line, lineIndex) => {
-    // Jeśli linia jest pusta, po prostu dodaj \n i przejdź dalej
-    if (line === '') {
-      if (lineIndex < lines.length - 1) {
-        segments.push({ text: '\n' });
-      }
-      return;
+
+  for (const rawLine of lines) {
+    const line = rawLine.replace(/\s+$/g, '');
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      blocks.push({ type: 'blank' });
+      continue;
     }
-    
-    let remaining = line;
-    
-    // Przetwarzanie jednej linii
-    while (remaining.length > 0) {
-      // Szukaj bold **text**
-      const boldMatch = remaining.match(/^\*\*(.*?)\*\*/);
-      if (boldMatch) {
-        segments.push({ text: boldMatch[1], bold: true });
-        remaining = remaining.slice(boldMatch[0].length);
-        continue;
-      }
-      
-      // Szukaj italic *text*
-      const italicMatch = remaining.match(/^\*(.*?)\*/);
-      if (italicMatch) {
-        segments.push({ text: italicMatch[1], italic: true });
-        remaining = remaining.slice(italicMatch[0].length);
-        continue;
-      }
-      
-      // Szukaj kombinacji bold + italic ***text***
-      const boldItalicMatch = remaining.match(/^\*\*\*(.*?)\*\*\*/);
-      if (boldItalicMatch) {
-        segments.push({ text: boldItalicMatch[1], bold: true, italic: true });
-        remaining = remaining.slice(boldItalicMatch[0].length);
-        continue;
-      }
 
-      // Szukaj nagłówków
-      const headerMatch = remaining.match(/^(#{1,6})\s+(.*)/);
-      if (headerMatch) {
-        segments.push({ text: headerMatch[2], heading: true });
-        remaining = remaining.slice(headerMatch[0].length);
-        continue;
-      }
-
-
-      // Szukaj list punktowanych
-      const listItemMatch = remaining.match(/^[-*]\s+(.*)/);
-      if (listItemMatch) {
-        segments.push({ text: listItemMatch[1], listItem: true });
-        remaining = remaining.slice(listItemMatch[0].length);
-        continue;
-      }
-      
-      // Szukaj najbliższego specjalnego znaku
-      const nextSpecial = remaining.search(/\*\*/);
-      if (nextSpecial === -1) {
-        // Nie ma więcej specjalnych znaków, dodaj resztę jako zwykły tekst
-        if (remaining.length > 0) {
-          segments.push({ text: remaining });
-        }
-        break;
-      } else if (nextSpecial > 0) {
-        // Dodaj tekst przed specjalnym znakiem
-        segments.push({ text: remaining.slice(0, nextSpecial) });
-        remaining = remaining.slice(nextSpecial);
-      } else {
-        // nextSpecial === 0, ale nie pasuje do żadnego wzorca
-        // Dodaj pierwszy znak jako zwykły tekst
-        segments.push({ text: remaining[0] });
-        remaining = remaining.slice(1);
-      }
+    // Nagłówki: wspieramy zarówno "# Title" jak i "#Title".
+    const headingMatch = trimmed.match(/^(#{1,6})\s*(\S.*)$/);
+    if (headingMatch) {
+      blocks.push({
+        type: 'heading',
+        level: headingMatch[1].length,
+        spans: parseInlineMarkdown(headingMatch[2]),
+      });
+      continue;
     }
-  });
-  
-  return segments.length > 0 ? segments : [{ text }];
+
+    // Lista punktowana: "- item" lub "* item".
+    const listMatch = trimmed.match(/^[-*]\s+(\S.*)$/);
+    if (listMatch) {
+      blocks.push({
+        type: 'listItem',
+        spans: parseInlineMarkdown(listMatch[1]),
+      });
+      continue;
+    }
+
+    blocks.push({
+      type: 'paragraph',
+      spans: parseInlineMarkdown(line),
+    });
+  }
+
+  // Usuń trailing puste bloki (niepotrzebne odstępy na końcu).
+  while (blocks.length > 0 && blocks[blocks.length - 1].type === 'blank') {
+    blocks.pop();
+  }
+
+  return blocks;
 }
 
 export function formatDate(dateString: string, variant: 'long' | 'short') {

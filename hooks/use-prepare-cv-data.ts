@@ -4,6 +4,7 @@ import { getAllTemplates } from '@/lib/db/templates'
 import type { PersonalInfo, DBExperience, DBAdditionalActivity, DBEducation, DBCourse, DBSkill, DBTemplates, Links } from '@/lib/db'
 import type { Footer } from '@/lib/slices/footerSlice'
 import type { Freelance } from '@/lib/slices/freelanceSlice'
+import { normalizeUnicodeNFCDeep } from '@/lib/utils'
 
 interface UsePrepareDataProps {
     lang: string
@@ -254,5 +255,5 @@ export function usePrepareData({
         }
     })()
 
-    return preparedData
+    return normalizeUnicodeNFCDeep(preparedData)
 }
