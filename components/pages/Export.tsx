@@ -41,6 +41,7 @@ import { type Freelance } from '@/lib/slices/freelanceSlice';
 import { getMenuItems } from "@/components/AppSidebar";
 import { normalizeUnicodeNFCDeep } from '@/lib/utils'
 import { analyzeMinimalisticOverflow } from '@/lib/minimalistic-layout'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group';
 
 const contentData = getMenuItems({slug: "export"});
 
@@ -103,7 +104,7 @@ export const handleDownloadPDF = async ({ personal, experiences, additionalActiv
         const measuredBlob = await pdf(
             renderDoc({
                 onRender: (params) => {
-                    layoutData = (params as any)?._INTERNAL__LAYOUT__DATA_ ?? null
+                    layoutData = (params as { _INTERNAL__LAYOUT__DATA_?: unknown })?._INTERNAL__LAYOUT__DATA_ ?? null
                 },
             })
         ).toBlob()
@@ -132,6 +133,20 @@ export const handleDownloadPDF = async ({ personal, experiences, additionalActiv
     URL.revokeObjectURL(url);
 };
 
+type JobLinkFetchStatus = 'idle' | 'loading' | 'success' | 'error'
+
+type JobOfferApiResponse =
+    | {
+        found: true
+        jobTitle?: string
+        companyName?: string
+        salary?: number
+        salaryCurrency?: string
+        url?: string
+    }
+    | { found: false }
+    | { error: string }
+
 export default function Export() {
     const dispatch = useAppDispatch()
 
@@ -146,6 +161,8 @@ export default function Export() {
         salary: '',
         notes: '',
     });
+    const [jobLinkFetchStatus, setJobLinkFetchStatus] = useState<JobLinkFetchStatus>('idle');
+    const [jobLinkFetchError, setJobLinkFetchError] = useState<string | null>(null);
     const [templates, setTemplates] = useState<DBTemplates[]>([]);
     const defaultCurrency = useDefaultCurrency()
 
@@ -198,6 +215,11 @@ export default function Export() {
         const { id, value } = e.target
         const key = id as keyof typeof exportData
         setExportData(prev => ({ ...prev, [key]: value }))
+
+        if (id === 'jobLink') {
+            setJobLinkFetchStatus('idle')
+            setJobLinkFetchError(null)
+        }
     }
 
     const handleTemplateChange = (templateId: string) => {
@@ -210,6 +232,78 @@ export default function Export() {
             if (template) {
                 dispatch(setCurrentDesignId(template.designId || 'classic'))
             }
+        }
+    }
+
+    const canFetchJobOfferData = !!exportData.jobLink.trim() && !loading && jobLinkFetchStatus !== 'loading'
+
+    const fetchButtonVariant: 'outline' | 'destructive' = jobLinkFetchStatus === 'error' ? 'destructive' : 'outline'
+    const fetchButtonText =
+        jobLinkFetchStatus === 'loading' ? 'Fetching...' :
+        jobLinkFetchStatus === 'success' ? 'Fetched' :
+        jobLinkFetchStatus === 'error' ? 'Error' :
+        'Fetch Data'
+
+    const fetchButtonIconClass =
+        jobLinkFetchStatus === 'loading' ? 'bi bi-arrow-repeat animate-spin' :
+        jobLinkFetchStatus === 'success' ? 'bi bi-check2' :
+        jobLinkFetchStatus === 'error' ? 'bi bi-exclamation-triangle' :
+        'bi bi-arrow-repeat'
+
+    const handleFetchJobOfferData = async () => {
+        const url = exportData.jobLink.trim()
+        if (!url) return
+
+        setJobLinkFetchStatus('loading')
+        setJobLinkFetchError(null)
+
+        try {
+            const res = await fetch('/api/job-offer', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({ url }),
+            })
+
+            const payload = (await res.json().catch(() => null)) as JobOfferApiResponse | null
+
+            if (!res.ok) {
+                const err = payload && 'error' in payload ? payload.error : 'Failed to fetch data'
+                setJobLinkFetchStatus('error')
+                setJobLinkFetchError(err)
+                return
+            }
+
+            if (!payload || !('found' in payload) || payload.found !== true) {
+                setJobLinkFetchStatus('error')
+                setJobLinkFetchError('Nie znaleziono danych JobPosting (JSON-LD) na tej stronie.')
+                return
+            }
+
+            setExportData(prev => {
+                const next = { ...prev }
+
+                if (!next.jobTitle && payload.jobTitle) next.jobTitle = payload.jobTitle
+                if (!next.companyName && payload.companyName) next.companyName = payload.companyName
+                if (!next.salary && typeof payload.salary === 'number' && Number.isFinite(payload.salary)) {
+                    next.salary = String(payload.salary)
+                }
+
+                if (payload.salaryCurrency) {
+                    const currencyNote = `Salary currency: ${payload.salaryCurrency}`
+                    if (!next.notes.includes(currencyNote)) {
+                        next.notes = next.notes ? `${next.notes} | ${currencyNote}` : currencyNote
+                    }
+                }
+
+                return next
+            })
+
+            setJobLinkFetchStatus('success')
+        } catch {
+            setJobLinkFetchStatus('error')
+            setJobLinkFetchError('Nie udało się pobrać danych z linku.')
         }
     }
 
@@ -377,13 +471,36 @@ export default function Export() {
                                     <FieldLabel>
                                         Job Offer Link (optional)
                                     </FieldLabel>
-                                    <Input
-                                        type="text"
-                                        id="jobLink"
-                                        value={exportData.jobLink}
-                                        onChange={handleChange}
-                                        placeholder="https://..."
-                                    />
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            type="text"
+                                            id="jobLink"
+                                            value={exportData.jobLink}
+                                            onChange={handleChange}
+                                            placeholder="https://..."
+                                        />
+                                        <InputGroupAddon align="inline-end">
+                                            <Button
+                                                variant={fetchButtonVariant}
+                                                size="sm"
+                                                onClick={handleFetchJobOfferData}
+                                                disabled={!canFetchJobOfferData}
+                                            >
+                                                {fetchButtonText}
+                                                <i className={fetchButtonIconClass}></i>
+                                            </Button>
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                    {jobLinkFetchError && (
+                                        <FieldDescription className="text-destructive">
+                                            {jobLinkFetchError}
+                                        </FieldDescription>
+                                    )}
+                                    {!jobLinkFetchError && jobLinkFetchStatus === 'success' && (
+                                        <FieldDescription className="text-green-600">
+                                            Uzupełniono dane z JSON-LD.
+                                        </FieldDescription>
+                                    )}
                                 </Field>
                                 <Field>
                                     <FieldLabel>
