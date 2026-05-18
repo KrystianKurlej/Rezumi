@@ -226,7 +226,7 @@ export default function ApplicationsTable() {
       accessorKey: "actions",
       header: '',
       cell: ({ row }) => (
-        <div className="flex space-x-2">
+        <div className="flex flex-wrap gap-2 items-center">
           <ApplicationEditDialog
             application={row.original}
             open={editDialogOpen === row.original.id}
@@ -351,8 +351,8 @@ export default function ApplicationsTable() {
               />
             </div>
           </div>
-          <div className="overflow-hidden mt-2">
-            <Table>
+          <div className="overflow-auto mt-2">
+            <Table className="min-w-full">
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
@@ -378,14 +378,20 @@ export default function ApplicationsTable() {
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
                     >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
+                      {row.getVisibleCells().map((cell) => {
+                        const wrapperClass = cell.column.id === 'actions' ? 'min-w-0' : 'min-w-0 truncate';
+                        const cellClass = cell.column.id === 'actions' ? 'whitespace-nowrap' : 'max-w-[220px]';
+                        return (
+                          <TableCell key={cell.id} className={cellClass}>
+                            <div className={wrapperClass}>
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </div>
+                          </TableCell>
+                        )
+                      })}
                     </TableRow>
                   ))
                 ) : (
